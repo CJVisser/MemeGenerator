@@ -1,0 +1,9 @@
+.list{
+    display: flex;
+    flex-direction: column;
+
+    &-item{
+        margin-right: 2rem;
+        margin-bottom: 2rem;
+    }
+}
