@@ -1,0 +1,41 @@
+/* Global styles
+   ========================================================================== */
+   @import './settings';
+
+   html {
+    font-size: 100%;
+    min-height: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    font-family: $font-regular;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    text-rendering: optimizeLegibility;
+    font-family: $font-regular;
+    overflow-x: hidden;
+    padding-top: $mobile-padding;
+
+    @include breakpoint($ipad-horizontal){
+        padding-top: $desktop-padding;
+    }
+}
+
+.container{
+    box-sizing: border-box;
+    width: auto;
+    max-width: 1640px;
+    padding: 0 1.5rem;
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+
+    &.first{
+        margin-top: 15rem;
+    }
+}
+
+li {
+    list-style: none;
+}
+

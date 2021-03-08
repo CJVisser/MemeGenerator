@@ -1,15 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { NgModule,ModuleWithProviders } from '@angular/core';
 
-@Component({
-  selector: 'app-shared',
-  templateUrl: './shared.component.html',
-  styleUrls: ['./shared.component.scss']
-})
-export class SharedComponent implements OnInit {
+//components
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
 
-  constructor() { }
 
-  ngOnInit(): void {
-  }
+@NgModule({
+    declarations: [
+        HeaderComponent,
+        FooterComponent
+    ],
+    imports: [
 
-}
+    ],
+    exports: [
+        HeaderComponent,
+        FooterComponent
+    ],
+    providers: [],
+
+  })
+  export class SharedModule { 
+      public static forRoot(): ModuleWithProviders<SharedModule>{
+          return {
+              ngModule: SharedModule};
+          }
+      }
+  

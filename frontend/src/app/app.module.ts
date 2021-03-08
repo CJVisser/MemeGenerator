@@ -4,10 +4,8 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule  } from '@angular/common/http';
-import { CreateComponent } from './create/create.component';
 import { FormsModule ,ReactiveFormsModule } from '@angular/forms';
-import { CoreComponent } from './core/core.component';
-import { SharedComponent } from './shared/shared.component';
+import { SharedModule } from './shared/shared.component';
 import { MemelistComponent } from './shared/components/memelist/memelist.component';
 import { MemeComponent } from './shared/components/meme/meme.component';
 import { DetailpageComponent } from './pages/detailpage/detailpage.component';
@@ -18,16 +16,11 @@ import { FooterComponent } from './shared/components/footer/footer.component';
 @NgModule({
   declarations: [
     AppComponent,
-    CreateComponent,
-    CoreComponent,
-    SharedComponent,
     MemelistComponent,
     MemeComponent,
     DetailpageComponent,
     LayoutComponent,
     HomeComponent,
-    HeaderComponent,
-    FooterComponent
   ],
   imports: [
     FormsModule,
@@ -35,6 +28,7 @@ import { FooterComponent } from './shared/components/footer/footer.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    SharedModule.forRoot()
   ],
   exports:[
     FormsModule

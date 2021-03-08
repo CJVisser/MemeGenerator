@@ -1,0 +1,39 @@
+@import '../../styles/settings';
+
+.main_nav{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background-color:  $color-1-normal;
+    
+    &-container{
+        position: relative;
+        height: 4rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &-logo{
+        position: relative;
+        & img{
+        width: 2.5rem;
+        height: auto;
+        }
+    }
+
+    &-search{
+        width: 50%;
+        & input{
+            width: 100%;
+        }
+    }
+
+    &-picker{
+        width: 10%;
+        & select{
+            width: 100%;
+        }
+    }
+}
