@@ -14,7 +14,7 @@ import java.util.Set;
 @Setter
 public class Achievement extends BaseEntity {
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "title", nullable = false)
     @NotNull
     public String title;
 
