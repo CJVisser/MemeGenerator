@@ -16,6 +16,7 @@ body {
     font-family: $font-regular;
     overflow-x: hidden;
     padding-top: $mobile-padding;
+    background-color: $color-2-normal;
 
     @include breakpoint($ipad-horizontal){
         padding-top: $desktop-padding;
@@ -25,7 +26,7 @@ body {
 .container{
     box-sizing: border-box;
     width: auto;
-    max-width: 1640px;
+    // max-width: 1640px;
     padding: 0 1.5rem;
     margin-left: 2.5rem;
     margin-right: 2.5rem;

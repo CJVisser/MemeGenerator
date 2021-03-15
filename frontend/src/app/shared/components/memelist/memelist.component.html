@@ -1,1 +1,12 @@
-<p>memelist works!</p>
+<section id="memelist">
+    <div class="meme-container container" *ngFor="let item of memes;" >
+            <meme 
+            [memeId] ="item.id"
+            [memeName] = "item.name"
+            [memeImageUrl] = "item.ImageUrl"
+            [memeUpvotes] = "item.Upvotes"
+            [memeDownvotes] = "item.Downvotes">
+        </meme>
+    
+    </div>
+</section>
