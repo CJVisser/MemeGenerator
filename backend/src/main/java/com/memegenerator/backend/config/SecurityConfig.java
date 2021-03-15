@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.HttpMethod;
 
 import com.memegenerator.backend.domain.service.impl.*;
-import com.memegenerator.security.UserDetailsAdapter;
+import com.memegenerator.backend.security.UserDetailsAdapter;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

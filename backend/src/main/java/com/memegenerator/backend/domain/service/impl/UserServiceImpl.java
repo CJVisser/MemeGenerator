@@ -1,22 +1,20 @@
-package com.example.memegenerator.domain.service.impl;
+package com.memegenerator.backend.domain.service.impl;
 
-import java.nio.charset.Charset;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
 import javax.ejb.DuplicateKeyException;
 
-import com.example.memegenerator.data.entity.User;
-import com.example.memegenerator.domain.service.JavaMailSender;
-import com.example.memegenerator.domain.service.UserService;
-import com.example.memegenerator.security.Role;
-import com.example.memegenerator.security.UserDetailsAdapter;
-import com.example.memegenerator.data.repository.UserRepository;
-import com.example.memegenerator.web.dto.SmallUserDto;
-import com.example.memegenerator.web.dto.UserDto;
+import com.memegenerator.backend.data.entity.User;
+//import com.memegenerator.backend.domain.service.JavaMailSender;
+import com.memegenerator.backend.domain.service.UserService;
+import com.memegenerator.backend.security.Role;
+import com.memegenerator.backend.security.UserDetailsAdapter;
+import com.memegenerator.backend.data.repository.UserRepository;
+import com.memegenerator.backend.web.dto.SmallUserDto;
+import com.memegenerator.backend.web.dto.UserDto;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,7 +31,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JavaMailSender javaMailSender;
+    //private final JavaMailSender javaMailSender;
     private final ModelMapper modelMapper;
 
     
@@ -58,6 +56,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return modelMapper.map(savedUser, UserDto.class);
     }
 
+    /** 
+     * @return int
+     */
+    private int randomInt() {
+
+        return new Random().nextInt(9000) + 1000;
+    }
+
     
     /** 
      * @param userId
@@ -69,6 +75,47 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
 
         return modelMapper.map(user, SmallUserDto.class);
+    }
+
+    /** 
+     * @param userDto
+     * @return UserDto
+     * @throws NoSuchElementException
+     * @throws DuplicateKeyException
+     */
+    public UserDto updateUser(UserDto userDto) throws NoSuchElementException, DuplicateKeyException {
+        return null;
+    }
+
+    /** 
+     * @param email
+     * @throws NoSuchElementException
+     */
+    public void requestPasswordReset(String email) throws NoSuchElementException {
+    }
+
+    /** 
+     * @param confirmationToken
+     * @param password
+     * @throws NoSuchElementException
+     */
+    public void resetPassword(String confirmationToken, String password) throws NoSuchElementException {
+    }
+
+    /** 
+     * @param userId
+     * @param confirmationToken
+     * @throws NoSuchElementException
+     */
+    public void activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
+    }
+    
+    /** 
+     * @param userId
+     * @param pointsToAdd
+     * @throws NoSuchElementException
+     */
+    public void updateUserPoints(Long userId, int pointsToAdd) throws NoSuchElementException {
     }
 
     

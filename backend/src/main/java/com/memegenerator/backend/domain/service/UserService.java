@@ -1,25 +1,32 @@
-package com.memegenerator.web.dto;
+package com.memegenerator.backend.domain.service;
 
-import javax.validation.constraints.NotNull;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.memegenerator.backend.web.dto.SmallUserDto;
+import com.memegenerator.backend.web.dto.UserDto;
 
-@Getter
-@Setter
-public class UserDto {
+import java.util.NoSuchElementException;
 
-	public long id;
+import javax.ejb.DuplicateKeyException;
 
-	@NotNull
-	public String username;
+@Service
+public interface UserService {
 
-	@NotNull
-	public String password;
+    UserDto createUser(UserDto userDto) throws NoSuchElementException, DuplicateKeyException;
 
-	@NotNull
-	public String email;
+    UserDto updateUser(UserDto userDto) throws NoSuchElementException, DuplicateKeyException;
 
-	@NotNull
-	public boolean activated;
+    SmallUserDto getUserById(long userId) throws NoSuchElementException;
+
+    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+
+    void requestPasswordReset(String email) throws NoSuchElementException;
+    
+    void resetPassword(String confirmationToken, String password) throws NoSuchElementException;
+
+    void activateUser(Long userId, String confirmationToken) throws NoSuchElementException;
+
+    void updateUserPoints(Long userId, int pointsToAdd) throws NoSuchElementException;
 }

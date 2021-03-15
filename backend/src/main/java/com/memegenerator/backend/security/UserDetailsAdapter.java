@@ -1,4 +1,4 @@
-package com.memegenerator.security;
+package com.memegenerator.backend.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
