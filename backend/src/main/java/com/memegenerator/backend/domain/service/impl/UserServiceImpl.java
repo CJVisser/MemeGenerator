@@ -84,7 +84,22 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @throws DuplicateKeyException
      */
     public UserDto updateUser(UserDto userDto) throws NoSuchElementException, DuplicateKeyException {
-        return null;
+
+        User user = userRepository.findUserByUsername(userDto.username)
+                .orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
+                
+        if (user.id != userDto.id) {
+
+            throw new DuplicateKeyException("Wrong user");
+        }
+
+        user = modelMapper.map(userDto, User.class);
+        user.role =  Role.User;
+        user.password = bCryptPasswordEncoder.encode(userDto.password);
+        user.confirmationToken = this.randomInt();
+        User savedUser = userRepository.save(user);
+
+        return modelMapper.map(savedUser, UserDto.class);
     }
 
     /** 

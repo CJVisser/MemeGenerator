@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,6 +37,24 @@ public class UserController {
 
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (NoSuchElementException e) {
+
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/** 
+	 * @param userDto
+	 * @return ResponseEntity<String>
+	 */
+	@PutMapping()
+	public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto userDto) {
+
+		try {
+
+			userService.updateUser(userDto);
+
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (NoSuchElementException | DuplicateKeyException e) {
 
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
