@@ -60,7 +60,7 @@ export class LoginService {
 
           alert("Verkeerde username of password")
 
-          
+          throw("Wrong username");
         }
       }),
       map((response: LoginResponse) => response.status)
