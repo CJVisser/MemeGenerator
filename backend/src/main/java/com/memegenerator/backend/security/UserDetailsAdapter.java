@@ -2,10 +2,11 @@ package com.memegenerator.backend.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Collection;
 import java.util.Optional;
-import com.memegenerator.backend.data.entity.User;
 
+import com.memegenerator.backend.data.entity.User;
 
 public class UserDetailsAdapter implements UserDetails {
 
@@ -15,6 +16,17 @@ public class UserDetailsAdapter implements UserDetails {
 
         this.user = user.get();
     }
+
+	
+    /** 
+     * @return Collection<? extends GrantedAuthority>
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        return user.getRole().getAuthorities();
+    }
+
     
     /** 
      * @return String
@@ -79,14 +91,7 @@ public class UserDetailsAdapter implements UserDetails {
     /** 
      * @return Long
      */
-
     public Long getUserId(){
         return user.id;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

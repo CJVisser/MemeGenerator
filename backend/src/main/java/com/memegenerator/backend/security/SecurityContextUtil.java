@@ -1,4 +1,3 @@
-  
 package com.memegenerator.backend.security;
 
 import org.springframework.security.core.context.SecurityContextHolder;

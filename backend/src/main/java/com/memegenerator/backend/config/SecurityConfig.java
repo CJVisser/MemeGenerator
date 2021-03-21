@@ -28,6 +28,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import lombok.var;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
