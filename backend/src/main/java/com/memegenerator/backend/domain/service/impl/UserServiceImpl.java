@@ -93,7 +93,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new DuplicateKeyException("Wrong user");
         }
 
+        // Maybe this line should be fixed, it seems to reset user fields
         user = modelMapper.map(userDto, User.class);
+
+        user.activated = true;
         user.role =  Role.User;
         user.password = bCryptPasswordEncoder.encode(userDto.password);
         user.confirmationToken = this.randomInt();
