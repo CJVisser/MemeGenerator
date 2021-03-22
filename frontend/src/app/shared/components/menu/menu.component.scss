@@ -1,0 +1,25 @@
+@import "../../styles/settings";
+
+.menu-container{
+    width: 10%;
+    position: absolute;
+    right: 3%;
+    padding: 4rem;
+    background: $color-1-normal;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    & ul{
+        display: inline-block;
+        padding: 2rem;
+        background: $color-3-normal;
+        & li{
+            
+            // width: 50%;
+
+        }
+
+
+    }
+}

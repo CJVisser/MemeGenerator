@@ -1,0 +1,27 @@
+@import '../../shared/styles/settings';
+
+.profile-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+   
+}
+
+.profile-form{
+    background-color: $color-3-normal;
+    padding: 4rem;
+    box-shadow: 5px 5px 15px 5px $color-1-normal ;
+}
+
+.form-group{
+    margin-bottom: 1rem; 
+    
+    & label{
+        margin-right: 2rem;
+    }
+
+    & button{
+        margin-right: 2rem;
+    }
+}
