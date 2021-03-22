@@ -28,6 +28,7 @@ export class ProfileService {
   }
 
   getUserInfo(userId = null): Observable<User> {
+    debugger;
     if(!userId){
       userId = 0;
     }
