@@ -52,9 +52,15 @@ export class LoginService {
         this._loggedIn.next(response.status);
 
         if (response.status) {
+
           this.profileService
             .getUserInfo(response.userId)
             .subscribe((user: User) => this._currentUser.next(user));
+        }else{
+
+          alert("Verkeerde username of password")
+
+          throw("Wrong username");
         }
       }),
       map((response: LoginResponse) => response.status)

@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import com.example.memegenerator.security.Role;
+import com.memegenerator.backend.security.Role;
 
 import java.util.HashSet;
 import java.util.Set;
