@@ -1,8 +1,5 @@
 package com.memegenerator.backend.config;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 import com.memegenerator.backend.data.entity.Meme;
 import com.memegenerator.backend.data.entity.Tag;
 import com.memegenerator.backend.web.dto.MemeDto;

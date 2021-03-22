@@ -15,6 +15,7 @@ import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
+import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,6 +26,7 @@ import { SignupComponent } from './pages/signup/signup.component';
     HomeComponent,
     LoginComponent,
     SignupComponent,
+    MememakerpageComponent,
   ],
   imports: [
     FormsModule,

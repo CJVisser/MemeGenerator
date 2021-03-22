@@ -35,6 +35,7 @@ import lombok.var;
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
     
     private static final String USER_PATH = "/user";
+    private static final String MEME_PATH = "/meme";
     private static final String LOGIN_PATH = "/login";
     private static final String LOGOUT_PATH = "/logout";
     private static final String HOME_PATH = "/";
@@ -85,6 +86,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .antMatchers(HttpMethod.POST, LOGIN_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, LOGOUT_PATH).permitAll()
                 .antMatchers(HttpMethod.PUT, USER_PATH).permitAll()
+                .antMatchers(HttpMethod.POST, MEME_PATH).permitAll()
+                .antMatchers(HttpMethod.PUT, MEME_PATH).permitAll()
+                .antMatchers(HttpMethod.GET, MEME_PATH).permitAll()
                 .anyRequest().permitAll()
                 .and().httpBasic().and().formLogin().successHandler(new AuthenticationSuccessHandler() {
 
