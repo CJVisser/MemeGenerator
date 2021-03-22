@@ -17,6 +17,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { MenuComponent } from './shared/components/menu/menu.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ProfileComponent } from './pages/profile/profile.component';
     LoginComponent,
     SignupComponent,
     MenuComponent,
-    ProfileComponent
+    ProfileComponent,
+    MememakerpageComponent,
   ],
   imports: [
     FormsModule,
