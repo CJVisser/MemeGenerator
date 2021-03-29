@@ -6,7 +6,7 @@ import java.util.Random;
 import javax.ejb.DuplicateKeyException;
 
 import com.memegenerator.backend.data.entity.User;
-//import com.memegenerator.backend.domain.service.JavaMailSender;
+import com.memegenerator.backend.domain.service.JavaMailSender;
 import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.security.Role;
 import com.memegenerator.backend.security.UserDetailsAdapter;
@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.mail.SimpleMailMessage;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    //private final JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
     private final ModelMapper modelMapper;
 
     
@@ -52,6 +53,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         user.confirmationToken = this.randomInt();
 
         User savedUser = userRepository.save(user);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("javaminor@cornevisser.nl");
+        message.setTo(savedUser.email);
+        message.setSubject("Thank you for signing up");
+
+        String url = "http://localhost:8080/user/activate/" + savedUser.id + "/" + savedUser.confirmationToken;
+
+        message.setText("Click here to activate your account: " + url);
+
+        javaMailSender.getJavaMailSender().send(message);
 
         return modelMapper.map(savedUser, UserDto.class);
     }
@@ -126,6 +138,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @throws NoSuchElementException
      */
     public void activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
+
+        User user = userRepository.findByToken(confirmationToken)
+                .orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
+
+        if (user.id != userId) {
+            throw new NoSuchElementException(USER_NOT_FOUND);
+        }
+
+        user.activated = true;
+
+        userRepository.save(user);
     }
     
     /** 
