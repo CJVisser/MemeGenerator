@@ -14,6 +14,11 @@ import { HomeComponent } from './pages/home/home.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { LoginComponent } from './pages/login/login.component';
+import { SignupComponent } from './pages/signup/signup.component';
+import { MenuComponent } from './shared/components/menu/menu.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,6 +28,10 @@ import { LoginComponent } from './pages/login/login.component';
     LayoutComponent,
     HomeComponent,
     LoginComponent,
+    SignupComponent,
+    MenuComponent,
+    ProfileComponent,
+    MememakerpageComponent,
   ],
   imports: [
     FormsModule,

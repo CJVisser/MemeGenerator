@@ -6,6 +6,10 @@ import { LayoutComponent } from '../app/core/layout/layout.component';
 import { HomeComponent } from '../app/pages/home/home.component';
 import { DetailpageComponent } from "../app/pages/detailpage/detailpage.component";
 import { LoginComponent } from './pages/login/login.component';
+import { SignupComponent } from './pages/signup/signup.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.component'
+
 
 const routes: Routes = [
   { path: '', component: LayoutComponent,
@@ -24,10 +28,14 @@ const routes: Routes = [
       //   )
       component : HomeComponent
     },
-    { path: 'detail/{id}', component: DetailpageComponent},
+    { path: 'detail/:id', component: DetailpageComponent},
     // { path: 'create', component: CreatepageComponent},
     { path: 'login', component: LoginComponent },
+    { path: 'signup', component: SignupComponent} ,
+    { path: 'profile/:id', component: ProfileComponent},
+    { path: 'mememaker', component: MememakerpageComponent},
     ],
+
    
   }
 ];
