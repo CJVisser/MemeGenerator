@@ -71,7 +71,7 @@ public class MemeController {
         long userIdLong = Long.parseLong(userId);
 
         try {
-            var result = new ResponseEntity<>(memeService.createMeme(memeDto, userIdLong), HttpStatus.CREATED);
+            ResponseEntity<MemeDto> result = new ResponseEntity<MemeDto>(memeService.createMeme(memeDto, userIdLong), HttpStatus.CREATED);
             userService.updateUserPoints(userIdLong, 1);
             return result;
 
