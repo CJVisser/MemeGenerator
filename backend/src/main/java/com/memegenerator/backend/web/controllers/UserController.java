@@ -66,6 +66,25 @@ public class UserController {
 
 	/** 
 	 * @param userId
+	 * @param token
+	 * @return ResponseEntity<String>
+	 */
+	@GetMapping(path = "/activate/{userId}/{token}")
+	public ResponseEntity<String> activateUser(@PathVariable long userId, @PathVariable String token) {
+
+		try {
+
+			userService.activateUser(userId, token);
+
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (NoSuchElementException e) {
+
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/** 
+	 * @param userId
 	 * @return ResponseEntity<SmallUserDto>
 	 */
 	@GetMapping(path = "/{userId}")

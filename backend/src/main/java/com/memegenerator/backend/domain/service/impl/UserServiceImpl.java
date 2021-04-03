@@ -137,9 +137,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @param confirmationToken
      * @throws NoSuchElementException
      */
-    public void activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
+    public SmallUserDto activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
 
-        User user = userRepository.findByToken(confirmationToken)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
 
         if (user.id != userId) {
@@ -149,6 +149,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         user.activated = true;
 
         userRepository.save(user);
+
+        return modelMapper.map(user, SmallUserDto.class);
     }
     
     /** 
