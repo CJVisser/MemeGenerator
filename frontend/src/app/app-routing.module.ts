@@ -20,10 +20,12 @@ const routes: Routes = [
         redirectTo: 'home',
         pathMatch: 'full'
       },
-      { path: 'home', component: HomeComponent },
-      { path: 'detail/:id', component: DetailpageComponent },
       { path: 'login', component: LoginComponent },
       { path: 'signup', component: SignupComponent },
+      { path: 'create', component: MememakerpageComponent },
+      { path: 'home', component: HomeComponent },
+      { path: 'detail/:id', component: DetailpageComponent },
+      { path: 'profile/:id', component: ProfileComponent },
     ],
   }
 ];

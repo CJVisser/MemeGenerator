@@ -28,10 +28,15 @@
             <div class="field">
                 <label for="password" class="label">Password</label>
                 <div class="control">
-                    <input id="password" class="input" type="password" formControlName="password"/>
+                    <input id="password" class="input" type="password" formControlName="password" />
                 </div>
             </div>
-            <button class="button is-success" (click)="signup()">Sign up</button>
+            <button class="button is-success" (click)="signup()">Sign up</button> 
+
+            <div class="block notification is-success is-light margin">
+                <button class="delete"></button>
+                An email as been sent to 'test@example.com'! Click the link in the email to log in.
+            </div>
         </form>
     </div>
 </section>
