@@ -12,31 +12,19 @@ import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.comp
 
 
 const routes: Routes = [
-  { path: '', component: LayoutComponent,
-  children: [
-    {
-      path: '',
-      redirectTo: 'home',
-      pathMatch: 'full'
-    },
-    {
-      path: 'home',
-      //TODO: Create childrens if needed 
-      // loadChildren: () =>
-      //   import('./pages/home/home.component').then(
-      //     (m) => m.HomeComponent
-      //   )
-      component : HomeComponent
-    },
-    { path: 'detail/:id', component: DetailpageComponent},
-    // { path: 'create', component: CreatepageComponent},
-    { path: 'login', component: LoginComponent },
-    { path: 'signup', component: SignupComponent} ,
-    { path: 'profile/:id', component: ProfileComponent},
-    { path: 'mememaker', component: MememakerpageComponent},
+  {
+    path: '', component: LayoutComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
+      { path: 'home', component: HomeComponent },
+      { path: 'detail/:id', component: DetailpageComponent },
+      { path: 'login', component: LoginComponent },
+      { path: 'signup', component: SignupComponent },
     ],
-
-   
   }
 ];
 

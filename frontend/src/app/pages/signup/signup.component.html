@@ -1,28 +1,37 @@
 <section id="signup">
     <div class="container">
-        <div class="signup-container">
-            <div class="signup-form">
-                <h2>Sign up to make your own memes!</h2>
-    
-                <form [formGroup]="signupForm">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" formControlName="username" class="form-control" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="username">Password</label>
-                        <input type="password" formControlName="password" class="form-control" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="username">Email</label>
-                        <input type="email" formControlName="email" class="form-control" />
-                    </div>
-
-                    <button class="btn btn-primary" (click)="signup()">Sign up</button>
-                </form>
+        <h1 class="title">Sign up!</h1>
+        <form [formGroup]="signupForm">
+            <!-- <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" formControlName="username" class="form-control" />
             </div>
-        </div>
+
+            <div class="form-group">
+                <label for="username">Password</label>
+                <input type="password" formControlName="password" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="username">Email</label>
+                <input type="email" formControlName="email" class="form-control" />
+            </div>
+            <button class="btn btn-primary" (click)="signup()">Sign up</button> -->
+
+            <div class="field">
+                <label for="username" class="label">Username</label>
+                <div class="control">
+                    <input id="username" class="input" type="text" formControlName="username" />
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="password" class="label">Password</label>
+                <div class="control">
+                    <input id="password" class="input" type="password" formControlName="password"/>
+                </div>
+            </div>
+            <button class="button is-success" (click)="signup()">Sign up</button>
+        </form>
     </div>
 </section>
