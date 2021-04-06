@@ -14,6 +14,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { LoginComponent } from './pages/login/login.component';
+import { TableComponent } from './shared/components/table/table.component';
+import { AdminComponent } from './pages/admin/admin.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { MenuComponent } from './shared/components/menu/menu.component';
 import { ProfileComponent } from './pages/profile/profile.component';
@@ -28,6 +30,8 @@ import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.comp
     LayoutComponent,
     HomeComponent,
     LoginComponent,
+    AdminComponent,
+    TableComponent,
     SignupComponent,
     MenuComponent,
     ProfileComponent,

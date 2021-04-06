@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.memegenerator.backend.web.dto.SmallUserDto;
 import com.memegenerator.backend.web.dto.UserDto;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.ejb.DuplicateKeyException;
@@ -29,4 +30,6 @@ public interface UserService {
     void activateUser(Long userId, String confirmationToken) throws NoSuchElementException;
 
     void updateUserPoints(Long userId, int pointsToAdd) throws NoSuchElementException;
+
+    List<UserDto> getAllUsers();
 }
