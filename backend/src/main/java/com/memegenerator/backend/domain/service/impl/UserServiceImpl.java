@@ -1,7 +1,10 @@
 package com.memegenerator.backend.domain.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.ejb.DuplicateKeyException;
 
@@ -143,5 +146,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return new UserDetailsAdapter(userRepository.findUserByUsername(username));
+    }
+
+    /**
+     * @return LIst<UserDto>
+     */
+    public List<User> getAllUsers() {
+
+        return userRepository.findAll();
     }
 }

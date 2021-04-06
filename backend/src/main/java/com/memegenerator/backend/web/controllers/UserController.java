@@ -1,6 +1,8 @@
 package com.memegenerator.backend.web.controllers;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import javax.ejb.DuplicateKeyException;
 import javax.validation.Valid;
@@ -83,5 +85,18 @@ public class UserController {
 
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+
+	/**
+	 * @return ResponseEntity<UserDto[]>
+	 */
+	@GetMapping(path = "/")
+	public ResponseEntity<List<UserDto>> getUsers() {
+		List<User> users = userService.getAllUsers();
+
+		List<UserDto> userDtos = users.stream()
+			.map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+
+		return new ResponseEntity<List<UserDto>>(userDtos, HttpStatus.OK);
 	}
 }
