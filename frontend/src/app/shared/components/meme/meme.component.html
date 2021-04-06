@@ -6,5 +6,11 @@
         <div class="meme-image">
             <img src="{{memeImageUrl}}">
         </div>
+        <div (click)="sendMessage('u')">
+            Upvotes: {{memeUpvotes}}
+        </div>
+        <div (click)="sendMessage('d')">
+            Downvotes: {{memeDownvotes}}
+        </div>
     </div>
 </div>

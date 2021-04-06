@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MemelistComponent } from '../memelist/memelist.component'
 
 @Component({
   selector: 'meme',
@@ -11,10 +12,19 @@ export class MemeComponent implements OnInit {
   @Input() memeImageUrl;
   @Input() memeUpvotes;
   @Input() memeDownvotes;
-  
-  constructor() { }
+
+  appComponent: MemelistComponent;
+
+  constructor(appComponent: MemelistComponent){
+      this.appComponent = appComponent;
+  }
 
   ngOnInit(): void {
+    
+  }
+
+  sendMessage(voteType){
+    this.appComponent.sendMessage(voteType, this.memeId)
   }
 
 }

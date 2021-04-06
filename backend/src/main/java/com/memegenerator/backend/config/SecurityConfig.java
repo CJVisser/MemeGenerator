@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     private static final String LOGIN_PATH = "/login";
     private static final String LOGOUT_PATH = "/logout";
     private static final String HOME_PATH = "/";
+    private static final String LIKEDISLIKE_PATH = "/likedislike";
     private ModelMapper modelmapper = new ModelMapper();
 
     @Autowired
@@ -89,6 +90,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .antMatchers(HttpMethod.POST, MEME_PATH).permitAll()
                 .antMatchers(HttpMethod.PUT, MEME_PATH).permitAll()
                 .antMatchers(HttpMethod.GET, MEME_PATH).permitAll()
+                .antMatchers(LIKEDISLIKE_PATH).permitAll()
+                .antMatchers("/ws").permitAll()
                 .anyRequest().permitAll()
                 .and().httpBasic().and().formLogin().successHandler(new AuthenticationSuccessHandler() {
 
