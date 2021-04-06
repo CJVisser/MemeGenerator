@@ -11,6 +11,7 @@ import com.memegenerator.backend.data.entity.Category;
 import com.memegenerator.backend.data.entity.Meme;
 import com.memegenerator.backend.domain.service.CategoryService;
 import com.memegenerator.backend.domain.service.MemeService;
+import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.web.dto.MemeDto;
 
 import org.modelmapper.ModelMapper;
@@ -35,6 +36,7 @@ public class MemeController {
 
     private final CategoryService categoryService;
     private final MemeService memeService;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
     /**
@@ -81,9 +83,10 @@ public class MemeController {
         long userIdLong = Long.parseLong(userId);
 
         try {
-
             Meme createdMeme = memeService.createMeme(meme, userIdLong);
-            
+
+            userService.updateUserPoints(userIdLong, 1);
+
             return new ResponseEntity<MemeDto>(modelMapper.map(createdMeme, MemeDto.class), HttpStatus.CREATED);
         } catch (NoSuchElementException e) {
 

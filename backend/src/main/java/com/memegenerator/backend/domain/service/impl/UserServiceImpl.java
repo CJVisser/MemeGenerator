@@ -128,7 +128,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @throws NoSuchElementException
      */
     public void updateUserPoints(Long userId, int pointsToAdd) throws NoSuchElementException {
-        throw new UnsupportedOperationException();
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
+
+        user.points = user.points + pointsToAdd;
+
+        userRepository.save(user);
     }
 
     /**
