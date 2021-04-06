@@ -27,6 +27,12 @@
                 </span>
             </button>
         </div>
+        <div (click)="sendMessage('u')">
+            Upvotes: {{memeUpvotes}}
+        </div>
+        <div (click)="sendMessage('d')">
+            Downvotes: {{memeDownvotes}}
+        </div>
     </div>
 </div>
 

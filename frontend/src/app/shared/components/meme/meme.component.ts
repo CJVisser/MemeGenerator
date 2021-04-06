@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { MemelistComponent } from '../memelist/memelist.component'
 import { MemeService } from 'src/app/services/meme/memeService';
 import { LoginService } from 'src/app/services/login/loginService';
 import { User } from 'src/app/models/User';
@@ -23,6 +24,7 @@ export class MemeComponent implements OnInit {
   status: boolean = false
   user: any = null
   showButtons: boolean = false
+  appComponent: MemelistComponent;
   
   constructor(
     private loginService: LoginService, 
@@ -30,6 +32,7 @@ export class MemeComponent implements OnInit {
     private router: Router,
     protected memeService: MemeService,
   ) {
+    this.appComponent = appComponent;
   }
 
   ngOnInit(): void {
@@ -39,6 +42,10 @@ export class MemeComponent implements OnInit {
     if(this.user) this.showButtons = true
   }
 
+  sendMessage(voteType){
+    this.appComponent.sendMessage(voteType, this.memeId)
+  }
+  
   flagMeme(id): void {
     this.memeService.FlagMeme(id);
 
