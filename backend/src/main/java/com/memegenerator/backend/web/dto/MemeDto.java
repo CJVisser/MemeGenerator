@@ -1,5 +1,7 @@
 package com.memegenerator.backend.web.dto;
 
+import java.sql.Timestamp;
+
 import javax.validation.constraints.NotNull;
 
 import com.memegenerator.backend.data.entity.Tag;
@@ -29,4 +31,6 @@ public class MemeDto {
     public UserDto user;
 
     public long categoryId;
+
+    public Timestamp createdat;
 }

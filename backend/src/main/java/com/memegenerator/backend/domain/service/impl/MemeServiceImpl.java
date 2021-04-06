@@ -81,6 +81,8 @@ public class MemeServiceImpl implements MemeService {
 
         allMemes.sort(Comparator.comparing(Meme::getCreatedat).reversed());
 
-        return allMemes.stream().map(meme -> modelMapper.map(meme, MemeDto.class)).collect(Collectors.toList());
+        List<MemeDto> checker = allMemes.stream().map(meme -> modelMapper.map(meme, MemeDto.class)).collect(Collectors.toList());
+
+        return checker;
     }
 }

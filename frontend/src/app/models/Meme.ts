@@ -12,4 +12,5 @@ export interface Meme {
   userId: number;
   imageId?: number;
   tags?: Tag[];
+  createdate?: Date;
 };

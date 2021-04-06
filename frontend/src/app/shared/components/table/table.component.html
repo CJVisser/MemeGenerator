@@ -1,16 +1,12 @@
-<table class="tg">
+<table class="styled-table">
     <thead>
       <tr>
-        <th class="tg-0lax" *ngFor="let header of headers" [value]="header.value">{{header.text}}</th>
+        <th *ngFor="let header of headers" [value]="header.value">{{header.text}}</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of items">
-        <td class="tg-0lax">{{item.userName}}</td>
-        <td class="tg-0lax">{{item.createDat}}</td>
-        <td class="tg-0lax">{{item.numOfReported}}</td>
-        <td class="tg-0lax">{{item.points}}</td>
-        <td class="tg-0lax">{{item.numOfMemes}}</td>
+        <td *ngFor="let header of headers">{{item[header.value]}}</td>
       </tr>
     </tbody>
   </table>
