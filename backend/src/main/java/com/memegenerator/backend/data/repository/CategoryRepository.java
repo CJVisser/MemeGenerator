@@ -1,10 +1,10 @@
 package com.memegenerator.backend.data.repository;
 
-import com.memegenerator.backend.data.entity.Meme;
+import com.memegenerator.backend.data.entity.Category;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MemeRepository extends JpaRepository<Meme, Long> {
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 }
