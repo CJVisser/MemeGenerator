@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.memegenerator.backend.web.dto.SmallUserDto;
@@ -75,6 +76,23 @@ public class UserController {
 		try {
 
 			userService.activateUser(userId, token);
+
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (NoSuchElementException e) {
+
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/** 
+	 * @param userId
+	 * @param token
+	 * @return ResponseEntity<String>
+	 */
+	@PostMapping(path = "/user/reset")
+	public ResponseEntity<String> resetPassword(@RequestParam("email") String email) {
+		try {
+			userService.requestPasswordReset(email);
 
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (NoSuchElementException e) {

@@ -8,6 +8,7 @@ import { DetailpageComponent } from "../app/pages/detailpage/detailpage.componen
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { PasswordResetComponent } from './pages/password-reset/password-reset.component';
 import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.component'
 
 
@@ -24,6 +25,7 @@ const routes: Routes = [
       { path: 'signup', component: SignupComponent },
       { path: 'create', component: MememakerpageComponent },
       { path: 'home', component: HomeComponent },
+      { path: 'reset/password', component: HomeComponent },
       { path: 'detail/:id', component: DetailpageComponent },
       { path: 'profile/:id', component: ProfileComponent },
     ],
