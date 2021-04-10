@@ -6,11 +6,12 @@ import { LayoutComponent } from '../app/core/layout/layout.component';
 import { HomeComponent } from '../app/pages/home/home.component';
 import { DetailpageComponent } from "../app/pages/detailpage/detailpage.component";
 import { LoginComponent } from './pages/login/login.component';
+import { AdminComponent } from './pages/admin/admin.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { PasswordResetComponent } from './pages/password-reset/password-reset.component';
 import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.component'
-
+import { LoginService } from '../../src/services/login/loginService'
 
 const routes: Routes = [
   {

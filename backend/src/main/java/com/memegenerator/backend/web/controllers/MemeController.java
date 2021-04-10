@@ -7,8 +7,10 @@ import java.util.NoSuchElementException;
 import javax.validation.Valid;
 
 import com.memegenerator.backend.domain.service.MemeService;
+import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.web.dto.MemeDto;
 
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class MemeController {
     @Autowired
     private final MemeService memeService;
-
+    private final UserService userService;
     /** 
      * @return ResponseEntity<List<MemeDto>>
      */
@@ -69,8 +71,10 @@ public class MemeController {
         long userIdLong = Long.parseLong(userId);
 
         try {
+            ResponseEntity<MemeDto> result = new ResponseEntity<MemeDto>(memeService.createMeme(memeDto, userIdLong), HttpStatus.CREATED);
+            userService.updateUserPoints(userIdLong, 1);
+            return result;
 
-            return new ResponseEntity<>(memeService.createMeme(memeDto, userIdLong), HttpStatus.CREATED);
         } catch (NoSuchElementException e) {
 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

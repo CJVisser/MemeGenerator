@@ -1,5 +1,6 @@
 package com.memegenerator.backend.web.controllers;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.ejb.DuplicateKeyException;
@@ -114,5 +115,13 @@ public class UserController {
 
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+
+	/** 
+	 * @return ResponseEntity<UserDto[]>
+	 */
+	@GetMapping(path = "/")
+	public ResponseEntity<List<UserDto>> getUsers() {
+		return new ResponseEntity<List<UserDto>>(userService.getAllUsers(), HttpStatus.OK);
 	}
 }
