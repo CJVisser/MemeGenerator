@@ -5,26 +5,26 @@
             <div class="field">
                 <label for="username" class="label">Username</label>
                 <div class="control">
-                    <input id="username" class="input" type="text" formControlName="username" disabled value="{{user.username}}"/>
+                    <input id="username" class="input" type="text" formControlName="username" disabled
+                        value="{{user.username}}" />
                 </div>
             </div>
             <div class="field">
                 <label for="email" class="label">Email</label>
                 <div class="control">
-                    <input id="email" type="email" formControlName="email" class="input"/>
+                    <input id="email" type="email" formControlName="email" class="input" value="{{ user.email }}" />
                 </div>
             </div>
             <div class="field">
-                <label for="password" class="label">Password</label>
+                <label for="password" class="label">New password</label>
                 <div class="control">
-                    <input id="password" type="password" formControlName="password" class="input"/>
+                    <input id="password" type="password" formControlName="password" class="input" />
                 </div>
             </div>
             <button class="button is-success" (click)="updateUser()">Update</button>
         </form>
 
-        <div class="block notification is-success is-light margin">
-            <button class="delete"></button>
+        <div *ngIf="updatedProfile" class="block notification is-success is-light margin">
             Your profile has been updated.
         </div>
     </div>

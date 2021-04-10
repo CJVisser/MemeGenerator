@@ -15,6 +15,9 @@ let self: any;
   styleUrls: ["./profile.component.scss"],
 })
 export class ProfileComponent implements OnInit {
+
+  updatedProfile : Boolean = false
+
   constructor(private profileService: ProfileService, 
     private route: ActivatedRoute
     // private authService: AuthService
@@ -32,10 +35,6 @@ export class ProfileComponent implements OnInit {
       
     
   }
-  
-    
-    
-  
 
   updateUser(): void {
     const e: Event = window.event;
@@ -48,6 +47,8 @@ export class ProfileComponent implements OnInit {
       document.getElementById("password")
     )).value;
 
-    this.profileService.updateUserInfo(this.user).subscribe();
+    this.profileService.updateUserInfo(this.user).subscribe()
+
+    this.updatedProfile = true
   }
 }
