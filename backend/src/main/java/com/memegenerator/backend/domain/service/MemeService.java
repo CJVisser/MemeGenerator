@@ -3,18 +3,18 @@ package com.memegenerator.backend.domain.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.memegenerator.backend.web.dto.MemeDto;
+import com.memegenerator.backend.data.entity.Meme;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public interface MemeService {
-    
-    MemeDto createMeme(MemeDto meme, Long id) throws NoSuchElementException;
 
-    MemeDto getMemeById(long id) throws NoSuchElementException;
+    Meme createMeme(Meme meme, Long id) throws NoSuchElementException;
 
-    MemeDto updateMeme(MemeDto meme) throws NoSuchElementException;
+    Meme getMemeById(long id) throws NoSuchElementException;
 
-    List<MemeDto> getMemes();
+    Meme updateMeme(Meme meme) throws NoSuchElementException;
+
+    List<Meme> getMemes();
 }

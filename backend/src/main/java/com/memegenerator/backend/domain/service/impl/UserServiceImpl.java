@@ -9,13 +9,10 @@ import java.util.stream.Collectors;
 import javax.ejb.DuplicateKeyException;
 
 import com.memegenerator.backend.data.entity.User;
-//import com.memegenerator.backend.domain.service.JavaMailSender;
 import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.security.Role;
 import com.memegenerator.backend.security.UserDetailsAdapter;
 import com.memegenerator.backend.data.repository.UserRepository;
-import com.memegenerator.backend.web.dto.SmallUserDto;
-import com.memegenerator.backend.web.dto.UserDto;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,32 +31,29 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    //private final JavaMailSender javaMailSender;
     private final ModelMapper modelMapper;
 
-    
-    /** 
-     * @param userDto
-     * @return UserDto
+    /**
+     * @param user
+     * @return User
      * @throws DuplicateKeyException
      */
-    public UserDto createUser(UserDto userDto) throws DuplicateKeyException {
-        
-        if(userRepository.findByEmail(userDto.email).isPresent()) throw new DuplicateKeyException("Email is already in use");
+    public User createUser(User user) throws DuplicateKeyException {
 
-        if(userRepository.findUserByUsername(userDto.username).isPresent()) throw new DuplicateKeyException("Username is already in use");
+        if (userRepository.findByEmail(user.email).isPresent())
+            throw new DuplicateKeyException("Email is already in use");
 
-        User user = modelMapper.map(userDto, User.class);
-        user.role =Role.User;
-        user.password = bCryptPasswordEncoder.encode(userDto.password);
+        if (userRepository.findUserByUsername(user.username).isPresent())
+            throw new DuplicateKeyException("Username is already in use");
+
+        user.role = Role.User;
+        user.password = bCryptPasswordEncoder.encode(user.password);
         user.confirmationToken = this.randomInt();
 
-        User savedUser = userRepository.save(user);
-
-        return modelMapper.map(savedUser, UserDto.class);
+        return userRepository.save(user);
     }
 
-    /** 
+    /**
      * @return int
      */
     private int randomInt() {
@@ -67,71 +61,71 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return new Random().nextInt(9000) + 1000;
     }
 
-    
-    /** 
+    /**
      * @param userId
-     * @return SmallUserDto
+     * @return SmallUser
      * @throws NoSuchElementException
      */
-    public SmallUserDto getUserById(long userId) throws NoSuchElementException {
+    public User getUserById(long userId) throws NoSuchElementException {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
-
-        return modelMapper.map(user, SmallUserDto.class);
+        return userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
     }
 
-    /** 
-     * @param userDto
-     * @return UserDto
+    /**
+     * @param user
+     * @return User
      * @throws NoSuchElementException
      * @throws DuplicateKeyException
      */
-    public UserDto updateUser(UserDto userDto) throws NoSuchElementException, DuplicateKeyException {
+    public User updateUser(User user) throws NoSuchElementException, DuplicateKeyException {
 
-        User user = userRepository.findUserByUsername(userDto.username)
+        User foundUser = userRepository.findUserByUsername(user.username)
                 .orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
-                
-        if (user.id != userDto.id) {
+
+        if (!user.id.equals(foundUser.id)) {
 
             throw new DuplicateKeyException("Wrong user");
         }
 
         // Maybe this line should be fixed, it seems to reset user fields
-        user = modelMapper.map(userDto, User.class);
+        user = modelMapper.map(user, User.class);
 
         user.activated = true;
-        user.role =  Role.User;
-        user.password = bCryptPasswordEncoder.encode(userDto.password);
+        user.role = Role.User;
+        user.password = bCryptPasswordEncoder.encode(user.password);
         user.confirmationToken = this.randomInt();
         User savedUser = userRepository.save(user);
 
-        return modelMapper.map(savedUser, UserDto.class);
+        return modelMapper.map(savedUser, User.class);
     }
 
-    /** 
+    /**
      * @param email
      * @throws NoSuchElementException
      */
     public void requestPasswordReset(String email) throws NoSuchElementException {
+        throw new UnsupportedOperationException();
     }
 
-    /** 
+    /**
      * @param confirmationToken
      * @param password
      * @throws NoSuchElementException
      */
     public void resetPassword(String confirmationToken, String password) throws NoSuchElementException {
+        throw new UnsupportedOperationException();
     }
 
-    /** 
+    /**
      * @param userId
      * @param confirmationToken
      * @throws NoSuchElementException
      */
     public void activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
+        throw new UnsupportedOperationException();
     }
-    
-    /** 
+
+    /**
      * @param userId
      * @param pointsToAdd
      * @throws NoSuchElementException
@@ -144,8 +138,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userRepository.save(user);
     }
 
-    
-    /** 
+    /**
      * @param username
      * @return UserDetails
      * @throws UsernameNotFoundException
@@ -155,13 +148,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return new UserDetailsAdapter(userRepository.findUserByUsername(username));
     }
 
-    /** 
+    /**
      * @return LIst<UserDto>
      */
-    public List<UserDto> getAllUsers(){
+    public List<User> getAllUsers() {
 
-        List<User> users = userRepository.findAll();
-
-        return users.stream().map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+        return userRepository.findAll();
     }
 }
