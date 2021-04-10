@@ -29,6 +29,7 @@ const routes: Routes = [
       { path: 'reset/password', component: HomeComponent },
       { path: 'detail/:id', component: DetailpageComponent },
       { path: 'profile/:id', component: ProfileComponent },
+      { path: 'admin', component: AdminComponent },
     ],
   }
 ];
