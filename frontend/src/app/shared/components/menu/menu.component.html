@@ -1,6 +1,6 @@
 <ul>
-    <li><a [routerLink]="['/login']">Login </a></li>
-    <li><a [routerLink]="['/signup']">Signup </a></li>
-    <li><a [routerLink]="['/create']">Create </a></li>
-    <li><a [routerLink]="['/profile']">Profile</a></li>
+    <li *ngIf="!user"><a [routerLink]="['/login']">Login </a></li>
+    <li *ngIf="!user"><a [routerLink]="['/signup']">Signup </a></li>
+    <li *ngIf="user"><a [routerLink]="['/create']">Create </a></li>
+    <li *ngIf="user"><a [routerLink]="['/profile']">Profile</a></li>
 </ul>

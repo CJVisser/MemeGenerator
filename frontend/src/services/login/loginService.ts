@@ -5,6 +5,7 @@ import { environment } from "../../environments/environment";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { ProfileService } from "../profile/profile.service";
+import { EventEmitter, Output } from '@angular/core';
 
 export interface LoginResponse {
   status: boolean;
@@ -17,6 +18,7 @@ export interface LoginResponse {
 export class LoginService {
   private _loggedIn: BehaviorSubject<boolean>;
   private _currentUser: BehaviorSubject<User>;
+  @Output() getLoggedInUser: EventEmitter<any> = new EventEmitter();
 
   constructor(
     protected httpClient: HttpClient,
@@ -55,12 +57,16 @@ export class LoginService {
 
           this.profileService
             .getUserInfo(response.userId)
-            .subscribe((user: User) => this._currentUser.next(user));
-        }else{
+            .subscribe((user: User) => {
+              this._currentUser.next(user)
+
+              this.getLoggedInUser.emit(user)
+            });
+        } else {
 
           alert("Verkeerde username of password")
 
-          throw("Wrong username");
+          throw ("Wrong username");
         }
       }),
       map((response: LoginResponse) => response.status)
