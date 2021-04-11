@@ -52,4 +52,7 @@ public class User extends BaseEntity {
     @Column(name = "activated", nullable = false)
     @NotNull(message = "No activated give")
     public boolean activated;
+
+    @Column(name = "banned")
+    public boolean banned;
 }

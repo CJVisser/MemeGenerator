@@ -30,6 +30,9 @@ public class Meme extends BaseEntity {
     @Column(name = "dislikes")
     public int dislikes;
 
+    @Column(name = "memestatus")
+    public String memestatus;
+
     @ManyToOne
     @JoinColumn(name = "imageid")
     public Image image;

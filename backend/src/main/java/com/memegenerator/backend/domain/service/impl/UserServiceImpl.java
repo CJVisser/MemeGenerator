@@ -156,7 +156,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     /** 
-     * @return LIst<UserDto>
+     * @return List<UserDto>
      */
     public List<UserDto> getAllUsers(){
 
