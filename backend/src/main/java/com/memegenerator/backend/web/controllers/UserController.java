@@ -8,6 +8,7 @@ import javax.ejb.DuplicateKeyException;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,7 @@ import com.memegenerator.backend.domain.service.UserService;
 @RequiredArgsConstructor
 public class UserController {
 
+	@Autowired
 	UserService userService;
 	ModelMapper modelMapper;
 
@@ -44,7 +46,7 @@ public class UserController {
 
 		try {
 
-			userService.createUser(modelMapper.map(userDto, User.class));
+			userService.createUser(userDto);
 
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (NoSuchElementException e) {
@@ -62,7 +64,7 @@ public class UserController {
 
 		try {
 
-			userService.updateUser(modelMapper.map(userDto, User.class));
+			userService.updateUser(userDto);
 
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (NoSuchElementException | DuplicateKeyException e) {
@@ -115,9 +117,7 @@ public class UserController {
 	public ResponseEntity<SmallUserDto> getUserInfo(@PathVariable long userId) {
 		try {
 
-			User user = userService.getUserById(userId);
-
-			return new ResponseEntity<SmallUserDto>(modelMapper.map(user, SmallUserDto.class), HttpStatus.OK);
+			return new ResponseEntity<SmallUserDto>(userService.getUserById(userId), HttpStatus.OK);
 		} catch (NoSuchElementException e) {
 
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
