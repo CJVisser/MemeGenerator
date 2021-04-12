@@ -6,18 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import javax.ejb.DuplicateKeyException;
 
 import com.memegenerator.backend.data.entity.User;
-import com.memegenerator.backend.domain.service.JavaMailSender;
 import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.security.Role;
 import com.memegenerator.backend.security.UserDetailsAdapter;
 import com.memegenerator.backend.data.repository.UserRepository;
-import com.memegenerator.backend.web.dto.SmallUserDto;
-import com.memegenerator.backend.web.dto.UserDto;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +22,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.mail.SimpleMailMessage;
+import com.memegenerator.backend.web.dto.SmallUserDto;
+import com.memegenerator.backend.web.dto.UserDto;
+import com.memegenerator.backend.domain.service.JavaMailSender;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,12 +36,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JavaMailSender javaMailSender;
     private final ModelMapper modelMapper;
+    private final JavaMailSender javaMailSender;
 
     /**
-     * @param userDto
-     * @return UserDto
+     * @param user
+     * @return User
      * @throws DuplicateKeyException
      */
     public UserDto createUser(UserDto userDto) throws DuplicateKeyException {
@@ -110,7 +109,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new DuplicateKeyException("Wrong user");
         }
 
-        // Maybe this line should be fixed, it seems to reset user fields
         user = modelMapper.map(userDto, User.class);
 
         user.activated = true;
@@ -165,7 +163,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @throws NoSuchElementException
      */
     public SmallUserDto activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
-
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
 
         if (user.id != userId) {
@@ -202,13 +199,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return new UserDetailsAdapter(userRepository.findUserByUsername(username));
     }
 
-    /** 
+    /**
      * @return LIst<UserDto>
      */
-    public List<UserDto> getAllUsers(){
+    public List<User> getAllUsers() {
 
-        List<User> users = userRepository.findAll();
-
-        return users.stream().map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+        return userRepository.findAll();
     }
 }
