@@ -80,6 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        
         http.csrf().disable().cors().and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, HOME_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, USER_PATH).permitAll()

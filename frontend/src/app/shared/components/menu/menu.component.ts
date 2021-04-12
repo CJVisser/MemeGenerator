@@ -22,4 +22,10 @@ export class MenuComponent implements OnInit {
   private updateUser(user: any) : void {
     this.user = user
   }
+
+  private logout(){
+    this.loginService.logout()
+
+    
+  }
 }

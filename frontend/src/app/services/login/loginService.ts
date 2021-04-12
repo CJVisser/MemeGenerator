@@ -73,10 +73,16 @@ export class LoginService {
     );
   }
 
-  logout(): Observable<void> {
+  logout(): void {
+
     this._loggedIn.next(false);
     this._currentUser.next(null);
 
-    return this.httpClient.post<void>(`${environment.apiUrl}/logout`, {});
+    this.httpClient.post(`${environment.apiUrl}/logout`, {}).subscribe(
+      tap((response: any) => {
+      })
+    );
+
+    window.location.reload()
   }
 }
