@@ -10,17 +10,15 @@ import java.util.NoSuchElementException;
 import javax.ejb.DuplicateKeyException;
 
 import com.memegenerator.backend.data.entity.User;
-import com.memegenerator.backend.web.dto.SmallUserDto;
-import com.memegenerator.backend.web.dto.UserDto;
 
 @Service
 public interface UserService {
 
-    UserDto createUser(UserDto user) throws NoSuchElementException, DuplicateKeyException;
+    User createUser(User user) throws NoSuchElementException, DuplicateKeyException;
 
-    UserDto updateUser(UserDto user) throws NoSuchElementException, DuplicateKeyException;
+    User updateUser(User user) throws NoSuchElementException, DuplicateKeyException;
 
-    SmallUserDto getUserById(long userId) throws NoSuchElementException;
+    User getUserById(long userId) throws NoSuchElementException;
 
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
@@ -28,7 +26,7 @@ public interface UserService {
 
     void resetPassword(String confirmationToken, String password) throws NoSuchElementException;
 
-    SmallUserDto activateUser(Long userId, String confirmationToken) throws NoSuchElementException;
+    User activateUser(Long userId, String confirmationToken) throws NoSuchElementException;
 
     void updateUserPoints(Long userId, int pointsToAdd) throws NoSuchElementException;
 

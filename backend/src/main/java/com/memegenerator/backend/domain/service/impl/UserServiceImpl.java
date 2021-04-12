@@ -1,8 +1,6 @@
 package com.memegenerator.backend.domain.service.impl;
 
-
-import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -15,15 +13,12 @@ import com.memegenerator.backend.security.Role;
 import com.memegenerator.backend.security.UserDetailsAdapter;
 import com.memegenerator.backend.data.repository.UserRepository;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.mail.SimpleMailMessage;
-import com.memegenerator.backend.web.dto.SmallUserDto;
-import com.memegenerator.backend.web.dto.UserDto;
 import com.memegenerator.backend.domain.service.JavaMailSender;
 
 import lombok.RequiredArgsConstructor;
@@ -36,7 +31,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final ModelMapper modelMapper;
     private final JavaMailSender javaMailSender;
 
     /**
@@ -44,17 +38,18 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @return User
      * @throws DuplicateKeyException
      */
-    public UserDto createUser(UserDto userDto) throws DuplicateKeyException {
+    public User createUser(User user) throws DuplicateKeyException {
 
-        if (userRepository.findByEmail(userDto.email).isPresent())
+        if (userRepository.findByEmail(user.email).isPresent()) {
             throw new DuplicateKeyException("Email is already in use");
+        }
 
-        if (userRepository.findUserByUsername(userDto.username).isPresent())
+        if (userRepository.findUserByUsername(user.username).isPresent()) {
             throw new DuplicateKeyException("Username is already in use");
+        }
 
-        User user = modelMapper.map(userDto, User.class);
         user.role = Role.User;
-        user.password = bCryptPasswordEncoder.encode(userDto.password);
+        user.password = bCryptPasswordEncoder.encode(user.password);
         user.confirmationToken = this.randomInt();
 
         User savedUser = userRepository.save(user);
@@ -70,7 +65,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         javaMailSender.getJavaMailSender().send(message);
 
-        return modelMapper.map(savedUser, UserDto.class);
+        return savedUser;
     }
 
     /**
@@ -83,42 +78,37 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     /**
      * @param userId
-     * @return SmallUserDto
+     * @return User
      * @throws NoSuchElementException
      */
-    public SmallUserDto getUserById(long userId) throws NoSuchElementException {
+    public User getUserById(long userId) throws NoSuchElementException {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
-
-        return modelMapper.map(user, SmallUserDto.class);
+        return userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
     }
 
     /**
-     * @param userDto
-     * @return UserDto
+     * @param user
+     * @return User
      * @throws NoSuchElementException
      * @throws DuplicateKeyException
      */
-    public UserDto updateUser(UserDto userDto) throws NoSuchElementException, DuplicateKeyException {
+    public User updateUser(User user) throws NoSuchElementException, DuplicateKeyException {
 
-        User user = userRepository.findUserByUsername(userDto.username)
+        User foundUser = userRepository.findUserByUsername(user.username)
                 .orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
 
-        if (user.id != userDto.id) {
+        if (!user.id.equals(foundUser.id)) {
 
             throw new DuplicateKeyException("Wrong user");
         }
 
-        user = modelMapper.map(userDto, User.class);
-
         user.activated = true;
         user.role = Role.User;
-        user.password = bCryptPasswordEncoder.encode(userDto.password);
+        user.password = bCryptPasswordEncoder.encode(user.password);
         user.confirmationToken = this.randomInt();
         user.banned = false;
-        User savedUser = userRepository.save(user);
 
-        return modelMapper.map(savedUser, UserDto.class);
+        return userRepository.save(user);
     }
 
     /**
@@ -130,7 +120,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         byte[] array = new byte[10];
         new Random().nextBytes(array);
-        String token = new String(array, Charset.forName("UTF-8"));
+        String token = new String(array, StandardCharsets.UTF_8);
 
         user.token = token;
         userRepository.save(user);
@@ -163,18 +153,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @param confirmationToken
      * @throws NoSuchElementException
      */
-    public SmallUserDto activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
+    public User activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
 
-        if (user.id != userId) {
+        if (!user.id.equals(userId)) {
             throw new NoSuchElementException(USER_NOT_FOUND);
         }
 
         user.activated = true;
 
-        userRepository.save(user);
-
-        return modelMapper.map(user, SmallUserDto.class);
+        return userRepository.save(user);
     }
 
     /**
@@ -200,8 +188,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return new UserDetailsAdapter(userRepository.findUserByUsername(username));
     }
 
-    /** 
-     * @return List<UserDto>
+    /**
+     * @return List<User>
      */
     public List<User> getAllUsers() {
 
