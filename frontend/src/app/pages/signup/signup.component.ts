@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { throwError } from "rxjs";
 import { User } from "../../models/User";
-import { SignupService } from 'src/services/signup/signup.service';
+import { SignupService } from 'src/app/services/signup/signup.service';
 
 @Component({
   selector: 'app-signup',

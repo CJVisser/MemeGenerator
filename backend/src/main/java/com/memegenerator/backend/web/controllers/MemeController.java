@@ -13,6 +13,7 @@ import com.memegenerator.backend.domain.service.CategoryService;
 import com.memegenerator.backend.domain.service.MemeService;
 import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.web.dto.MemeDto;
+import com.memegenerator.backend.web.dto.SmallMemeDto;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -71,6 +72,7 @@ public class MemeController {
         meme.likes = 0;
         meme.dislikes = 0;
         meme.category = category;
+        meme.flag_points = 0;
 
         try {
 
@@ -128,5 +130,12 @@ public class MemeController {
 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping(path = "/flag")
+    public ResponseEntity<MemeDto> flagMeme(@Valid @RequestBody SmallMemeDto memeDto) {
+        Meme meme = memeService.flagMeme(memeDto.Id);
+
+        return new ResponseEntity<MemeDto>(modelMapper.map(meme, MemeDto.class), HttpStatus.OK);
     }
 }

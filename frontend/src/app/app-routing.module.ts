@@ -11,7 +11,7 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { PasswordResetComponent } from './pages/password-reset/password-reset.component';
 import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.component'
-import { LoginService } from '../../src/services/login/loginService'
+import { LoginService } from './services/login/loginService'
 
 const routes: Routes = [
   {

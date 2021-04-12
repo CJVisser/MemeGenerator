@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemeServiceImpl implements MemeService {
 
+    private static final String MEME_NOT_FOUND = "Meme not found";
+
     private final MemeRepository memeRepository;
     private final UserRepository userRepository;
 
@@ -28,7 +30,7 @@ public class MemeServiceImpl implements MemeService {
      */
     public Meme createMeme(Meme meme, Long userId) throws NoSuchElementException {
 
-        meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("Meme not found"));
 
         return memeRepository.save(meme);
     }
@@ -67,5 +69,16 @@ public class MemeServiceImpl implements MemeService {
         allMemes.sort(Comparator.comparing(Meme::getCreatedat).reversed());
 
         return allMemes;
+    }
+
+    public Meme flagMeme(long id) throws NoSuchElementException {
+
+        Meme meme = getMemeById(id);
+
+        meme.flag_points += 1;
+
+        memeRepository.save(meme);
+
+        return meme;
     }
 }

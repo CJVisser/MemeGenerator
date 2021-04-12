@@ -2,7 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import html2canvas from 'html2canvas';
 import { Observable, Observer } from 'rxjs';
-import { MemeService } from "../../../services/meme/memeService";
+import { MemeService } from "../../services/meme/memeService";
 import { Meme } from "../../models/Meme"
 
 @Component({

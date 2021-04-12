@@ -30,8 +30,11 @@ public class Meme extends BaseEntity {
     @Column(name = "dislikes")
     public int dislikes;
 
-    @Column(name = "memestatus")
-    public String memestatus;
+    @Column(name = "flag_points")
+    public int flag_points;
+
+    @Column(name = "disabled", nullable = false)
+    public boolean activated;
 
     @ManyToOne
     @JoinColumn(name = "imageid")

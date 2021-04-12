@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { User } from "../../models/User";
 // import { AuthService } from "app/services/auth/auth.service";
-import { ProfileService } from "../../../services/profile/profile.service";
+import { ProfileService } from "../../services/profile/profile.service";
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';

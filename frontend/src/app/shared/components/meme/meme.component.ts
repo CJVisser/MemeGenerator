@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { MemeService } from 'src/app/services/meme/memeService';
 
 @Component({
   selector: 'meme',
@@ -11,10 +13,24 @@ export class MemeComponent implements OnInit {
   @Input() memeImageUrl;
   @Input() memeUpvotes;
   @Input() memeDownvotes;
+
+  status: boolean = false
   
-  constructor() { }
+  constructor(
+    protected httpClient: HttpClient,
+    protected memeService: MemeService
+  ) {
+  }
 
   ngOnInit(): void {
+  }
+
+  flagMeme(id): void {
+    this.memeService.FlagMeme(id);
+
+    this.status = true
+
+    alert("You have successfully flagged this meme!")
   }
 
 }
