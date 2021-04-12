@@ -16,5 +16,7 @@ public interface MemeService {
 
     Meme updateMeme(Meme meme) throws NoSuchElementException;
 
+    Meme flagMeme(long id) throws NoSuchElementException;
+
     List<Meme> getMemes();
 }

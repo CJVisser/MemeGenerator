@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { User } from 'src/models/User';
-import { LoginService } from 'src/services/login/loginService';
+import { User } from '../../../models/User';
+import { LoginService } from 'src/app/services/login/loginService';
 
 @Component({
   selector: 'app-menu',

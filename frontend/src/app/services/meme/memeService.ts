@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Meme } from "../../app/models/Meme";
-import { environment } from "../../environments/environment";
+import { Meme } from "../../models/Meme";
+import { environment } from "../../../environments/environment";
 import { Observable, throwError } from "rxjs";
 import { catchError, retry } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -28,6 +29,7 @@ export class MemeService {
     result.append("imageblob", data.imageblob);
     result.append("title", data.title);
     result.append("userId", data.userId.toString());
+    
     if(data.description){
       result.append("description", data.description);
     }else{
@@ -46,6 +48,22 @@ export class MemeService {
         this.httpOptionsWithResponse
       )
       .pipe(retry(1), catchError(this.handleError));
+  }
+
+  FlagMeme(id): void {
+
+    const data = {
+      Id: id
+    }
+
+    this.http.post(`${environment.apiUrl}/meme/flag`, JSON.stringify(data), this.httpOptions).subscribe(
+      tap((response: any) => {
+
+        if (response.status) {
+          alert("You have flagged this meme!")
+        } 
+      })
+    );
   }
 
   GetAllMemes(): Observable<Meme[]> {

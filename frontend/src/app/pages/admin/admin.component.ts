@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Meme } from 'src/app/models/Meme';
 import { User } from 'src/app/models/User';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
-import { AdminService } from 'src/services/admin/adminService';
-import { MemeService } from 'src/services/meme/memeService';
+import { AdminService } from 'src/app/services/admin/adminService';
+import { MemeService } from 'src/app/services/meme/memeService';
 
 @Component({
   selector: 'app-admin',

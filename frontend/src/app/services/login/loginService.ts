@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { User } from "../../models/User";
-import { environment } from "../../environments/environment";
+import { User } from "../../models/User"
+import { environment } from "../../../environments/environment";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { ProfileService } from "../profile/profile.service";

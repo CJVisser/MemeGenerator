@@ -91,6 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .antMatchers(HttpMethod.POST, MEME_PATH).permitAll()
                 .antMatchers(HttpMethod.PUT, MEME_PATH).permitAll()
                 .antMatchers(HttpMethod.GET, MEME_PATH).permitAll()
+                .antMatchers(HttpMethod.POST, MEME_PATH + "/flag").permitAll()
                 .anyRequest().permitAll()
                 .and().httpBasic().and().formLogin().successHandler(new AuthenticationSuccessHandler() {
 

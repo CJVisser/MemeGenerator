@@ -1,28 +1,22 @@
-<!-- <div class="meme-container">
-    <div class="meme">
-        <div class="meme-name">
-            {{memeName}}
-        </div>
-        <div class="meme-image">
-            <img src="{{memeImageUrl}}">
-        </div>
-    </div>
-</div> -->
-
 <div class="container has-text-centered meme-item">
     <h1 class="title">{{memeName}}</h1>
     <img src="{{memeImageUrl}}">
 
     <div>
-        <h2 class="subtitle margin">69 pts</h2>
+        <h2 class="subtitle margin">Likes: {{ memeUpvotes}} Dislikes: {{ memeDownvotes }}</h2>
         <button class="button is-large icon-button">
             <span class="icon is-large">
-                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
             </span>
         </button>
         <button class="button is-large icon-button">
             <span class="icon is-large">
-                <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+            </span>
+        </button>
+        <button class="button is-large icon-button" (click)="flagMeme(memeId)" [disabled]="status">
+            <span class="icon is-large">
+                <i class="fa fa-exclamation" ></i>
             </span>
         </button>
     </div>
