@@ -15,7 +15,7 @@ export class AdminComponent implements OnInit {
   headersUsers: any[] = [
     {text: "Username", value: "username"},
     {text: "Creation Date", value: "createdat"},
-    {text: "# Reported Memes", value: "numOfReported"},
+    {text: "Banned", value: "banned"},
     {text: "Points", value: "points"},
     {text: "# of Memes", value: "numOfMemes"},
   ];
@@ -24,46 +24,8 @@ export class AdminComponent implements OnInit {
     {text: "Meme Description", value: "description"},
     {text: "Creation Date", value: "createdat"},
     {text: "Username", value: "user.username"},
-    {text: "Reported", value: "reported"},
+    {text: "Status", value: "memestatus"},
   ]
-  userItems: any[] = [
-    {
-        userName: "Bobbert",
-        createDat: "03-12-13",
-        numOfReported: 8,
-        points: 0,
-        numOfMemes: 5,
-    },
-    {
-        userName: "Cornie",
-        createDat: "04-12-11",
-        numOfReported: 999,
-        points: 10,
-        numOfMemes: 10,
-    },
-    {
-        userName: "Andhe",
-        createDat: "20-01-14",
-        numOfReported: 420,
-        points: -500,
-        numOfMemes: 365,
-    },
-    {
-        userName: "Dove",
-        createDat: "12-08-00",
-        numOfReported: 0,
-        points: 21,
-        numOfMemes: 7,
-    },
-    {
-        userName: "Thommert",
-        createDat: "01-01-90",
-        numOfReported: -10,
-        points: 69,
-        numOfMemes: 13,
-    },
-  ];
-  userUrl: string = 'iets';
   users: User[] = [];
   memes: any[] = [];
 

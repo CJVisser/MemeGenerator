@@ -22,4 +22,6 @@ public class UserDto {
 
 	@NotNull
 	public boolean activated;
+
+	public boolean banned;
 }

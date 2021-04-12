@@ -115,6 +115,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         user.role = Role.User;
         user.password = bCryptPasswordEncoder.encode(userDto.password);
         user.confirmationToken = this.randomInt();
+        user.banned = false;
         User savedUser = userRepository.save(user);
 
         return modelMapper.map(savedUser, UserDto.class);
@@ -199,8 +200,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return new UserDetailsAdapter(userRepository.findUserByUsername(username));
     }
 
-    /**
-     * @return LIst<UserDto>
+    /** 
+     * @return List<UserDto>
      */
     public List<User> getAllUsers() {
 
