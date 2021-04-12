@@ -48,7 +48,8 @@ public class UserController {
 
 		try {
 
-			userService.createUser(userDto);
+			User user = modelMapper.map(userDto, User.class);
+			userService.createUser(user);
 
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (NoSuchElementException e) {
@@ -66,7 +67,8 @@ public class UserController {
 
 		try {
 
-			userService.updateUser(userDto);
+			User user = modelMapper.map(userDto, User.class);
+			userService.updateUser(user);
 
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (NoSuchElementException | DuplicateKeyException e) {
@@ -119,7 +121,9 @@ public class UserController {
 	public ResponseEntity<SmallUserDto> getUserInfo(@PathVariable long userId) {
 		try {
 
-			return new ResponseEntity<SmallUserDto>(userService.getUserById(userId), HttpStatus.OK);
+			User user = userService.getUserById(userId);
+
+			return new ResponseEntity<SmallUserDto>(modelMapper.map(user, SmallUserDto.class), HttpStatus.OK);
 		} catch (NoSuchElementException e) {
 
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
