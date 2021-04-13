@@ -24,9 +24,9 @@ jobs:
     - name: Create .env file
       uses: SpicyPizza/create-envfile@v1
       with:
-        DB_URL: "jdbc:mysql://web0086.zxcs.nl:3306/cornevisser_JavaMinor?serverTimezone=UTC"
-        DB_USER: "cornevisser_JavaMino"
-        DB_PASS: "Mp1SVoji"
+        DB_URL: "${{ secrets.DB_URL }}"
+        DB_USER: "${{ secrets.DB_USER }}"
+        DB_PASS: "${{ secrets.DB_PASS }}"
     - name: Build with Maven
       run: mvn -B package --file pom.xml
       working-directory: './backend'
