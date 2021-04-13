@@ -20,6 +20,12 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+        
+    - name: Define variables
+      env:
+        DB-URL: "jdbc:mysql://web0086.zxcs.nl:3306/cornevisser_JavaMinor?serverTimezone=UTC"
+        DB-USER: "cornevisser_JavaMino"
+        DB-PASS: "Mp1SVoji"
     - name: Build with Maven
       run: mvn -B package --file pom.xml
       working-directory: './backend'
