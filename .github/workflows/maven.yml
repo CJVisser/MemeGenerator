@@ -21,8 +21,9 @@ jobs:
       with:
         java-version: 1.8
         
-    - name: Define variables
-      env:
+    - name: Create .env file
+      uses: SpicyPizza/create-envfile@v1
+      with:
         DB-URL: "jdbc:mysql://web0086.zxcs.nl:3306/cornevisser_JavaMinor?serverTimezone=UTC"
         DB-USER: "cornevisser_JavaMino"
         DB-PASS: "Mp1SVoji"
