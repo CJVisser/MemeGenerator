@@ -143,7 +143,7 @@ export class MememakerpageComponent implements OnInit {
         description: this.description,
         imageblob: blob,
         categoryId: this.chosenCategoryId,
-        userId: 180
+        userId: this.user.id
       };
 
       this.memeService.CreateMeme(meme).subscribe((res: HttpResponse<any>) => {
