@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, ElementRef, OnInit, ViewChild } from '@angular/core';
 import html2canvas from 'html2canvas';
 import { Observable, Observer } from 'rxjs';
 import { MemeService } from "../../services/meme/memeService";
@@ -7,6 +7,10 @@ import { Meme } from "../../models/Meme"
 import { Category } from 'src/app/models/Category';
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
+import { LoginService } from 'src/app/services/login/loginService';
+import { User } from 'src/app/models/User';
+import { ProfileService } from 'src/app/services/profile/profile.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-mememakerpage',
@@ -14,8 +18,6 @@ import { HttpClient } from "@angular/common/http";
   styleUrls: ['./mememakerpage.component.scss']
 })
 export class MememakerpageComponent implements OnInit {
-
-  constructor(private memeService: MemeService, private httpClient: HttpClient) { }
 
   @ViewChild('screen') screen: ElementRef;
   @ViewChild('canvas') canvas: ElementRef;
@@ -46,6 +48,14 @@ export class MememakerpageComponent implements OnInit {
   //stores file-names of all memes
   imageFileNameList: string[] = ["magikarp_logo.png", "crying_pepe.jpg", "denerys.png"];
 
+  user: any = null
+
+  constructor
+  ( private loginService: LoginService, 
+    private memeService: MemeService, private httpClient: HttpClient, 
+    private router: Router) {
+  }
+
   changeImage() {
     var valueOfSearch: string = "";
     for (var i = 0; i < this.imageNameList.length; i++) {
@@ -59,6 +69,10 @@ export class MememakerpageComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCategories();
+
+    this.user = this.loginService.getCurrentUser()
+
+    if (!this.user) this.router.navigate(["/login"]);
   }
 
   downloadImage() {

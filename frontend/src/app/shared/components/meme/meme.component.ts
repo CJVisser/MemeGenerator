@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { MemeService } from 'src/app/services/meme/memeService';
+import { LoginService } from 'src/app/services/login/loginService';
+import { User } from 'src/app/models/User';
+import { ProfileService } from 'src/app/services/profile/profile.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'meme',
@@ -15,14 +19,26 @@ export class MemeComponent implements OnInit {
   @Input() memeDownvotes;
 
   status: boolean = false
+
+  user: any = null
+
+  showButtons: boolean = false
   
   constructor(
+    private loginService: LoginService, 
     protected httpClient: HttpClient,
-    protected memeService: MemeService
+    private router: Router,
+    protected memeService: MemeService,
   ) {
   }
 
   ngOnInit(): void {
+
+    this.user = this.loginService.getCurrentUser()
+
+    if(this.user) this.showButtons = true
+
+    //if (!this.user) this.router.navigate(["/login"]);
   }
 
   flagMeme(id): void {

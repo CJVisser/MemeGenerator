@@ -19,13 +19,16 @@ export class ProfileComponent implements OnInit {
   updatedProfile : Boolean = false
 
   constructor(private profileService: ProfileService, 
-    private route: ActivatedRoute
-    // private authService: AuthService
+    private route: ActivatedRoute,
+    private router: Router
     ) {}
 
   user: User;
   id: any;
   ngOnInit(): void {
+
+    if (!this.user) this.router.navigate(["/login"]);
+    
     self = this;
     this.id = this.route.snapshot.paramMap.get('id');
     this.profileService.getUserInfo(

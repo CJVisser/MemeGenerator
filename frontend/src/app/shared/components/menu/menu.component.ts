@@ -25,7 +25,5 @@ export class MenuComponent implements OnInit {
 
   private logout(){
     this.loginService.logout()
-
-    
   }
 }
