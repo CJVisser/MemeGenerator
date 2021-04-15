@@ -1,13 +1,13 @@
-<div class = "container">
-    <div class = "container">
-        <div class = "one">
-            <div class = "form-group">
+<div class="container">
+    <div class="container">
+        <div class="one">
+            <div class="form-group">
                 <label>Top Text: </label>
-                <input class = "form-control" [(ngModel)] = "topText">
+                <input class="form-control" [(ngModel)]="topText">
             </div>
-            <div class = "form-group">
-                    <label>Bottom Text: </label>
-                    <input class = "form-control" [(ngModel)] = "bottomText">
+            <div class="form-group">
+                <label>Bottom Text: </label>
+                <input class="form-control" [(ngModel)]="bottomText">
             </div>
             <!-- <div class = "form-group">
                     <label>Image: </label>
@@ -17,37 +17,44 @@
                             <option>Denerys</option>
                         </select>
             </div> example for sample pictures from list -->
-            <div class = "form-group">
+
+            <select [(ngModel)]="chosenCategoryId">
+                <option *ngFor="let category of categories" [value]="category.id">
+                    {{category.title}}
+                </option>
+            </select>
+
+            <div class="form-group">
                 <label>Image upload: </label>
                 <input type="file" id="img" name="img" accept="image/*" (change)="onFileChanged($event)">
             </div>
-            <div class = "form-group">
-                    <label>Background Color: </label>
-                    <input type="color" [(ngModel)] = "colorName">
+            <div class="form-group">
+                <label>Background Color: </label>
+                <input type="color" [(ngModel)]="colorName">
             </div>
-            <div class = "form-group">
+            <div class="form-group">
                 <label>Title: </label>
-                <input class = "form-control" [(ngModel)] = "title">
+                <input class="form-control" [(ngModel)]="title">
             </div>
-            <div class = "form-group">
+            <div class="form-group">
                 <label>Description: </label>
-                <input class = "form-control" [(ngModel)] = "description">
+                <input class="form-control" [(ngModel)]="description">
             </div>
             <div class="button" (click)="downloadImage()">Save image</div>
         </div>
-        <div class = "two" #screen>
-            <div style = "background-color: {{colorName}}">
-                <h2 style = "text-align: center; color: white; padding-top: 1em;">{{ topText }}</h2>
-                <img [src]="changeImage()" class = ".img-responsive" style = "display: block;
+        <div class="two" #screen>
+            <div style="background-color: {{colorName}}">
+                <h2 style="text-align: center; color: white; padding-top: 1em;">{{ topText }}</h2>
+                <img [src]="changeImage()" class=".img-responsive" style="display: block;
                 margin-left: auto;
                 margin-right: auto;" #image>
-                <h2 style = "text-align: center; color: white; padding-bottom: 1em;">{{ bottomText }}</h2>
+                <h2 style="text-align: center; color: white; padding-bottom: 1em;">{{ bottomText }}</h2>
             </div>
         </div>
 
         <div id="download">
             <img #canvas>
             <a #downloadLink></a>
-          </div>
+        </div>
     </div>
 </div>
