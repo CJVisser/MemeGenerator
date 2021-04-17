@@ -11,8 +11,13 @@
     <artifactId>fullstack</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>fullstack</name>
-    <description>Demo project for java sullstack</description>
-    <properties></properties>
+
+    <properties>
+        <sonar.projectKey>Vitrav_MemeGenerator</sonar.projectKey>
+        <sonar.organization>vitrav</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -175,19 +180,14 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <profiles>
         <profile>
             <id>sonar</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <properties>
-            <!-- Optional URL to server. Default value is http://localhost:9000 -->
-                <sonar.host.url>
-                    https://memegenerator-herkansing.herokuapp.com/:9000
-                </sonar.host.url>
-            </properties>
         </profile>
     </profiles>
+
 </project>
