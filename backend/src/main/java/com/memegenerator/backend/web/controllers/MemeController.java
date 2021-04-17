@@ -3,15 +3,18 @@ package com.memegenerator.backend.web.controllers;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.memegenerator.backend.data.entity.Category;
+import com.memegenerator.backend.data.entity.Meme;
+import com.memegenerator.backend.domain.service.CategoryService;
 import com.memegenerator.backend.domain.service.MemeService;
 import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.web.dto.MemeDto;
 
-import lombok.var;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,39 +33,48 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("meme")
 @RequiredArgsConstructor
 public class MemeController {
-    @Autowired
+
+    private final CategoryService categoryService;
     private final MemeService memeService;
     private final UserService userService;
-    /** 
+    private final ModelMapper modelMapper;
+
+    /**
      * @return ResponseEntity<List<MemeDto>>
      */
     @GetMapping(path = "/")
     public ResponseEntity<List<MemeDto>> getMemes() {
 
-        return new ResponseEntity<List<MemeDto>>(memeService.getMemes(), HttpStatus.OK);
+        List<Meme> memes = memeService.getMemes();
+
+        List<MemeDto> memeDtos = memes.stream().map(meme -> modelMapper.map(meme, MemeDto.class))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<List<MemeDto>>(memeDtos, HttpStatus.OK);
     }
 
-    
-    /** 
+    /**
      * @param imageblob
      * @param @RequestParam("title"
      * @return ResponseEntity<MemeDto>
      */
     @PostMapping(path = "/")
-    public ResponseEntity<MemeDto> createMeme(@RequestParam("imageblob") MultipartFile imageblob, @RequestParam("title") String title,
-        @RequestParam("userId") String userId, @RequestParam("categoryId") long categoryId,
-        @RequestParam("description") String description) {
+    public ResponseEntity<MemeDto> createMeme(@RequestParam("imageblob") MultipartFile imageblob,
+            @RequestParam("title") String title, @RequestParam("userId") String userId,
+            @RequestParam("categoryId") long categoryId, @RequestParam("description") String description) {
 
-        MemeDto memeDto = new MemeDto();
-        memeDto.title = title;
-        memeDto.description = description;
-        memeDto.likes = 0;
-        memeDto.dislikes = 0;
-        memeDto.categoryId = categoryId;
+        Category category = categoryService.getCategoryById(categoryId);
+
+        Meme meme = new Meme();
+        meme.title = title;
+        meme.description = description;
+        meme.likes = 0;
+        meme.dislikes = 0;
+        meme.category = category;
 
         try {
 
-            memeDto.imageblob = imageblob.getBytes();
+            meme.imageblob = imageblob.getBytes();
         } catch (IOException e) {
 
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -71,18 +83,18 @@ public class MemeController {
         long userIdLong = Long.parseLong(userId);
 
         try {
-            ResponseEntity<MemeDto> result = new ResponseEntity<MemeDto>(memeService.createMeme(memeDto, userIdLong), HttpStatus.CREATED);
-            userService.updateUserPoints(userIdLong, 1);
-            return result;
+            Meme createdMeme = memeService.createMeme(meme, userIdLong);
 
+            userService.updateUserPoints(userIdLong, 1);
+
+            return new ResponseEntity<MemeDto>(modelMapper.map(createdMeme, MemeDto.class), HttpStatus.CREATED);
         } catch (NoSuchElementException e) {
 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    
-    /** 
+    /**
      * @param memeId
      * @return ResponseEntity<MemeDto>
      */
@@ -91,15 +103,16 @@ public class MemeController {
 
         try {
 
-            return new ResponseEntity<MemeDto>(memeService.getMemeById(memeId), HttpStatus.OK);
+            Meme meme = memeService.getMemeById(memeId);
+
+            return new ResponseEntity<MemeDto>(modelMapper.map(meme, MemeDto.class), HttpStatus.OK);
         } catch (NoSuchElementException e) {
 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    
-    /** 
+    /**
      * @param memeDto
      * @return ResponseEntity<MemeDto>
      */
@@ -108,7 +121,9 @@ public class MemeController {
 
         try {
 
-            return new ResponseEntity<MemeDto>(memeService.updateMeme(memeDto), HttpStatus.OK);
+            Meme meme = memeService.updateMeme(modelMapper.map(memeDto, Meme.class));
+
+            return new ResponseEntity<MemeDto>(modelMapper.map(meme, MemeDto.class), HttpStatus.OK);
         } catch (NoSuchElementException e) {
 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
