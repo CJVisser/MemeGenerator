@@ -20,19 +20,16 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-        
-    - name: Create .env file
-      uses: SpicyPizza/create-envfile@v1
-      with:
-        directory: '.\backend\src\main\resources\'
-        file_name: .env
-        envkey_DB_URL: ${{ secrets.DB_URL }}
-        envkey_DB_USER: ${{ secrets.DB_USER }}
-        envkey_DB_PASS: ${{ secrets.DB_PASS }}
-      
+              
     - name: Build with Maven
       run: mvn -B package --file pom.xml
       working-directory: './backend'
+      env:
+           DB_URL: ${{ secrets.DB_URL }}
+           DB_USER: ${{ secrets.DB_USER }}
+           DB_PASS: ${{ secrets.DB_PASS }}
+	
+
       
   sonar:
     name: Test - SonarCloud Scan
