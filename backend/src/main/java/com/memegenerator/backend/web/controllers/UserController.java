@@ -30,8 +30,8 @@ import com.memegenerator.backend.domain.service.UserService;
 @RequiredArgsConstructor
 public class UserController {
 
-	UserService userService;
-	ModelMapper modelMapper;
+	private final UserService userService;
+	private final ModelMapper modelMapper;
 
 	/**
 	 * @param userDto

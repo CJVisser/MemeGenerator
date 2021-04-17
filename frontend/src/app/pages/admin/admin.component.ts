@@ -38,7 +38,7 @@ export class AdminComponent implements OnInit {
     this.adminService.getUsers()
     .subscribe( data => {
       this.users = data;
-      console.log(this.users);
+      //console.log(data);
     });
     this.memeService.GetAllMemes()
     .subscribe( data => {
