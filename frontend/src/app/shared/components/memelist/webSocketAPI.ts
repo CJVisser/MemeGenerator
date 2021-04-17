@@ -16,6 +16,7 @@ export class WebSocketAPI {
         this.stompClient = Stomp.over(ws);
         const _this = this;
         _this.stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
             _this.stompClient.subscribe(_this.topic, function (sdkEvent) {
                 _this.onMessageReceived(sdkEvent);
             });
