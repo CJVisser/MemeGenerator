@@ -25,9 +25,9 @@ jobs:
       run: mvn -B package --file pom.xml
       working-directory: './backend'
       env:
-           DB_URL: ${{ secrets.DB_URL }}
-           DB_USER: ${{ secrets.DB_USER }}
-           DB_PASS: ${{ secrets.DB_PASS }}
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
 	
 
       
