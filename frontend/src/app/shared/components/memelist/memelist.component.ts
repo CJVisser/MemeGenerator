@@ -72,7 +72,6 @@ export class MemelistComponent implements OnInit {
   }
 
   connect(){
-    debugger;
     this.webSocketAPI._connect();
   }
 
