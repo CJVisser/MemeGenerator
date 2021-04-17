@@ -27,7 +27,7 @@ jobs:
         envkey_DB_URL: ${{ secrets.DB_URL }}
         envkey_DB_USER: ${{ secrets.DB_USER }}
         envkey_DB_PASS: ${{ secrets.DB_PASS }}
-        directory: './backend'
+        directory: './backend/src/main/resources'
         file_name: .env
       
     - name: Build with Maven
