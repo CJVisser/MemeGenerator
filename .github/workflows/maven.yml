@@ -28,6 +28,7 @@ jobs:
         envkey_DB_USER: ${{ secrets.DB_USER }}
         envkey_DB_PASS: ${{ secrets.DB_PASS }}
         directory: './backend'
+        file_name: .env
       
     - name: Build with Maven
       run: mvn -B package --file pom.xml
