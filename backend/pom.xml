@@ -16,7 +16,7 @@
         <sonar.projectKey>Vitrav_MemeGenerator</sonar.projectKey>
         <sonar.organization>vitrav</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <java.version>14</java.version>
+        <java.version>12</java.version>
     </properties>
 
     <dependencies>
