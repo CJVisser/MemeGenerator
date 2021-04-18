@@ -16,6 +16,7 @@
         <sonar.projectKey>Vitrav_MemeGenerator</sonar.projectKey>
         <sonar.organization>vitrav</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <java.version>12</java.version>
     </properties>
 
     <dependencies>
@@ -41,6 +42,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
             <optional>true</optional>
         </dependency>
         <dependency>
