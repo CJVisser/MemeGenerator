@@ -11,7 +11,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -120,10 +122,8 @@ public class UserController {
 	 * @return ResponseEntity<SmallUserDto>
 	 */
 	@GetMapping(path = "/{userId}")
-	public ResponseEntity<SmallUserDto> getUserInfo(@AuthenticationPrincipal User authenticatedUser, @PathVariable long userId) {
+	public ResponseEntity<SmallUserDto> getUserInfo(@PathVariable long userId) {
 		try {
-
-			if(authenticatedUser == null) new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
 			User user = userService.getUserById(userId);
 

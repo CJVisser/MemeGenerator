@@ -30,8 +30,6 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
 
-    //if (!this.user) this.router.navigate(["/login"]);
-
     self = this;
     this.id = this.route.snapshot.paramMap.get('id');
     this.profileService.getUserInfo(

@@ -19,7 +19,7 @@ public class JavaMailSender {
         mailSender.setPort(587);
 
         mailSender.setUsername("javaminormailer@cornevisser.nl");
-        mailSender.setPassword("AndyVergeetHeelDeTijdDatHijVerloofdIs2");
+        mailSender.setPassword("");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

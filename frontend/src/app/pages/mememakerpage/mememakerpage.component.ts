@@ -9,8 +9,12 @@ import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { LoginService } from 'src/app/services/login/loginService';
 import { User } from 'src/app/models/User';
+import { Tag } from 'src/app/models/Tag';
 import { ProfileService } from 'src/app/services/profile/profile.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { tap } from "rxjs/operators";
+import { pipe } from 'rxjs';
+import { HtmlTagDefinition } from '@angular/compiler';
 
 @Component({
   selector: 'app-mememakerpage',
@@ -49,11 +53,14 @@ export class MememakerpageComponent implements OnInit {
   imageFileNameList: string[] = ["magikarp_logo.png", "fistingBaby.png", "skeleton.png", "scaredCat.png", "watchingBack.png"];
 
   user: any = null
+  tags: Tag[] = []
+  chosenTags: Tag[] = []
+  tag: Tag = null
 
   constructor
-  ( private loginService: LoginService, 
-    private memeService: MemeService, private httpClient: HttpClient, 
-    private router: Router) {
+    (private loginService: LoginService,
+      private memeService: MemeService, private httpClient: HttpClient,
+      private router: Router) {
   }
 
   changeImage() {
@@ -68,11 +75,12 @@ export class MememakerpageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCategories();
-
     this.user = this.loginService.getCurrentUser()
 
     if (!this.user) this.router.navigate(["/login"]);
+
+    this.getCategories()
+    this.getTags()
   }
 
   downloadImage() {
@@ -138,16 +146,17 @@ export class MememakerpageComponent implements OnInit {
 
   createBlobImageFileAndShow(): void {
     this.dataURItoBlob(this.base64TrimmedURL).subscribe((blob: Blob) => {
+
       var meme: Meme = {
         title: this.title,
         description: this.description,
         imageblob: blob,
         categoryId: this.chosenCategoryId,
-        userId: this.user.id
+        userId: this.user.id,
+        tags: this.chosenTags
       };
 
       this.memeService.CreateMeme(meme).subscribe((res: HttpResponse<any>) => {
-        console.log(res.body);
 
         alert('Je meme is aangemaakt!')
       });
@@ -204,5 +213,15 @@ export class MememakerpageComponent implements OnInit {
 
   getCategories() {
     this.httpClient.get<Category[]>(`${environment.apiUrl}/category/`).subscribe(data => this.categories = data)
+  }
+
+  getTags() {
+    this.httpClient.get<Tag[]>(`${environment.apiUrl}/tag/`).subscribe(data => this.tags = data)
+  }
+
+  addTag(tagId) {
+    const tag = this.tags.find(a => a.id == tagId)
+
+    this.chosenTags.push(tag)
   }
 }

@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.memegenerator.backend.data.entity.Meme;
+import com.memegenerator.backend.data.entity.Tag;
 import com.memegenerator.backend.data.repository.MemeRepository;
 import com.memegenerator.backend.data.repository.UserRepository;
+import com.memegenerator.backend.data.repository.TagRepository;
 import com.memegenerator.backend.domain.service.MemeService;
 
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class MemeServiceImpl implements MemeService {
 
     private final MemeRepository memeRepository;
     private final UserRepository userRepository;
+    private final TagRepository tagRepository;
 
     /**
      * @param meme
@@ -30,7 +33,13 @@ public class MemeServiceImpl implements MemeService {
      */
     public Meme createMeme(Meme meme, Long userId) throws NoSuchElementException {
 
-        meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("Meme not found"));
+        meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(MEME_NOT_FOUND));
+
+        for (Tag elementTag : meme.tags) {
+            // Check if tag exists in the database 
+            Tag tag = tagRepository.findById(elementTag.id).orElseThrow(() -> new NoSuchElementException("Tag not found"));
+            meme.tags.add(tag);
+        }
 
         return memeRepository.save(meme);
     }
