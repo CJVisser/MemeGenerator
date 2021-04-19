@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 import javax.ejb.DuplicateKeyException;
 
@@ -154,5 +155,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public List<User> getAllUsers() {
 
         return userRepository.findAll();
+    }
+
+    public void banUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
+        user.banned = !user.banned;
+
+        userRepository.save(user);
     }
 }

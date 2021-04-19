@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Meme } from 'src/app/models/Meme';
 import { User } from 'src/app/models/User';
-import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { AdminService } from 'src/services/admin/adminService';
 import { MemeService } from 'src/services/meme/memeService';
 
@@ -28,6 +27,9 @@ export class AdminComponent implements OnInit {
   ]
   users: User[] = [];
   memes: any[] = [];
+  ban: string = 'Ban';
+  userButtonText: string;
+  memeButtonText: string;
 
   constructor(
     private adminService: AdminService,
@@ -38,13 +40,21 @@ export class AdminComponent implements OnInit {
     this.adminService.getUsers()
     .subscribe( data => {
       this.users = data;
-      //console.log(data);
+      console.log(data);
     });
     this.memeService.GetAllMemes()
     .subscribe( data => {
       console.log(data);
       this.memes = data;
       this.getWantedProps();
+    })
+    this.userButtonText = 'Ban';
+  }
+
+  public banUser(userId: number): void {
+    this.adminService.banUser(userId)
+    .subscribe( data => {
+      console.log(data);
     })
   }
 
