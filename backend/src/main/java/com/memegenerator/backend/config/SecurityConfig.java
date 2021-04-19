@@ -28,8 +28,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import lombok.var;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
@@ -99,7 +97,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                             Authentication authentication) throws IOException, ServletException {
-                        var principal = modelmapper.map(authentication.getPrincipal(), UserDetailsAdapter.class);
+                        UserDetailsAdapter principal = modelmapper.map(authentication.getPrincipal(), UserDetailsAdapter.class);
                         response.getWriter().write("{ \"status\": true, \"userId\": " + principal.getUserId() +" }");
                     }
                 }).failureHandler(new AuthenticationFailureHandler() {

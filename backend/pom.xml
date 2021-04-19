@@ -11,8 +11,14 @@
     <artifactId>fullstack</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>fullstack</name>
-    <description>Demo project for java sullstack</description>
-    <properties></properties>
+
+    <properties>
+        <sonar.projectKey>Vitrav_MemeGenerator</sonar.projectKey>
+        <sonar.organization>vitrav</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <java.version>12</java.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -36,6 +42,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -148,9 +155,9 @@
             <version>1.5.2</version>
         </dependency>
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.5.2</version>
+            <groupId>me.paulschwarz</groupId>
+            <artifactId>spring-dotenv</artifactId>
+            <version>2.3.0</version>
         </dependency>
     </dependencies>
 
@@ -168,26 +175,7 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.4.0.905</version>
-            </plugin>
         </plugins>
     </build>
-    
-    <profiles>
-        <profile>
-            <id>sonar</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-            <!-- Optional URL to server. Default value is http://localhost:9000 -->
-                <sonar.host.url>
-                    https://memegenerator-herkansing.herokuapp.com/:9000
-                </sonar.host.url>
-            </properties>
-        </profile>
-    </profiles>
+
 </project>

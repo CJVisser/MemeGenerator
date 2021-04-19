@@ -44,9 +44,9 @@ export class MememakerpageComponent implements OnInit {
   the meme names and corresponding file-names need to be in the same order in both arrays.*/
 
   //stores names of all the memes
-  imageNameList: string[] = ["Magikarp Logo", "Crying Pepe", "Denerys"];
+  imageNameList: string[] = ["Magikarp Logo", "Fisting baby", "Skeleton", "Scared cat", "Watching back"];
   //stores file-names of all memes
-  imageFileNameList: string[] = ["magikarp_logo.png", "crying_pepe.jpg", "denerys.png"];
+  imageFileNameList: string[] = ["magikarp_logo.png", "fistingBaby.png", "skeleton.png", "scaredCat.png", "watchingBack.png"];
 
   user: any = null
 
