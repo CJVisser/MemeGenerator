@@ -1,6 +1,6 @@
 <div class="container" *ngFor="let item of memes;">
     <meme [memeId]="item.id" [memeName]="item.title" [memeImageUrl]="item.imageSrc" [memeUpvotes]="item.likes"
-        [memeDownvotes]="item.dislikes">
+        [memeDownvotes]="item.dislikes" [tags]="item.tags">
     </meme>
 
     <hr />

@@ -4,7 +4,11 @@
 
     <div class="container">
         <h2 class="subtitle margin">Likes: {{ memeUpvotes}} Dislikes: {{ memeDownvotes }}</h2>
-
+        <div class="is-clearfix">
+            <div class="float-left added-tag" *ngFor="let tag of tags">
+                {{ tag.title }}
+            </div>
+        </div>
         <div *ngIf="showButtons">
             <button class="button is-large icon-button">
                 <span class="icon is-large">

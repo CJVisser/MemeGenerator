@@ -17,11 +17,10 @@ export class MemeComponent implements OnInit {
   @Input() memeImageUrl;
   @Input() memeUpvotes;
   @Input() memeDownvotes;
+  @Input() tags;
 
   status: boolean = false
-
   user: any = null
-
   showButtons: boolean = false
   
   constructor(
@@ -37,8 +36,6 @@ export class MemeComponent implements OnInit {
     this.user = this.loginService.getCurrentUser()
 
     if(this.user) this.showButtons = true
-
-    //if (!this.user) this.router.navigate(["/login"]);
   }
 
   flagMeme(id): void {

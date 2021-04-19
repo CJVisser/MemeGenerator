@@ -10,7 +10,9 @@ import com.memegenerator.backend.data.repository.MemeRepository;
 import com.memegenerator.backend.data.repository.UserRepository;
 import com.memegenerator.backend.data.repository.TagRepository;
 import com.memegenerator.backend.domain.service.MemeService;
+import com.memegenerator.backend.web.dto.MemeDto;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class MemeServiceImpl implements MemeService {
     private final MemeRepository memeRepository;
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
+    private final ModelMapper modelMapper;
 
     /**
      * @param meme
@@ -31,11 +34,13 @@ public class MemeServiceImpl implements MemeService {
      * @return Meme
      * @throws NoSuchElementException
      */
-    public Meme createMeme(Meme meme, Long userId) throws NoSuchElementException {
+    public Meme createMeme(MemeDto memeDto, Long userId) throws NoSuchElementException {
+
+        Meme meme = modelMapper.map(memeDto, Meme.class);
 
         meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(MEME_NOT_FOUND));
 
-        for (Tag elementTag : meme.tags) {
+        for (Tag elementTag : memeDto.tags) {
             // Check if tag exists in the database 
             Tag tag = tagRepository.findById(elementTag.id).orElseThrow(() -> new NoSuchElementException("Tag not found"));
             meme.tags.add(tag);

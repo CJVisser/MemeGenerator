@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import javax.validation.constraints.NotNull;
 
+import com.memegenerator.backend.data.entity.Category;
 import com.memegenerator.backend.data.entity.Tag;
 
 import lombok.Getter;
@@ -35,4 +36,7 @@ public class MemeDto {
     public Timestamp createdat;
 
     public String memestatus;
+
+    public Category category;
+    public Integer flag_points;
 }
