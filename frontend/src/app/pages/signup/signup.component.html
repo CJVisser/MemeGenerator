@@ -28,7 +28,20 @@
         </div>
 
         <div *ngIf="createdAccount" class="block notification is-success is-light margin">
-            Een email is verstuurd naar'{{ f.email.value }}'! Klik op de link in deze email om uw account te activeren en om in te kunnen loggen! 
+            An email has been sent to '{{ f.email.value }}'! Click the link in the mail to activate your account and be able to log in.
+        </div>
+
+        <div *ngIf="errors.length > 0" class="block notification is-danger is-light margin">
+            <ul *ngFor="let error of errors">
+                <li>{{ error }}</li>
+            </ul>
         </div>
     </div>
 </section>
+
+<style>
+    ul{
+        background:none;
+        list-style-type: circle;
+    }
+</style>

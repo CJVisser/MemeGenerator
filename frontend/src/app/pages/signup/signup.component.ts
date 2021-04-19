@@ -15,6 +15,7 @@ export class SignupComponent implements OnInit {
   user: User;
   signupForm: FormGroup;
   createdAccount: Boolean = false
+  errors: string[] = []
 
   constructor(
 
@@ -48,9 +49,28 @@ export class SignupComponent implements OnInit {
       email: this.f.email.value,
     };
 
-    this.signupService.signup(this.user);
+    if(this.user.username == "" || this.user.password == "" || this.user.email == ""){
+      alert("U moet een gebruikersnaam, wachtwoord en email invullen.")
 
-    this.createdAccount = true
+      return;
+    }
+
+    this.signupService.signup(this.user).subscribe((response) => {
+        // Do stuff
+        console.log(response)
+
+        if(response.success){
+          this.createdAccount = true
+
+          this.errors = []
+        }else{
+          this.errors = response.errors
+        }
+    });
+
+    // if(response.success) this.createdAccount = true
+
+    // this.errors = response.errors
   }
 }
 

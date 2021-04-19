@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import com.memegenerator.backend.web.dto.RequestResponse;
 import com.memegenerator.backend.web.dto.SmallUserDto;
 import com.memegenerator.backend.web.dto.UserDto;
 import com.memegenerator.backend.data.entity.User;
@@ -44,17 +46,18 @@ public class UserController {
 	 * @throws DuplicateKeyException
 	 */
 	@PostMapping()
-	public ResponseEntity<String> createUser(@Valid @RequestBody UserDto userDto) throws DuplicateKeyException {
+	public ResponseEntity<RequestResponse> createUser(@Valid @RequestBody UserDto userDto)
+			throws DuplicateKeyException {
 
 		try {
 
 			User user = modelMapper.map(userDto, User.class);
-			userService.createUser(user);
+			RequestResponse response = userService.createUser(user);
 
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<RequestResponse>(response, HttpStatus.OK);
 		} catch (NoSuchElementException e) {
 
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<RequestResponse>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -66,6 +69,8 @@ public class UserController {
 	public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto userDto) {
 
 		try {
+
+			// if(authenticatedUser == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
 			User user = modelMapper.map(userDto, User.class);
 			userService.updateUser(user);
@@ -83,20 +88,17 @@ public class UserController {
 	 * @return ResponseEntity<String>
 	 */
 	@GetMapping(path = "/activate/{userId}/{token}")
-	public ResponseEntity<String> activateUser(@PathVariable long userId, @PathVariable String token) {
+	public ResponseEntity<RequestResponse> activateUser(@PathVariable long userId, @PathVariable String token) {
 
 		try {
 
-			userService.activateUser(userId, token);
-
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<RequestResponse>(userService.activateUser(userId, token), HttpStatus.OK);
 		} catch (NoSuchElementException e) {
-
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<RequestResponse>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
-	/** 
+	/**
 	 * @param userId
 	 * @param token
 	 * @return ResponseEntity<String>
@@ -113,13 +115,15 @@ public class UserController {
 		}
 	}
 
-	/** 
+	/**
 	 * @param userId
 	 * @return ResponseEntity<SmallUserDto>
 	 */
 	@GetMapping(path = "/{userId}")
-	public ResponseEntity<SmallUserDto> getUserInfo(@PathVariable long userId) {
+	public ResponseEntity<SmallUserDto> getUserInfo(@AuthenticationPrincipal User authenticatedUser, @PathVariable long userId) {
 		try {
+
+			if(authenticatedUser == null) new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
 			User user = userService.getUserById(userId);
 
@@ -137,8 +141,8 @@ public class UserController {
 	public ResponseEntity<List<UserDto>> getUsers() {
 		List<User> users = userService.getAllUsers();
 
-		List<UserDto> userDtos = users.stream()
-			.map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+		List<UserDto> userDtos = users.stream().map(user -> modelMapper.map(user, UserDto.class))
+				.collect(Collectors.toList());
 
 		return new ResponseEntity<List<UserDto>>(userDtos, HttpStatus.OK);
 	}

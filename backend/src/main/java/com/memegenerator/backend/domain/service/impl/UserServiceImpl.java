@@ -11,6 +11,7 @@ import com.memegenerator.backend.data.entity.User;
 import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.security.Role;
 import com.memegenerator.backend.security.UserDetailsAdapter;
+import com.memegenerator.backend.web.dto.RequestResponse;
 import com.memegenerator.backend.data.repository.UserRepository;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,15 +39,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @return User
      * @throws DuplicateKeyException
      */
-    public User createUser(User user) throws DuplicateKeyException {
+    public RequestResponse createUser(User user) {
 
-        if (userRepository.findByEmail(user.email).isPresent()) {
-            throw new DuplicateKeyException("Email is already in use");
-        }
+        RequestResponse response = new RequestResponse();
 
-        if (userRepository.findUserByUsername(user.username).isPresent()) {
-            throw new DuplicateKeyException("Username is already in use");
-        }
+        // Check if email is already in use
+        if (userRepository.findByEmail(user.email).isPresent()) response.Errors.add("This email is already in use.");
+
+        // Check if username is already in use
+        if (userRepository.findUserByUsername(user.username).isPresent()) response.Errors.add("This username is already in use.");
+
+        if(response.Errors.size() > 0) return response;
 
         user.role = Role.User;
         user.password = bCryptPasswordEncoder.encode(user.password);
@@ -57,15 +60,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("javaminor@cornevisser.nl");
         message.setTo(savedUser.email);
-        message.setSubject("Thank you for signing up");
+        message.setSubject("Bedankt voor het registreren");
 
         String url = "http://localhost:8080/user/activate/" + savedUser.id + "/" + savedUser.confirmationToken;
 
-        message.setText("Click here to activate your account: " + url);
+        message.setText("Klik hier om uw account te activeren: " + url);
 
         javaMailSender.getJavaMailSender().send(message);
 
-        return savedUser;
+        response.Message = "You successfully signed up!";
+
+        response.Success = true;
+
+        return response;
     }
 
     /**
@@ -153,8 +160,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @param confirmationToken
      * @throws NoSuchElementException
      */
-    public User activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
+    public RequestResponse activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
+
+        RequestResponse response = new RequestResponse();
 
         if (!user.id.equals(userId)) {
             throw new NoSuchElementException(USER_NOT_FOUND);
@@ -162,7 +171,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         user.activated = true;
 
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        response.Message = "Your account is activated!";
+        response.Success = true;
+
+        return response;
     }
 
     /**
