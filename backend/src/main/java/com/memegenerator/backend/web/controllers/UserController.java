@@ -8,12 +8,8 @@ import javax.ejb.DuplicateKeyException;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,11 +32,8 @@ import com.memegenerator.backend.domain.service.UserService;
 @RequiredArgsConstructor
 public class UserController {
 
-	@Autowired
-	UserService userService;
-
-	@Autowired
-	ModelMapper modelMapper;
+	private final UserService userService;
+	private final ModelMapper modelMapper;
 
 	/**
 	 * @param userDto
@@ -48,8 +41,7 @@ public class UserController {
 	 * @throws DuplicateKeyException
 	 */
 	@PostMapping()
-	public ResponseEntity<RequestResponse> createUser(@Valid @RequestBody UserDto userDto)
-			throws DuplicateKeyException {
+	public ResponseEntity<RequestResponse> createUser(@Valid @RequestBody UserDto userDto) {
 
 		try {
 
