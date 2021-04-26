@@ -16,6 +16,7 @@ import com.memegenerator.backend.domain.service.CategoryService;
 import com.memegenerator.backend.domain.service.MemeService;
 import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.web.dto.MemeDto;
+import com.memegenerator.backend.web.dto.RequestResponse;
 import com.memegenerator.backend.web.dto.SmallMemeDto;
 import com.memegenerator.backend.web.dto.TagDto;
 
@@ -44,9 +45,6 @@ public class MemeController {
     private final UserService userService;
     private final ModelMapper modelMapper;
 
-    /**
-     * @return ResponseEntity<List<MemeDto>>
-     */
     @GetMapping(path = "/")
     public ResponseEntity<List<MemeDto>> getMemes() {
 
@@ -58,13 +56,8 @@ public class MemeController {
         return new ResponseEntity<List<MemeDto>>(memeDtos, HttpStatus.OK);
     }
 
-    /**
-     * @param imageblob
-     * @param @RequestParam("title"
-     * @return ResponseEntity<MemeDto>
-     */
     @PostMapping(path = "/")
-    public ResponseEntity<MemeDto> createMeme(@RequestParam("imageblob") MultipartFile imageblob,
+    public ResponseEntity<RequestResponse> createMeme(@RequestParam("imageblob") MultipartFile imageblob,
             @RequestParam("title") String title, @RequestParam("userId") String userId,
             @RequestParam("categoryId") long categoryId, @RequestParam("tags") String tagsString, @RequestParam("description") String description) {
 
@@ -101,21 +94,17 @@ public class MemeController {
         }
 
         try {
-            Meme createdMeme = memeService.createMeme(memeDto, userIdLong);
+            RequestResponse response = memeService.createMeme(memeDto, userIdLong);
 
             userService.updateUserPoints(userIdLong, 1);
-
-            return new ResponseEntity<MemeDto>(modelMapper.map(createdMeme, MemeDto.class), HttpStatus.CREATED);
+        
+			return new ResponseEntity<RequestResponse>(response, HttpStatus.OK);
         } catch (NoSuchElementException e) {
 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    /**
-     * @param memeId
-     * @return ResponseEntity<MemeDto>
-     */
     @GetMapping(path = "/{memeId}")
     public ResponseEntity<MemeDto> getMemeById(@PathVariable long memeId) {
 
@@ -130,10 +119,6 @@ public class MemeController {
         }
     }
 
-    /**
-     * @param memeDto
-     * @return ResponseEntity<MemeDto>
-     */
     @PutMapping(path = "/update")
     public ResponseEntity<MemeDto> updateMeme(@Valid @RequestBody MemeDto memeDto) {
 

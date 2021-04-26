@@ -4,16 +4,31 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.imageio.ImageIO;
+
 import com.memegenerator.backend.data.entity.Meme;
 import com.memegenerator.backend.data.entity.Tag;
+import com.memegenerator.backend.data.entity.User;
+import com.memegenerator.backend.data.repository.CategoryRepository;
 import com.memegenerator.backend.data.repository.MemeRepository;
 import com.memegenerator.backend.data.repository.UserRepository;
 import com.memegenerator.backend.data.repository.TagRepository;
 import com.memegenerator.backend.domain.service.MemeService;
 import com.memegenerator.backend.web.dto.MemeDto;
+import com.memegenerator.backend.web.dto.RequestResponse;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.awt.Graphics2D;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,9 +49,19 @@ public class MemeServiceImpl implements MemeService {
      * @return Meme
      * @throws NoSuchElementException
      */
-    public Meme createMeme(MemeDto memeDto, Long userId) throws NoSuchElementException {
+    public RequestResponse createMeme(MemeDto memeDto, Long userId) throws NoSuchElementException {
+
+        RequestResponse response = new RequestResponse();
+        response.Success = false;
+
+        if(!userAllowedToCreate(userId)){
+            response.Errors.add("User is not allowed to create the meme.");
+            response.Message = "You are not allowed to create the meme.";
+            return response;
+        }
 
         Meme meme = modelMapper.map(memeDto, Meme.class);
+        meme.category = memeDto.category;
 
         meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(MEME_NOT_FOUND));
 
@@ -46,7 +71,48 @@ public class MemeServiceImpl implements MemeService {
             meme.tags.add(tag);
         }
 
-        return memeRepository.save(meme);
+        if (meme.user.points >= 1000) {
+
+            BufferedImage bufferedImage = createImageFromBytes(meme.imageblob);
+            BufferedImage bufferedImageWithWatermark = addTextWatermark("PREMIUM MEME", bufferedImage);
+            byte[] watermarkedMeme = createBytesFromImage(bufferedImageWithWatermark);
+            meme.imageblob = watermarkedMeme;
+        }
+
+        memeRepository.save(meme);
+
+        response.Message = "Successfully created the meme!";
+        response.Success = true;
+
+        return response;
+    }
+
+    public boolean userAllowedToCreate(Long userId) throws NoSuchElementException {
+
+        boolean result = false;
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        var currentDate = LocalDate.now();
+        Integer memesAddedCount = memeRepository.countAddedRecordsTodayByUser(currentDate.toString(), userId);
+
+        Integer userAmountToPost = 0;
+        if (user.points < 100) {
+            userAmountToPost = 1;
+        } else if (user.points < 500) {
+            userAmountToPost = 5;
+        } else if (user.points < 1000) {
+            userAmountToPost = 10;
+        } else {
+            userAmountToPost = -1;
+            result = true;
+        }
+
+        if (userAmountToPost != -1) {
+            result = userAmountToPost > memesAddedCount;
+        }
+
+        return result;
     }
 
     /**
@@ -94,5 +160,68 @@ public class MemeServiceImpl implements MemeService {
         memeRepository.save(meme);
 
         return meme;
+    }
+
+        /** 
+     * @param imageData
+     * @return BufferedImage
+     */
+    private BufferedImage createImageFromBytes(byte[] imageData) {
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(imageData);
+
+        try {
+
+            return ImageIO.read(bais);
+        } catch (IOException e) {
+
+            throw new RuntimeException(e);
+        }
+    }
+
+    /** 
+     * @param text
+     * @param sourceImage
+     * @return BufferedImage
+     */
+    private BufferedImage addTextWatermark(String text, BufferedImage sourceImage) {
+
+        Graphics2D g2d = (Graphics2D) sourceImage.getGraphics();
+
+        AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f);
+        g2d.setComposite(alphaChannel);
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("Arial", Font.BOLD, 64));
+        FontMetrics fontMetrics = g2d.getFontMetrics();
+        java.awt.geom.Rectangle2D rect = fontMetrics.getStringBounds(text, g2d);
+
+        int centerX = (sourceImage.getWidth() - (int) rect.getWidth()) / 2;
+        int centerY = sourceImage.getHeight() / 2;
+
+        g2d.drawString(text, centerX, centerY);
+
+        return sourceImage;
+    }
+    
+    /** 
+     * @param image
+     * @return byte[]
+     */
+    private byte[] createBytesFromImage(BufferedImage image) {
+
+        try {
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            ImageIO.write(image, "png", baos);
+
+            byte[] imageBytes = baos.toByteArray();
+            baos.close();
+            return imageBytes;
+
+        } catch (IOException e) {
+
+            throw new RuntimeException(e);
+        }
     }
 }

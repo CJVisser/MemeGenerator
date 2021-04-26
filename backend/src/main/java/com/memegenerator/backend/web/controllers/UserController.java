@@ -63,9 +63,6 @@ public class UserController {
 	public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto userDto) {
 
 		try {
-
-			// if(authenticatedUser == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-
 			User user = modelMapper.map(userDto, User.class);
 			userService.updateUser(user);
 

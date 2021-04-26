@@ -5,13 +5,14 @@ import java.util.NoSuchElementException;
 
 import com.memegenerator.backend.data.entity.Meme;
 import com.memegenerator.backend.web.dto.MemeDto;
+import com.memegenerator.backend.web.dto.RequestResponse;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public interface MemeService {
 
-    Meme createMeme(MemeDto meme, Long id) throws NoSuchElementException;
+    RequestResponse createMeme(MemeDto meme, Long id) throws NoSuchElementException;
 
     Meme getMemeById(long id) throws NoSuchElementException;
 
