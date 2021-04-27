@@ -1,10 +1,36 @@
-<div class="meme-container">
-    <div class="meme">
-        <div class="meme-name">
-            {{memeName}}
+<div class="container has-text-centered meme-item">
+    <h1 class="title">{{memeName}}</h1>
+    <img src="{{memeImageUrl}}">
+
+    <div class="container">
+        <h2 class="subtitle margin">Likes: {{ memeUpvotes}} Dislikes: {{ memeDownvotes }}</h2>
+        <div class="is-clearfix">
+            <div class="float-left added-tag" *ngFor="let tag of tags">
+                {{ tag.title }}
+            </div>
         </div>
-        <div class="meme-image">
-            <img src="{{memeImageUrl}}">
+        <div *ngIf="showButtons">
+            <button class="button is-large icon-button">
+                <span class="icon is-large">
+                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                </span>
+            </button>
+            <button class="button is-large icon-button">
+                <span class="icon is-large">
+                    <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                </span>
+            </button>
+            <button class="button is-large icon-button" (click)="flagMeme(memeId)" [disabled]="status">
+                <span class="icon is-large">
+                    <i class="fa fa-exclamation"></i>
+                </span>
+            </button>
         </div>
     </div>
 </div>
+
+<style>
+    .margin {
+        margin-left: 30px;
+    }
+</style>

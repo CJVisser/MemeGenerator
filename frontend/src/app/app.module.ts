@@ -20,6 +20,7 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { MenuComponent } from './shared/components/menu/menu.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.component';
+import { PasswordResetComponent } from './pages/password-reset/password-reset.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.comp
     MenuComponent,
     ProfileComponent,
     MememakerpageComponent,
+    PasswordResetComponent,
   ],
   imports: [
     FormsModule,

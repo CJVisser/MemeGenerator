@@ -1,9 +1,20 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, ElementRef, OnInit, ViewChild } from '@angular/core';
 import html2canvas from 'html2canvas';
 import { Observable, Observer } from 'rxjs';
-import { MemeService } from "../../../services/meme/memeService";
+import { MemeService } from "../../services/meme/memeService";
 import { Meme } from "../../models/Meme"
+import { Category } from 'src/app/models/Category';
+import { environment } from "../../../environments/environment";
+import { HttpClient } from "@angular/common/http";
+import { LoginService } from 'src/app/services/login/loginService';
+import { User } from 'src/app/models/User';
+import { Tag } from 'src/app/models/Tag';
+import { ProfileService } from 'src/app/services/profile/profile.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { tap } from "rxjs/operators";
+import { pipe } from 'rxjs';
+import { HtmlTagDefinition } from '@angular/compiler';
 
 @Component({
   selector: 'app-mememakerpage',
@@ -12,12 +23,10 @@ import { Meme } from "../../models/Meme"
 })
 export class MememakerpageComponent implements OnInit {
 
-  constructor(private memeService: MemeService) { }
-
   @ViewChild('screen') screen: ElementRef;
   @ViewChild('canvas') canvas: ElementRef;
   @ViewChild('downloadLink') downloadLink: ElementRef;
-  
+
   @ViewChild('image') image: ElementRef;
 
   topText: string = "This is top text";
@@ -32,33 +41,60 @@ export class MememakerpageComponent implements OnInit {
   base64DefaultURL: string;
   generatedImage: string;
 
+  categories: any
+  chosenCategoryId: number
+
   /*Note: In the event that new memes are to be added,
-  the meme names and corresponding file-names need to be in the same order in both arrays.*/ 
-  
+  the meme names and corresponding file-names need to be in the same order in both arrays.*/
+
   //stores names of all the memes
   imageNameList: string[] = ["Magikarp Logo", "Fisting baby", "Skeleton", "Scared cat", "Watching back"];
   //stores file-names of all memes
   imageFileNameList: string[] = ["magikarp_logo.png", "fistingBaby.png", "skeleton.png", "scaredCat.png", "watchingBack.png"];
 
+  user: any = null
+  tags: Tag[] = []
+  chosenTags: Tag[] = []
+  tag: Tag = null
 
-  changeImage(){
-      var valueOfSearch: string = "";
-      for(var i = 0; i < this.imageNameList.length; i++){
-          if(this.imageNameList[i] === this.imageName){
-              valueOfSearch = this.imageFileNameList[i];
-          }
+  constructor
+    (private loginService: LoginService,
+      private memeService: MemeService, private httpClient: HttpClient,
+      private router: Router) {
+  }
+
+  changeImage() {
+    var valueOfSearch: string = "";
+    for (var i = 0; i < this.imageNameList.length; i++) {
+      if (this.imageNameList[i] === this.imageName) {
+        valueOfSearch = this.imageFileNameList[i];
       }
-      var whole: string = "assets/" + valueOfSearch;
-      return whole;
+    }
+    var whole: string = "assets/" + valueOfSearch;
+    return whole;
   }
 
   ngOnInit(): void {
+    this.user = this.loginService.getCurrentUser()
+
+    if (!this.user) this.router.navigate(["/login"]);
+
+    this.getCategories()
+    this.getTags()
   }
 
-  downloadImage(){
+  downloadImage() {
+
+    if (!this.chosenCategoryId) {
+
+      alert('Kies een categorie voor de meme')
+
+      return
+    }
+
     html2canvas(this.screen.nativeElement).then(canvas => {
-          this.canvas.nativeElement.src = canvas.toDataURL();
-          this.getImage(canvas.toDataURL('image/png'));
+      this.canvas.nativeElement.src = canvas.toDataURL();
+      this.getImage(canvas.toDataURL('image/png'));
     });
   }
 
@@ -110,21 +146,24 @@ export class MememakerpageComponent implements OnInit {
 
   createBlobImageFileAndShow(): void {
     this.dataURItoBlob(this.base64TrimmedURL).subscribe((blob: Blob) => {
+
       var meme: Meme = {
         title: this.title,
         description: this.description,
         imageblob: blob,
-        categoryId: 1,
-        userId: 180
+        categoryId: this.chosenCategoryId,
+        userId: this.user.id,
+        tags: this.chosenTags
       };
 
       this.memeService.CreateMeme(meme).subscribe((res: HttpResponse<any>) => {
-        console.log(res.body);
+
+        alert('Je meme is aangemaakt!')
       });
     });
   }
-  
-    /* Method to convert Base64Data Url as Image Blob */
+
+  /* Method to convert Base64Data Url as Image Blob */
   dataURItoBlob(dataURI: string): Observable<Blob> {
     return Observable.create((observer: Observer<Blob>) => {
       const byteString: string = window.atob(dataURI);
@@ -154,21 +193,35 @@ export class MememakerpageComponent implements OnInit {
     return date + "." + text + ".jpeg";
   }
 
-  onFileChanged(event){
+  onFileChanged(event) {
     const files = event.target.files;
     if (files.length === 0)
-        return;
+      return;
 
     const mimeType = files[0].type;
     if (mimeType.match(/image\/*/) == null) {
-        //this.message = "Only images are supported."; possible error message
-        return;
+      //this.message = "Only images are supported."; possible error message
+      return;
     }
 
     const reader = new FileReader();
-    reader.readAsDataURL(files[0]); 
-    reader.onload = (_event) => { 
-        this.image.nativeElement.src = reader.result; 
+    reader.readAsDataURL(files[0]);
+    reader.onload = (_event) => {
+      this.image.nativeElement.src = reader.result;
     }
+  }
+
+  getCategories() {
+    this.httpClient.get<Category[]>(`${environment.apiUrl}/category/`).subscribe(data => this.categories = data)
+  }
+
+  getTags() {
+    this.httpClient.get<Tag[]>(`${environment.apiUrl}/tag/`).subscribe(data => this.tags = data)
+  }
+
+  addTag(tagId) {
+    const tag = this.tags.find(a => a.id == tagId)
+
+    this.chosenTags.push(tag)
   }
 }

@@ -10,11 +10,12 @@ import java.util.NoSuchElementException;
 import javax.ejb.DuplicateKeyException;
 
 import com.memegenerator.backend.data.entity.User;
+import com.memegenerator.backend.web.dto.RequestResponse;
 
 @Service
 public interface UserService {
 
-    User createUser(User user) throws NoSuchElementException, DuplicateKeyException;
+    RequestResponse createUser(User user);
 
     User updateUser(User user) throws NoSuchElementException, DuplicateKeyException;
 
@@ -26,7 +27,7 @@ public interface UserService {
 
     void resetPassword(String confirmationToken, String password) throws NoSuchElementException;
 
-    void activateUser(Long userId, String confirmationToken) throws NoSuchElementException;
+    RequestResponse activateUser(Long userId, String confirmationToken);
 
     void updateUserPoints(Long userId, int pointsToAdd) throws NoSuchElementException;
 

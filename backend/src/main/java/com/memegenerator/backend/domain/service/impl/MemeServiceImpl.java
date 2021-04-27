@@ -5,10 +5,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.memegenerator.backend.data.entity.Meme;
+import com.memegenerator.backend.data.entity.Tag;
 import com.memegenerator.backend.data.repository.MemeRepository;
 import com.memegenerator.backend.data.repository.UserRepository;
+import com.memegenerator.backend.data.repository.TagRepository;
 import com.memegenerator.backend.domain.service.MemeService;
+import com.memegenerator.backend.web.dto.MemeDto;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -17,8 +21,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemeServiceImpl implements MemeService {
 
+    private static final String MEME_NOT_FOUND = "Meme not found";
+
     private final MemeRepository memeRepository;
     private final UserRepository userRepository;
+    private final TagRepository tagRepository;
+    private final ModelMapper modelMapper;
 
     /**
      * @param meme
@@ -26,9 +34,17 @@ public class MemeServiceImpl implements MemeService {
      * @return Meme
      * @throws NoSuchElementException
      */
-    public Meme createMeme(Meme meme, Long userId) throws NoSuchElementException {
+    public Meme createMeme(MemeDto memeDto, Long userId) throws NoSuchElementException {
 
-        meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        Meme meme = modelMapper.map(memeDto, Meme.class);
+
+        meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(MEME_NOT_FOUND));
+
+        for (Tag elementTag : memeDto.tags) {
+            // Check if tag exists in the database 
+            Tag tag = tagRepository.findById(elementTag.id).orElseThrow(() -> new NoSuchElementException("Tag not found"));
+            meme.tags.add(tag);
+        }
 
         return memeRepository.save(meme);
     }
@@ -67,5 +83,16 @@ public class MemeServiceImpl implements MemeService {
         allMemes.sort(Comparator.comparing(Meme::getCreatedat).reversed());
 
         return allMemes;
+    }
+
+    public Meme flagMeme(long id) throws NoSuchElementException {
+
+        Meme meme = getMemeById(id);
+
+        meme.flag_points += 1;
+
+        memeRepository.save(meme);
+
+        return meme;
     }
 }
