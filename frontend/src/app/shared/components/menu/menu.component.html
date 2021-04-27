@@ -9,6 +9,8 @@
             <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Create </a></li>
     <li *ngIf="user"><a [routerLink]="['/profile/', user.id]"><i class="fa fa-user" aria-hidden="true"></i>
             &nbsp;Profile</a></li>
+    <li *ngIf="user"><a><i aria-hidden="true"></i>
+            &nbsp;Points: {{user.points}}</a></li>
     <li *ngIf="user"><a (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i>
             &nbsp;Log out</a></li>
 </ul>
