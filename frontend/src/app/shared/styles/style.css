@@ -70,3 +70,7 @@ li a:hover {
 .float-left{
     float:left;
 }
+
+#meme-image{
+    display:none;
+}

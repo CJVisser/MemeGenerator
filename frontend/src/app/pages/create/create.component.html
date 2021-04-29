@@ -1,0 +1,64 @@
+<div class="container">
+    <div class="columns">
+        <div class="column is-8">
+            <h3 class="subtitle">Create your meme</h3>
+            <div class="field">
+                <div>
+                    <input id="text" [(ngModel)]="text" class="input" type="text" placeholder="Text">
+                </div>
+            </div>
+            <div class="field">
+                <label for="title">Title</label>
+                <input id="title" class="input" type="text" placeholder="Title">
+            </div>
+            <div class="field">
+                <textarea id="description" class="textarea" placeholder="Description"></textarea>
+            </div>
+            <div class="field">
+                <div class="select is-fullwidth">
+                    <select id="category">
+                        <option>Choose a category</option>
+                        <option>Category 1</option>
+                        <option>Category 2</option>
+                        <option>Category 3</option>
+                        <option>Category 4</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field">
+                <div class="select is-fullwidth">
+                    <select id="tag">
+                        <option>Choose a tag</option>
+                        <option>Tag 1</option>
+                        <option>Tag 2</option>
+                        <option>Tag 3</option>
+                        <option>Tag 4</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field">
+                <button class="button is-success">
+                    Create
+                </button>
+            </div>
+        </div>
+        <div class="column is-4" id="chooseTemplate">
+            <h3 class="subtitle">Choose your template</h3>
+            <div class="select is-fullwidth">
+                <select id="image" (change)="setChosenImage($event.target.value)">
+                    <option>Choose an image</option>
+                    <option *ngFor="let image of images" [value]="image.url">{{ image.name }}</option>
+                </select>
+                <div *ngIf="text.length >= 1" ngDraggable (endOffset)="onMoveEnd($event)" id="textPosition">
+                    {{ text }}
+                </div>
+                <img [src]="chosenImage.url" alt="" id="meme-image">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>

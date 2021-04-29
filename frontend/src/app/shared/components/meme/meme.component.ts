@@ -18,6 +18,7 @@ export class MemeComponent implements OnInit {
   @Input() memeUpvotes;
   @Input() memeDownvotes;
   @Input() tags;
+  @Input() category;
 
   status: boolean = false
   user: any = null

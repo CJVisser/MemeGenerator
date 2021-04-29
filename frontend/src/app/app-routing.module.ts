@@ -10,7 +10,7 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { PasswordResetComponent } from './pages/password-reset/password-reset.component';
-import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.component'
+import { CreateComponent } from './pages/create/create.component'
 import { LoginService } from './services/login/loginService'
 
 const routes: Routes = [
@@ -24,7 +24,7 @@ const routes: Routes = [
       },
       { path: 'login', component: LoginComponent },
       { path: 'signup', component: SignupComponent },
-      { path: 'create', component: MememakerpageComponent },
+      { path: 'create', component: CreateComponent },
       { path: 'home', component: HomeComponent },
       { path: 'reset/password', component: HomeComponent },
       { path: 'detail/:id', component: DetailpageComponent },
