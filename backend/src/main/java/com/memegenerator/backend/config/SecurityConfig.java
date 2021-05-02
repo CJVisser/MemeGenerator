@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
      */
     @Bean
     protected AuthenticationProvider authenticationProvider(BCryptPasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        var authProvider = new DaoAuthenticationProvider();
         authProvider.setPasswordEncoder(passwordEncoder);
         authProvider.setUserDetailsService(userService);
         return authProvider;

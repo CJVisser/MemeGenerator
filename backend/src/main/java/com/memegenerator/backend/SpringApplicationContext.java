@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContextAware;
 
 public class SpringApplicationContext implements ApplicationContextAware {
 
-    private static ApplicationContext _context;
+    private static ApplicationContext context;
 
 
     /**
@@ -15,7 +15,7 @@ public class SpringApplicationContext implements ApplicationContextAware {
      */
     @Override
     public void setApplicationContext(ApplicationContext context) throws BeansException {
-        _context = context;
+        context = context;
     }
 
 
@@ -24,6 +24,6 @@ public class SpringApplicationContext implements ApplicationContextAware {
      * @return Object
      */
     public static Object getBean(String beanName) {
-        return _context.getBean(beanName);
+        return context.getBean(beanName);
     }
 }
