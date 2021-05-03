@@ -4,7 +4,12 @@
 
     <div class="container">
         <h2 class="subtitle margin">Likes: {{ memeUpvotes}} Dislikes: {{ memeDownvotes }}</h2>
-        <h3 class="subtitle margin">category: {{ category }} </h3>
+        <!-- <h3 class="subtitle margin">category: {{ category }} </h3> -->
+        <div>
+            <blockquote>
+                {{ description }}
+            </blockquote>
+        </div>
         <div class="is-clearfix">
             <div class="float-left added-tag" *ngFor="let tag of tags">
                 {{ tag.title }}
