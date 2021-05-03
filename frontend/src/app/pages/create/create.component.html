@@ -46,8 +46,17 @@
                         </div>
                     </div>
                     <div class="column is-2 center-text">
-                        <button class="button is-success" (click)="addTag(tag)">
+                        <button class="button" (click)="addTag(tag)">
                             Add tag
+                        </button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="title">Custom tag</label>
+                    <div class="control">
+                        <input id="title" [(ngModel)]="customTag" class="input" type="text" placeholder="Custom tag">
+                        <button class="button" (click)="addCustomTag()">
+                            Add custom tag
                         </button>
                     </div>
                 </div>

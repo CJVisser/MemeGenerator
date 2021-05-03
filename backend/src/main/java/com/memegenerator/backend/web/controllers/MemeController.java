@@ -14,6 +14,7 @@ import com.memegenerator.backend.data.entity.Meme;
 import com.memegenerator.backend.data.entity.Tag;
 import com.memegenerator.backend.domain.service.CategoryService;
 import com.memegenerator.backend.domain.service.MemeService;
+import com.memegenerator.backend.domain.service.TagService;
 import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.web.dto.MemeDto;
 import com.memegenerator.backend.web.dto.RequestResponse;
@@ -41,6 +42,7 @@ import lombok.RequiredArgsConstructor;
 public class MemeController {
 
     private final CategoryService categoryService;
+    private final TagService tagService;
     private final MemeService memeService;
     private final UserService userService;
     private final ModelMapper modelMapper;
@@ -73,6 +75,7 @@ public class MemeController {
 
         Gson gson = new Gson();
         TagDto[] tags = gson.fromJson(tagsString, TagDto[].class);
+
         long userIdLong = Long.parseLong(userId);
 
         memeDto.tags = new Tag[tags.length];
@@ -80,8 +83,14 @@ public class MemeController {
         for (int i = 0; i < tags.length; i++) {
 
             Tag newTag = new Tag();
+
             newTag.id = tags[i].id;
             newTag.title = tags[i].title;
+
+            if(tags[i].id == 0){
+                newTag = tagService.createTag(newTag);
+            }
+
             memeDto.tags[i] = newTag;
         }
 

@@ -39,6 +39,7 @@ export class CreateComponent implements OnInit {
   categories: any
   chosenCategoryId: number
   user: any = null
+  customTag: string = ""
 
   constructor(private loginService: LoginService,
     private memeService: MemeService, private httpClient: HttpClient,
@@ -129,9 +130,9 @@ export class CreateComponent implements OnInit {
 
   createMeme() {
 
-    if(this.title == "" || !this.chosenCategoryId){
+    if (this.title == "" || !this.chosenCategoryId) {
       alert("The title or category is empty")
-      
+
       return
     }
 
@@ -147,9 +148,9 @@ export class CreateComponent implements OnInit {
 
       this.memeService.CreateMeme(meme).subscribe((res: HttpResponse<any>) => {
 
-        if(res.body.Success){
+        if (res.body.Success) {
           alert("Your meme has been created!")
-        }else{
+        } else {
           alert(res.body.Message)
         }
       })
@@ -167,5 +168,16 @@ export class CreateComponent implements OnInit {
         this.setChosenImage(url)
       }
     }
+  }
+
+  addCustomTag() {
+    const tag : Tag = {
+      id: 0,
+      title: this.customTag
+    }
+
+    this.chosenTags.push(tag)
+
+    this.customTag = ""
   }
 }
