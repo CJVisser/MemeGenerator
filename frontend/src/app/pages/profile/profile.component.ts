@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { User } from "../../models/User";
-// import { AuthService } from "app/services/auth/auth.service";
-import { ProfileService } from "../../../services/profile/profile.service";
+import { ProfileService } from "../../services/profile/profile.service";
+import { LoginService } from 'src/app/services/login/loginService';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -15,27 +15,33 @@ let self: any;
   styleUrls: ["./profile.component.scss"],
 })
 export class ProfileComponent implements OnInit {
-  constructor(private profileService: ProfileService, 
-    private route: ActivatedRoute
-    // private authService: AuthService
-    ) {}
 
+  updatedProfile: Boolean = false
   user: User;
   id: any;
+
+  constructor(private profileService: ProfileService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private loginService: LoginService
+  ) {
+    loginService.getLoggedInUser.subscribe(user => this.getUser(user))
+  }
+
   ngOnInit(): void {
+
     self = this;
     this.id = this.route.snapshot.paramMap.get('id');
     this.profileService.getUserInfo(
-          <Number>this.id
-          // this.authService.getCurrentUser().id
-          ).subscribe(user => {this.user = user});
-      
-    
+      <Number>this.id
+    ).subscribe(user => { this.user = user });
+
+
   }
-  
-    
-    
-  
+
+  private getUser(user: any) : void {
+    this.user = user
+  }
 
   updateUser(): void {
     const e: Event = window.event;
@@ -48,6 +54,8 @@ export class ProfileComponent implements OnInit {
       document.getElementById("password")
     )).value;
 
-    this.profileService.updateUserInfo(this.user).subscribe();
+    this.profileService.updateUserInfo(this.user).subscribe()
+
+    this.updatedProfile = true
   }
 }

@@ -2,6 +2,7 @@ package com.memegenerator.backend.config;
 
 import com.memegenerator.backend.data.entity.Meme;
 import com.memegenerator.backend.data.entity.Tag;
+import com.memegenerator.backend.data.entity.User;
 import com.memegenerator.backend.web.dto.MemeDto;
 import com.memegenerator.backend.web.dto.UserDto;
 
@@ -37,6 +38,12 @@ public class ApplicationConfig {
       modelMapper.createTypeMap(MemeDto.class, Meme.class);
       modelMapper.getTypeMap(MemeDto.class, Meme.class).setConverter(toMeme);
 
+      modelMapper.createTypeMap(User.class, UserDto.class);
+      modelMapper.getTypeMap(User.class, UserDto.class).setConverter(toUserDto);
+
+      modelMapper.createTypeMap(UserDto.class, User.class);
+      modelMapper.getTypeMap(UserDto.class, User.class).setConverter(toUser);
+
       return modelMapper;
    }
 
@@ -54,6 +61,8 @@ public class ApplicationConfig {
          memeDto.dislikes = meme.dislikes;
          memeDto.likes = meme.likes;
          memeDto.imageblob = meme.imageblob;
+         memeDto.createdat = meme.createdat;
+         memeDto.memestatus = meme.memestatus;
 
          memeDto.user = modelmapper.map(meme.user, UserDto.class);
 
@@ -86,6 +95,44 @@ public class ApplicationConfig {
          meme.dislikes = memeDto.dislikes;
 
         return meme;
+      }
+    };
+
+    Converter<User, UserDto> toUserDto = new Converter<User, UserDto>() {
+      public UserDto convert(MappingContext<User, UserDto> context) {
+         User user = context.getSource();
+
+         UserDto userDto = new UserDto();
+         userDto.id = user.id;
+         userDto.username = user.username;
+         userDto.email = user.email;
+         userDto.activated = user.activated;
+         userDto.banned = user.banned;
+         userDto.createdat = user.createdat;
+         userDto.points = user.points;
+
+        return userDto;
+      }
+    };
+
+    Converter<UserDto, User> toUser = new Converter<UserDto, User>() {
+      public User convert(MappingContext<UserDto, User> context) {
+         UserDto userDto = context.getSource();
+
+         User user = context.getDestination();
+
+         if(userDto == null) return user;
+
+         if(user == null){ 
+            user = new User();
+
+            user.id = userDto.id;
+            user.username = userDto.username;
+            user.email = userDto.email;
+            user.points = userDto.points;
+         }
+
+        return user;
       }
     };
 }

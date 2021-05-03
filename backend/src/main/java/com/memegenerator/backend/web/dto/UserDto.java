@@ -1,5 +1,7 @@
 package com.memegenerator.backend.web.dto;
 
+import java.sql.Timestamp;
+
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
@@ -22,4 +24,10 @@ public class UserDto {
 
 	@NotNull
 	public boolean activated;
+
+	public boolean banned;
+
+	public Timestamp createdat;
+
+	public int points;
 }

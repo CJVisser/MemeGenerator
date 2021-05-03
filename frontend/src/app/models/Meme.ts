@@ -12,5 +12,6 @@ export interface Meme {
   userId: number;
   imageId?: number;
   tags?: Tag[];
-  createdate?: Date;
+  createdat?: Date;
+  memestatus?: string;
 };

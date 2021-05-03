@@ -1,0 +1,87 @@
+<div class="container">
+    <div class="columns">
+        <div class="column is-8">
+            <h3 class="subtitle">Create your meme</h3>
+            <div class="field">
+                <div>
+                    <input id="text" [(ngModel)]="text" class="input" type="text" placeholder="Text">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="title">Title</label>
+                <div class="control">
+                    <input id="title" [(ngModel)]="title" class="input" type="text" placeholder="Title">
+                </div>
+            </div>
+            <div class="field" *ngIf="user.points >= 500">
+                <label for="description" class="label">Description</label>
+                <div class="control">
+                    <textarea id="description" [(ngModel)]="description" class="textarea"
+                        placeholder="Description"></textarea>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="category">Category</label>
+                <div class="control">
+                    <div class="select is-fullwidth">
+                        <select id="category" [(ngModel)]="chosenCategoryId" class="dropdown">
+                            <option *ngFor="let category of categories" [value]="category.id">
+                                {{category.title}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="columns">
+                    <div class="column is-10">
+                        <div class="control">
+                            <div class="select is-fullwidth">
+                                <select id="tag" [(ngModel)]="tag" class="dropdown">
+                                    <option *ngFor="let tag of tags" [value]="tag.id">
+                                        {{tag.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-2 center-text">
+                        <button class="button is-success" (click)="addTag(tag)">
+                            Add tag
+                        </button>
+                    </div>
+                </div>
+                <div class="added-tag has-text-centered" *ngFor="let chosenTag of chosenTags">
+                    {{ chosenTag.title }}
+                </div>
+            </div>
+            <div class="field">
+                <button class="button is-success" (click)="createMeme()">
+                    Create
+                </button>
+            </div>
+        </div>
+        <div class="column is-4" id="chooseTemplate">
+            <h3 class="subtitle">Choose your template</h3>
+            <div class="select is-fullwidth">
+                <select id="image" (change)="setChosenImage($event.target.value)">
+                    <option>Choose an image</option>
+                    <option *ngFor="let image of images" [value]="image.url">{{ image.name }}</option>
+                </select>
+            </div>
+            <h3 class="subtitle">... or select your own</h3>
+            <div class="field" *ngIf="user.points >= 100">
+                <label for="image" class="label">Image</label>
+                <div class="control">
+                    <input type="file" class="input" id="img" name="img" accept="image/*"
+                        (change)="onSelectFile($event)">
+                </div>
+            </div>
+            <div *ngIf="text.length >= 1" ngDraggable (endOffset)="onMoveEnd($event)" id="textPosition">
+                {{ text }}
+            </div>
+            <img [src]="chosenImage.url" alt="" id="meme-image">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+</div>

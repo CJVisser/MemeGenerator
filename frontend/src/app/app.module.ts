@@ -20,6 +20,9 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { MenuComponent } from './shared/components/menu/menu.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.component';
+import { PasswordResetComponent } from './pages/password-reset/password-reset.component';
+import { CreateComponent } from './pages/create/create.component';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 @NgModule({
   declarations: [
@@ -36,6 +39,8 @@ import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.comp
     MenuComponent,
     ProfileComponent,
     MememakerpageComponent,
+    PasswordResetComponent,
+    CreateComponent
   ],
   imports: [
     FormsModule,
@@ -43,7 +48,8 @@ import { MememakerpageComponent } from './pages/mememakerpage/mememakerpage.comp
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    SharedModule.forRoot()
+    SharedModule.forRoot(),
+    AngularDraggableModule
   ],
   exports:[
     FormsModule
