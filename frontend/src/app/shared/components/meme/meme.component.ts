@@ -44,7 +44,7 @@ export class MemeComponent implements OnInit {
 
     this.status = true
 
-    alert("De meme is gerapporteerd!")
+    alert("You flagged this meme!")
   }
 
 }

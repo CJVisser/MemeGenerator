@@ -17,4 +17,8 @@ export class AdminService {
   getUsers(): Observable<User[]> {
       return this.httpClient.get<User[]>(`${environment.apiUrl}/user/`);
   }
+
+  banUser(userId: number): Observable<User> {
+    return this.httpClient.put<User>(`${environment.apiUrl}/user/ban`, userId);
+  }
 }

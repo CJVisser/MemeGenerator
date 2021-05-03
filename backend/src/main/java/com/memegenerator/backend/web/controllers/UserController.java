@@ -135,4 +135,21 @@ public class UserController {
 
 		return new ResponseEntity<List<UserDto>>(userDtos, HttpStatus.OK);
 	}
+
+	/**
+	 * 
+	 */
+	@PutMapping(path = "/ban")
+	public ResponseEntity<String> banUser(@Valid @RequestBody Long userId) {
+
+		try {
+
+			userService.banUser(userId);
+
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (NoSuchElementException | DuplicateKeyException e) {
+
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 }

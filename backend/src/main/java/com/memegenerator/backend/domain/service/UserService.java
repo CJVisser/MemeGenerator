@@ -32,4 +32,6 @@ public interface UserService {
     void updateUserPoints(Long userId, int pointsToAdd) throws NoSuchElementException;
 
     List<User> getAllUsers();
+
+    void banUser(Long userId) throws NoSuchElementException, DuplicateKeyException;
 }

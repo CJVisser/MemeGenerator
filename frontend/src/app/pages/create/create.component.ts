@@ -90,7 +90,7 @@ export class CreateComponent implements OnInit {
     this.text = "";
   }
 
-  setChosenImage(url: string): void {
+  setChosenImage(url: any): void {
 
     this.chosenImage.url = url
 
@@ -144,5 +144,18 @@ export class CreateComponent implements OnInit {
         alert('Je meme is aangemaakt!')
       });
     })
+  }
+
+  onSelectFile(event) { // called each time file input changes
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+
+      reader.readAsDataURL(event.target.files[0])
+
+      reader.onload = (event) => {
+        const url = event.target.result;
+        this.setChosenImage(url)
+      }
+    }
   }
 }

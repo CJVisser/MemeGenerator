@@ -32,6 +32,9 @@ export class AdminComponent implements OnInit {
   ]
   users: User[] = [];
   memes: any[] = [];
+  ban: string = 'Ban';
+  userButtonText: string;
+  memeButtonText: string;
 
   constructor(
     private adminService: AdminService,
@@ -53,13 +56,21 @@ export class AdminComponent implements OnInit {
     this.adminService.getUsers()
     .subscribe( data => {
       this.users = data;
-      console.log(this.users);
+      console.log(data);
     });
     this.memeService.GetAllMemes()
     .subscribe( data => {
       console.log(data);
       this.memes = data;
       this.getWantedProps();
+    })
+    this.userButtonText = 'Ban';
+  }
+
+  public banUser(userId: number): void {
+    this.adminService.banUser(userId)
+    .subscribe( data => {
+      console.log(data);
     })
   }
 

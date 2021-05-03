@@ -209,4 +209,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         return userRepository.findAll();
     }
+
+    public void banUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
+        user.banned = !user.banned;
+
+        userRepository.save(user);
+    }
 }

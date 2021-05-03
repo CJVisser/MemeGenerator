@@ -13,7 +13,7 @@
                     <input id="title" [(ngModel)]="title" class="input" type="text" placeholder="Title">
                 </div>
             </div>
-            <div class="field">
+            <div class="field" *ngIf="user.points >= 500">
                 <label for="description" class="label">Description</label>
                 <div class="control">
                     <textarea id="description" [(ngModel)]="description" class="textarea"
@@ -68,12 +68,20 @@
                     <option>Choose an image</option>
                     <option *ngFor="let image of images" [value]="image.url">{{ image.name }}</option>
                 </select>
-                <div *ngIf="text.length >= 1" ngDraggable (endOffset)="onMoveEnd($event)" id="textPosition">
-                    {{ text }}
-                </div>
-                <img [src]="chosenImage.url" alt="" id="meme-image">
-                <canvas id="canvas"></canvas>
             </div>
+            <h3 class="subtitle">... or select your own</h3>
+            <div class="field" *ngIf="user.points >= 100">
+                <label for="image" class="label">Image</label>
+                <div class="control">
+                    <input type="file" class="input" id="img" name="img" accept="image/*"
+                        (change)="onSelectFile($event)">
+                </div>
+            </div>
+            <div *ngIf="text.length >= 1" ngDraggable (endOffset)="onMoveEnd($event)" id="textPosition">
+                {{ text }}
+            </div>
+            <img [src]="chosenImage.url" alt="" id="meme-image">
+            <canvas id="canvas"></canvas>
         </div>
     </div>
 </div>

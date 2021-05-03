@@ -33,6 +33,9 @@ public class Meme extends BaseEntity {
     @Column(name = "flag_points")
     public int flag_points;
 
+    @Column(name = "memestatus")
+    public String memestatus;
+
     @Column(name = "disabled", nullable = false)
     public boolean activated;
 

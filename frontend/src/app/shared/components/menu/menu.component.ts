@@ -12,15 +12,15 @@ export class MenuComponent implements OnInit {
   user : any
 
   constructor(private loginService: LoginService) {
-
-    loginService.getLoggedInUser.subscribe(user => this.updateUser(user))
+    loginService.getLoggedInUser.subscribe(user => this.updateUser(user));
   }
 
   ngOnInit(): void {
   }
 
   private updateUser(user: any) : void {
-    this.user = user
+    this.user = user;
+    console.log(this.user);
   }
 
   private logout(){
