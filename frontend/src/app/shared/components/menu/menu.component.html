@@ -1,14 +1,17 @@
 <ul id="menu">
-    <li><a [routerLink]="['/home']"> <i class="fa fa-home" aria-hidden="true"></i>
-            &nbsp; Home </a></li>
-    <li *ngIf="!user"><a [routerLink]="['/login']"><i class="fa fa-sign-in" aria-hidden="true"></i>
-            &nbsp; Login </a></li>
-    <li *ngIf="!user"><a [routerLink]="['/signup']"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp; Signup </a>
-    </li>
-    <li *ngIf="user"><a [routerLink]="['/create']">
-            <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Create </a></li>
-    <li *ngIf="user"><a [routerLink]="['/profile/', user.id]"><i class="fa fa-user" aria-hidden="true"></i>
-            &nbsp;Profile</a></li>
-    <li *ngIf="user"><a (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i>
-            &nbsp;Log out</a></li>
+        <li><a [routerLink]="['/home']"> <i class="fa fa-home" aria-hidden="true"></i>
+                        &nbsp; Home </a></li>
+        <li *ngIf="!user"><a [routerLink]="['/login']"><i class="fa fa-sign-in" aria-hidden="true"></i>
+                        &nbsp; Login </a></li>
+        <li *ngIf="!user"><a [routerLink]="['/signup']"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp; Signup
+                </a>
+        </li>
+        <li *ngIf="user"><a [routerLink]="['/create']">
+                        <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Create </a></li>
+        <li *ngIf="user"><a [routerLink]="['/profile/', user.id]"><i class="fa fa-user" aria-hidden="true"></i>
+                        &nbsp;Profile</a></li>
+        <li *ngIf="user && user.role === 'Admin'"><a [routerLink]="['/admin']">
+                        &nbsp;Adminpanel</a></li>
+        <li *ngIf="user"><a (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i>
+                        &nbsp;Log out</a></li>
 </ul>

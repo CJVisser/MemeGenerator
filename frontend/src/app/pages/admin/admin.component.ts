@@ -4,6 +4,8 @@ import { User } from 'src/app/models/User';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { AdminService } from 'src/app/services/admin/adminService';
 import { MemeService } from 'src/app/services/meme/memeService';
+import { LoginService } from 'src/app/services/login/loginService';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -11,6 +13,8 @@ import { MemeService } from 'src/app/services/meme/memeService';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
+
+  user : any
 
   headersUsers: any[] = [
     {text: "Username", value: "username"},
@@ -32,9 +36,20 @@ export class AdminComponent implements OnInit {
   constructor(
     private adminService: AdminService,
     private memeService: MemeService,
+    private loginService: LoginService, 
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+
+    this.user = this.loginService.getCurrentUser()
+
+    if (!this.user) this.router.navigate(["/login"]);
+
+    if(this.user.role !== "Admin"){
+      alert("You are not allowed to see this page.")
+    }
+
     this.adminService.getUsers()
     .subscribe( data => {
       this.users = data;
