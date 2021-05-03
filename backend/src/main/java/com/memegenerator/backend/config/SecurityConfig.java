@@ -42,14 +42,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     @Autowired
     UserServiceImpl userService;
 
-    
     /** 
      * @param passwordEncoder
      * @return AuthenticationProvider
      */
     @Bean
     protected AuthenticationProvider authenticationProvider(BCryptPasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        var authProvider = new DaoAuthenticationProvider();
         authProvider.setPasswordEncoder(passwordEncoder);
         authProvider.setUserDetailsService(userService);
         return authProvider;
@@ -81,6 +80,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         
         http.csrf().disable().cors().and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, HOME_PATH).permitAll()
+                .antMatchers(HttpMethod.GET, MEME_PATH).permitAll()
+                .antMatchers(HttpMethod.GET, MEME_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, USER_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, LOGIN_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, LOGOUT_PATH).permitAll()
@@ -88,7 +89,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .antMatchers(HttpMethod.POST, "/user/reset/").permitAll()
                 .antMatchers(HttpMethod.GET, "/user/activate/{id:\\d+}/{token:\\d+}").permitAll()                               
                 .antMatchers(HttpMethod.POST, MEME_PATH).permitAll()
+                .antMatchers(HttpMethod.PUT, USER_PATH).permitAll()
                 .antMatchers(HttpMethod.PUT, MEME_PATH).permitAll()
+                .antMatchers(HttpMethod.PUT, USER_PATH).permitAll()
                 .antMatchers(HttpMethod.GET, MEME_PATH).permitAll()
                 .antMatchers(HttpMethod.POST, MEME_PATH + "/flag").permitAll()
                 .anyRequest().permitAll()
