@@ -129,6 +129,12 @@ export class CreateComponent implements OnInit {
 
   createMeme() {
 
+    if(this.title == "" || !this.chosenCategoryId){
+      alert("The title or category is empty")
+      
+      return
+    }
+
     this.canvas.toBlob((blob) => {
       const meme: Meme = {
         title: this.title,
@@ -141,8 +147,12 @@ export class CreateComponent implements OnInit {
 
       this.memeService.CreateMeme(meme).subscribe((res: HttpResponse<any>) => {
 
-        alert('Je meme is aangemaakt!')
-      });
+        if(res.body.Success){
+          alert("Your meme has been created!")
+        }else{
+          alert(res.body.Message)
+        }
+      })
     })
   }
 

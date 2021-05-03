@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="field">
-                <button class="button is-success" (click)="createMeme()">
+                <button class="button is-success" (click)="createMeme()" [disabled]="chosenImage.url === ''">
                     Create
                 </button>
             </div>
@@ -69,8 +69,8 @@
                     <option *ngFor="let image of images" [value]="image.url">{{ image.name }}</option>
                 </select>
             </div>
-            <h3 class="subtitle">... or select your own</h3>
             <div class="field" *ngIf="user.points >= 100">
+                <h3 class="subtitle">... or select your own</h3>
                 <label for="image" class="label">Image</label>
                 <div class="control">
                     <input type="file" class="input" id="img" name="img" accept="image/*"

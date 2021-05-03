@@ -96,7 +96,7 @@ public class MemeController {
         try {
             RequestResponse response = memeService.createMeme(memeDto, userIdLong);
 
-            userService.updateUserPoints(userIdLong, 1);
+            if(response.Success) userService.updateUserPoints(userIdLong, 1);
         
 			return new ResponseEntity<RequestResponse>(response, HttpStatus.OK);
         } catch (NoSuchElementException e) {
