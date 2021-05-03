@@ -8,36 +8,55 @@
                 </div>
             </div>
             <div class="field">
-                <label for="title">Title</label>
-                <input id="title" class="input" type="text" placeholder="Title">
-            </div>
-            <div class="field">
-                <textarea id="description" class="textarea" placeholder="Description"></textarea>
-            </div>
-            <div class="field">
-                <div class="select is-fullwidth">
-                    <select id="category">
-                        <option>Choose a category</option>
-                        <option>Category 1</option>
-                        <option>Category 2</option>
-                        <option>Category 3</option>
-                        <option>Category 4</option>
-                    </select>
+                <label class="label" for="title">Title</label>
+                <div class="control">
+                    <input id="title" [(ngModel)]="title" class="input" type="text" placeholder="Title">
                 </div>
             </div>
             <div class="field">
-                <div class="select is-fullwidth">
-                    <select id="tag">
-                        <option>Choose a tag</option>
-                        <option>Tag 1</option>
-                        <option>Tag 2</option>
-                        <option>Tag 3</option>
-                        <option>Tag 4</option>
-                    </select>
+                <label for="description" class="label">Description</label>
+                <div class="control">
+                    <textarea id="description" [(ngModel)]="description" class="textarea"
+                        placeholder="Description"></textarea>
                 </div>
             </div>
             <div class="field">
-                <button class="button is-success">
+                <label class="label" for="category">Category</label>
+                <div class="control">
+                    <div class="select is-fullwidth">
+                        <select id="category" [(ngModel)]="chosenCategoryId" class="dropdown">
+                            <option *ngFor="let category of categories" [value]="category.id">
+                                {{category.title}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="columns">
+                    <div class="column is-10">
+                        <div class="control">
+                            <div class="select is-fullwidth">
+                                <select id="tag" [(ngModel)]="tag" class="dropdown">
+                                    <option *ngFor="let tag of tags" [value]="tag.id">
+                                        {{tag.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-2 center-text">
+                        <button class="button is-success" (click)="addTag(tag)">
+                            Add tag
+                        </button>
+                    </div>
+                </div>
+                <div class="added-tag has-text-centered" *ngFor="let chosenTag of chosenTags">
+                    {{ chosenTag.title }}
+                </div>
+            </div>
+            <div class="field">
+                <button class="button is-success" (click)="createMeme()">
                     Create
                 </button>
             </div>
@@ -58,7 +77,3 @@
         </div>
     </div>
 </div>
-
-<script>
-
-</script>

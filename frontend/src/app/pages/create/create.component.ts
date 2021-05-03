@@ -1,6 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, Injector, ElementRef, OnInit, ViewChild } from '@angular/core';
-import html2canvas from 'html2canvas';
 import { Observable, Observer } from 'rxjs';
 import { MemeService } from "../../services/meme/memeService";
 import { Meme } from "../../models/Meme"
@@ -14,9 +13,7 @@ import { ProfileService } from 'src/app/services/profile/profile.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { tap } from "rxjs/operators";
 import { pipe } from 'rxjs';
-import { HtmlTagDefinition } from '@angular/compiler';
 import { MemeImage } from 'src/app/models/MemeImage';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-mememakerpage',
@@ -32,13 +29,31 @@ export class CreateComponent implements OnInit {
     url: ""
   }
 
+  title: string = ""
+  description: string = ""
+  tags: Tag[] = []
+  chosenTags: Tag[] = []
+  tag: Tag = null
   canvas;
   context;
+  categories: any
+  chosenCategoryId: number
+  user: any = null
 
-  constructor() {
+  constructor(private loginService: LoginService,
+    private memeService: MemeService, private httpClient: HttpClient,
+    private router: Router) {
   }
 
   ngOnInit(): void {
+
+    this.user = this.loginService.getCurrentUser()
+
+    if (!this.user) this.router.navigate(["/login"]);
+
+    this.getCategories()
+    this.getTags()
+
     this.setImages();
     this.canvas = document.getElementById("canvas");
     this.context = this.canvas.getContext("2d");
@@ -49,19 +64,19 @@ export class CreateComponent implements OnInit {
     this.images = [
       {
         name: "Magikarp",
-        url: "https://img.pokemondb.net/artwork/large/magikarp.jpg"
+        url: "assets/magikarp.jpg"
       },
       {
-        name: "Surprized Pikachu",
-        url: "https://en.meming.world/images/en/thumb/6/6e/Surprised_Pikachu.jpg/300px-Surprised_Pikachu.jpg"
+        name: "Surprised Pikachu",
+        url: "assets/pikachu.jpg"
       },
       {
         name: "SpongeBob 1",
-        url: "https://i.pinimg.com/736x/25/2a/04/252a045199e33164a8b7577fc001851a.jpg"
+        url: "assets/spongebob.jpg"
       },
       {
         name: "SpongeBob 2",
-        url: "https://i.imgflip.com/29r48m.jpg"
+        url: "assets/spongebob2.jpg"
       }
     ]
   }
@@ -91,10 +106,43 @@ export class CreateComponent implements OnInit {
     }
   }
 
-  onMoveEnd(event){
+  onMoveEnd(event) {
     const canvasRectangle = document.getElementById("canvas").getBoundingClientRect();
     const textRectangle = document.getElementById("textPosition").getBoundingClientRect();
 
     this.addText(event.x, event.y)
+  }
+
+  getCategories() {
+    this.httpClient.get<Category[]>(`${environment.apiUrl}/category/`).subscribe(data => this.categories = data)
+  }
+
+  getTags() {
+    this.httpClient.get<Tag[]>(`${environment.apiUrl}/tag/`).subscribe(data => this.tags = data)
+  }
+
+  addTag(tagId) {
+    const tag = this.tags.find(a => a.id == tagId)
+
+    this.chosenTags.push(tag)
+  }
+
+  createMeme() {
+
+    this.canvas.toBlob((blob) => {
+      const meme: Meme = {
+        title: this.title,
+        description: this.description,
+        imageblob: blob,
+        categoryId: this.chosenCategoryId,
+        userId: this.user.id,
+        tags: this.chosenTags
+      };
+
+      this.memeService.CreateMeme(meme).subscribe((res: HttpResponse<any>) => {
+
+        alert('Je meme is aangemaakt!')
+      });
+    })
   }
 }
