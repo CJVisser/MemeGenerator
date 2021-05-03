@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Meme } from 'src/app/models/Meme';
 import { User } from 'src/app/models/User';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
-import { AdminService } from 'src/services/admin/adminService';
-import { MemeService } from 'src/services/meme/memeService';
+import { AdminService } from 'src/app/services/admin/adminService';
+import { MemeService } from 'src/app/services/meme/memeService';
+import { LoginService } from 'src/app/services/login/loginService';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -12,10 +14,12 @@ import { MemeService } from 'src/services/meme/memeService';
 })
 export class AdminComponent implements OnInit {
 
+  user : any
+
   headersUsers: any[] = [
     {text: "Username", value: "username"},
     {text: "Creation Date", value: "createdat"},
-    {text: "# Reported Memes", value: "numOfReported"},
+    {text: "Banned", value: "banned"},
     {text: "Points", value: "points"},
     {text: "# of Memes", value: "numOfMemes"},
   ];
@@ -24,65 +28,49 @@ export class AdminComponent implements OnInit {
     {text: "Meme Description", value: "description"},
     {text: "Creation Date", value: "createdat"},
     {text: "Username", value: "user.username"},
-    {text: "Reported", value: "reported"},
+    {text: "Status", value: "memestatus"},
   ]
-  userItems: any[] = [
-    {
-        userName: "Bobbert",
-        createDat: "03-12-13",
-        numOfReported: 8,
-        points: 0,
-        numOfMemes: 5,
-    },
-    {
-        userName: "Cornie",
-        createDat: "04-12-11",
-        numOfReported: 999,
-        points: 10,
-        numOfMemes: 10,
-    },
-    {
-        userName: "Andhe",
-        createDat: "20-01-14",
-        numOfReported: 420,
-        points: -500,
-        numOfMemes: 365,
-    },
-    {
-        userName: "Dove",
-        createDat: "12-08-00",
-        numOfReported: 0,
-        points: 21,
-        numOfMemes: 7,
-    },
-    {
-        userName: "Thommert",
-        createDat: "01-01-90",
-        numOfReported: -10,
-        points: 69,
-        numOfMemes: 13,
-    },
-  ];
-  userUrl: string = 'iets';
   users: User[] = [];
   memes: any[] = [];
+  ban: string = 'Ban';
+  userButtonText: string;
+  memeButtonText: string;
 
   constructor(
     private adminService: AdminService,
     private memeService: MemeService,
+    private loginService: LoginService, 
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+
+    this.user = this.loginService.getCurrentUser()
+
+    if (!this.user) this.router.navigate(["/login"]);
+
+    if(this.user.role !== "Admin"){
+      alert("You are not allowed to see this page.")
+    }
+
     this.adminService.getUsers()
     .subscribe( data => {
       this.users = data;
-      console.log(this.users);
+      console.log(data);
     });
     this.memeService.GetAllMemes()
     .subscribe( data => {
       console.log(data);
       this.memes = data;
       this.getWantedProps();
+    })
+    this.userButtonText = 'Ban';
+  }
+
+  public banUser(userId: number): void {
+    this.adminService.banUser(userId)
+    .subscribe( data => {
+      console.log(data);
     })
   }
 

@@ -13,4 +13,5 @@ export interface User {
   confirmationToken?: string;
   role?: Role;
   activated?: boolean;
+  createdat?: Date;
 };

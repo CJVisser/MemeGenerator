@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { User } from "../../models/User";
-import { environment } from "../../environments/environment";
+import { environment } from "../../../environments/environment";
 import { catchError, retry } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { throwError } from "rxjs";

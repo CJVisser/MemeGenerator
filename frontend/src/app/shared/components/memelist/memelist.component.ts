@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MemeService } from 'src/services/meme/memeService';
+import { MemeService } from 'src/app/services/meme/memeService';
 import { Meme } from "../../../../app/models/Meme";
 
 @Component({
