@@ -13,9 +13,9 @@ import com.memegenerator.backend.web.dto.SocketResponseDto;
 
 import java.util.NoSuchElementException;
 
+import com.memegenerator.backend.data.entity.Meme;
 import com.memegenerator.backend.domain.service.MemeService;
 import com.memegenerator.backend.domain.service.UserService;
-import com.memegenerator.backend.web.dto.MemeDto;
 
 @RestController
 @RequestMapping("likedislike")
@@ -25,7 +25,6 @@ public class LikeDislikeController {
     private final MemeService memeService;
     private final UserService userService;
 
-    
     /** 
      * @param response
      * @return ResponseEntity<SocketResponseDto>
@@ -35,24 +34,24 @@ public class LikeDislikeController {
 
         try {
 
-            MemeDto memeDto = memeService.getMemeById(response.memeId);
-
-            if(response.userId == memeDto.user.id){
+            Meme meme = memeService.getMemeById(response.memeId);
+            
+            if(response.userId == meme.user.id){
                 return new ResponseEntity<SocketResponseDto>(response, HttpStatus.OK);
             }
 
             if (response.isUpvote) {
 
-                memeDto.likes = memeDto.likes + 1;
+                meme.likes = meme.likes + 1;
                 userService.updateUserPoints(response.userId, 1);
-                userService.updateUserPoints(memeDto.user.id, 1);
+                userService.updateUserPoints(meme.user.id, 1);
             } else {
 
-                memeDto.dislikes = memeDto.dislikes + 1;
+                meme.dislikes = meme.dislikes + 1;
                 userService.updateUserPoints(response.userId, 1);
             }
 
-            memeService.updateMeme(memeDto);
+            memeService.updateMeme(meme);
 
             return new ResponseEntity<SocketResponseDto>(response, HttpStatus.OK);
 
