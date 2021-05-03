@@ -16,13 +16,14 @@ import java.util.Set;
 @Setter
 public class User extends BaseEntity {
 
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(name = "user_achievements", joinColumns = { @JoinColumn(name = "userid") }, inverseJoinColumns = {
-            @JoinColumn(name = "achievementid") })
-    private Set<Achievement> achievements = new HashSet<>();
-
-    @OneToMany(mappedBy = "user")
-    private Set<Meme> memes = new HashSet<>();
+    public User(String username, String password, String email, Role role, boolean activated)
+    {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.activated = activated;
+    }
 
     @Column(name = "username", nullable = false)
     @NotNull(message = "No username given")
@@ -32,7 +33,7 @@ public class User extends BaseEntity {
     @NotNull(message = "No password given")
     public String password;
 
-    @Column(name = "points", nullable = true)
+    @Column(name = "points")
     public int points;
 
     @Column(name = "email", nullable = false)
@@ -55,4 +56,12 @@ public class User extends BaseEntity {
 
     @Column(name = "banned")
     public boolean banned;
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(name = "user_achievements", joinColumns = { @JoinColumn(name = "userid") }, inverseJoinColumns = {
+            @JoinColumn(name = "achievementid") })
+    private Set<Achievement> achievements = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Meme> memes = new HashSet<>();
 }

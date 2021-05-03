@@ -14,6 +14,15 @@ import java.util.Set;
 @Setter
 public class Meme extends BaseEntity {
 
+    public Meme(String title, byte[] imageblob, boolean activated, User user, Category category)
+    {
+        this.title = title;
+        this.imageblob = imageblob;
+        this.activated = activated;
+        this.user = user;
+        this.category = category;
+    }
+
     @Column(name = "title", nullable = false)
     @NotNull
     public String title;

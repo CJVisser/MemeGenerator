@@ -11,6 +11,11 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class Tag extends BaseEntity {
 
+    public Tag(String title)
+    {
+        this.title = title;
+    }
+    
     @Column(name = "title", nullable = false)
     @NotNull
     public String title;

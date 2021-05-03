@@ -14,6 +14,11 @@ import java.util.Set;
 @Setter
 public class Achievement extends BaseEntity {
 
+    public Achievement(String title)
+    {
+        this.title = title;
+    }
+
     @Column(name = "title", nullable = false)
     @NotNull
     public String title;

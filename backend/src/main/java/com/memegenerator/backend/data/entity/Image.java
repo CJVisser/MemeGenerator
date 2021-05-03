@@ -14,8 +14,12 @@ import java.util.Set;
 @Setter
 public class Image extends BaseEntity {
 
-    @OneToMany(mappedBy = "image")
-    private Set<Meme> memes = new HashSet<>();
+    public Image(String title, byte[] imageblob, User user)
+    {
+        this.title = title;
+        this.imageblob = imageblob;
+        this.user = user;
+    }
 
     @Column(name = "title", nullable = false)
     @NotNull
@@ -24,6 +28,9 @@ public class Image extends BaseEntity {
     @Column(name = "image", nullable = false)
     @NotNull
     public byte[] imageblob;
+
+    @OneToMany(mappedBy = "image")
+    private Set<Meme> memes = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
