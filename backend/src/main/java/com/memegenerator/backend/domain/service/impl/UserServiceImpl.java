@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         if(response.Errors.size() > 0) return response;
 
-        user.role = Role.User;
+        user.role = Role.USER;
         user.password = bCryptPasswordEncoder.encode(user.password);
         user.confirmationToken = this.randomInt();
 
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
 
         user.activated = true;
-        user.role = Role.User;
+        user.role = Role.USER;
         user.password = bCryptPasswordEncoder.encode(user.password);
         user.confirmationToken = this.randomInt();
         user.banned = false;
