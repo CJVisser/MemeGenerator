@@ -10,10 +10,8 @@ import java.util.Arrays;
 
 public enum Role {
 
-    // Regular casing, otherwise an exception: No enum constant com.example.memegenerator.security.Role.User
-    
-    User(Collections.singletonList(new SimpleGrantedAuthority("USER"))), Admin(new ArrayList<GrantedAuthority>(
-            Arrays.asList(new SimpleGrantedAuthority("ADMIN"), new SimpleGrantedAuthority("USER"))));
+    USER(Collections.singletonList(new SimpleGrantedAuthority("User"))), ADMIN(new ArrayList<GrantedAuthority>(
+            Arrays.asList(new SimpleGrantedAuthority("Admin"), new SimpleGrantedAuthority("User"))));
 
     private final Collection<GrantedAuthority> authorities;
 
