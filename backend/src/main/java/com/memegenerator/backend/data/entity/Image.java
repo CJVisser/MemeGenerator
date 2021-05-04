@@ -15,7 +15,7 @@ import java.util.Set;
 public class Image extends BaseEntity {
 
     @OneToMany(mappedBy = "image")
-    Set<Meme> memes = new HashSet<>();
+    private Set<Meme> memes = new HashSet<>();
 
     @Column(name = "title", nullable = false)
     @NotNull

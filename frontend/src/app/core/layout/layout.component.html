@@ -1,11 +1,14 @@
-<header>
-    <app-header></app-header> 
- </header>
- 
- <div class="container">
-     <app-menu></app-menu>
-     <router-outlet>
-     </router-outlet>
- </div>
- 
- <footer></footer>
+<div>
+  <div class="columns">
+    <div class="column">
+      <app-header></app-header>
+      <app-menu></app-menu>
+    </div>
+  </div>
+  <div class="columns">
+    <div class="column">
+      <router-outlet>
+      </router-outlet>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,34 @@
 <h1>Admin Page</h1>
-<app-table [items]="users" [headers]="headersUsers"></app-table>
-<app-table [items]="memes" [headers]="headersMemes"></app-table>
+<table class="styled-table">
+    <thead>
+        <tr>
+            <th *ngFor="let header of headersUsers" [value]="header.value">{{ header.text }}</th>
+            <th *ngIf="userButtonText">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users">
+            <td *ngFor="let header of headersUsers">{{ user[header.value] }}</td>
+            <td *ngIf="userButtonText">
+                <button *ngIf="!user.banned" (click)="banUser(user.id)">{{ userButtonText }}</button>
+                <button *ngIf="user.banned" (click)="banUser(user.id)">Unban</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<table class="styled-table">
+    <thead>
+        <tr>
+            <th *ngFor="let header of headersMemes" [value]="header.value">{{ header.text }}</th>
+            <th *ngIf="memeButtonText">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let meme of memes">
+            <td *ngFor="let header of headersMemes">{{ meme[header.value] }}</td>
+            <td *ngIf="memeButtonText">
+                <button onclick="actionButton(meme.id)">{{ memeButtonText }}</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

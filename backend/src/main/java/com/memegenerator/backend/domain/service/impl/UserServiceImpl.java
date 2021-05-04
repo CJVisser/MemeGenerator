@@ -1,10 +1,9 @@
 package com.memegenerator.backend.domain.service.impl;
 
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import javax.ejb.DuplicateKeyException;
 
@@ -14,14 +13,16 @@ import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.security.Role;
 import com.memegenerator.backend.security.UserDetailsAdapter;
 import com.memegenerator.backend.data.repository.AchievementRepository;
+import com.memegenerator.backend.web.dto.RequestResponse;
 import com.memegenerator.backend.data.repository.UserRepository;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.mail.SimpleMailMessage;
+import com.memegenerator.backend.domain.service.JavaMailSender;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,26 +35,47 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private final UserRepository userRepository;
     private final AchievementServiceImpl achievementService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final ModelMapper modelMapper;
+    private final JavaMailSender javaMailSender;
 
     /**
      * @param user
      * @return User
      * @throws DuplicateKeyException
      */
-    public User createUser(User user) throws DuplicateKeyException {
+    public RequestResponse createUser(User user) {
 
-        if (userRepository.findByEmail(user.email).isPresent())
-            throw new DuplicateKeyException("Email is already in use");
+        RequestResponse response = new RequestResponse();
 
-        if (userRepository.findUserByUsername(user.username).isPresent())
-            throw new DuplicateKeyException("Username is already in use");
+        // Check if email is already in use
+        if (userRepository.findByEmail(user.email).isPresent()) response.Errors.add("This email is already in use.");
+
+        // Check if username is already in use
+        if (userRepository.findUserByUsername(user.username).isPresent()) response.Errors.add("This username is already in use.");
+
+        if(response.Errors.size() > 0) return response;
 
         user.role = Role.User;
         user.password = bCryptPasswordEncoder.encode(user.password);
         user.confirmationToken = this.randomInt();
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("javaminor@cornevisser.nl");
+        message.setTo(savedUser.email);
+        message.setSubject("Bedankt voor het registreren");
+
+        String url = "http://localhost:8080/user/activate/" + savedUser.id + "/" + savedUser.confirmationToken;
+
+        message.setText("Klik hier om uw account te activeren: " + url);
+
+        javaMailSender.getJavaMailSender().send(message);
+
+        response.Message = "You successfully signed up!";
+
+        response.Success = true;
+
+        return response;
     }
 
     /**
@@ -66,7 +88,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     /**
      * @param userId
-     * @return SmallUser
+     * @return User
      * @throws NoSuchElementException
      */
     public User getUserById(long userId) throws NoSuchElementException {
@@ -90,16 +112,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new DuplicateKeyException("Wrong user");
         }
 
-        // Maybe this line should be fixed, it seems to reset user fields
-        user = modelMapper.map(user, User.class);
-
         user.activated = true;
         user.role = Role.User;
         user.password = bCryptPasswordEncoder.encode(user.password);
         user.confirmationToken = this.randomInt();
-        User savedUser = userRepository.save(user);
+        user.banned = false;
 
-        return modelMapper.map(savedUser, User.class);
+        return userRepository.save(user);
     }
 
     /**
@@ -107,7 +126,21 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @throws NoSuchElementException
      */
     public void requestPasswordReset(String email) throws NoSuchElementException {
-        throw new UnsupportedOperationException();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
+
+        byte[] array = new byte[10];
+        new Random().nextBytes(array);
+        String token = new String(array, StandardCharsets.UTF_8);
+
+        user.token = token;
+        userRepository.save(user);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("javaminor@cornevisser.nl");
+        message.setTo(user.email);
+        message.setSubject("Password reset token");
+        message.setText("Your password reset token: " + user.token);
+        javaMailSender.getJavaMailSender().send(message);
     }
 
     /**
@@ -116,7 +149,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @throws NoSuchElementException
      */
     public void resetPassword(String confirmationToken, String password) throws NoSuchElementException {
-        throw new UnsupportedOperationException();
+        User user = userRepository.findByToken(confirmationToken)
+                .orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
+
+        user.password = bCryptPasswordEncoder.encode(password);
+        user.token = null;
+
+        userRepository.save(user);
     }
 
     /**
@@ -124,8 +163,23 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @param confirmationToken
      * @throws NoSuchElementException
      */
-    public void activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
-        throw new UnsupportedOperationException();
+    public RequestResponse activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
+
+        RequestResponse response = new RequestResponse();
+
+        if (!user.id.equals(userId)) {
+            throw new NoSuchElementException(USER_NOT_FOUND);
+        }
+
+        user.activated = true;
+
+        userRepository.save(user);
+
+        response.Message = "Your account is activated!";
+        response.Success = true;
+
+        return response;
     }
 
     /**
@@ -152,10 +206,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     /**
-     * @return LIst<UserDto>
+     * @return List<User>
      */
     public List<User> getAllUsers() {
 
         return userRepository.findAll();
+    }
+
+    public void banUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
+        user.banned = !user.banned;
+
+        userRepository.save(user);
     }
 }

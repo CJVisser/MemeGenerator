@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
+import { User } from '../../../models/User';
+import { LoginService } from 'src/app/services/login/loginService';
 
 @Component({
   selector: 'app-menu',
@@ -7,9 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuComponent implements OnInit {
 
-  constructor() { }
+  user : any
+
+  constructor(private loginService: LoginService) {
+    loginService.getLoggedInUser.subscribe(user => this.updateUser(user));
+  }
 
   ngOnInit(): void {
   }
 
+  private updateUser(user: any) : void {
+    this.user = user;
+    console.log(this.user);
+  }
+
+  private logout(){
+    this.loginService.logout()
+  }
 }

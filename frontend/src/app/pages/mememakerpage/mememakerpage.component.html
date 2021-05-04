@@ -1,55 +1,79 @@
-<div class = "container">
-    <div class = "container">
-        <div class = "one">
-            <div class = "form-group">
-                <label>Top Text: </label>
-                <input class = "form-control" [(ngModel)] = "topText">
+<div class="container">
+    <div class="container">
+        <div class="one">
+            <div class="form-group">
+                <label for="">Top text</label>
+                <input class="input" [(ngModel)]="topText" placeholder="Top text">
             </div>
-            <div class = "form-group">
-                    <label>Bottom Text: </label>
-                    <input class = "form-control" [(ngModel)] = "bottomText">
+            <div> <br />
+                <label for="">Bottom text</label>
+                <input class="input" [(ngModel)]="bottomText" placeholder="Bottom text">
+            </div><br />
+            <div>
+                <label>Meme templates: </label>
+                <select [(ngModel)]="imageName" class="dropdown">
+                    <option>Magikarp Logo</option>
+                    <option>Fisting baby</option>
+                    <option>Skeleton</option>
+                    <option>Scared cat</option>
+                    <option>Watching back</option>
+                </select>
+            </div> <br />
+
+            <div>
+                <label for="">Category</label>
+                <select [(ngModel)]="chosenCategoryId" class="dropdown">
+                    <option *ngFor="let category of categories" [value]="category.id">
+                        {{category.title}}
+                    </option>
+                </select>
             </div>
-            <div class = "form-group">
-                    <label>Meme templates: </label>
-                    <select class="form-control" [(ngModel)] = "imageName">
-                            <option>Magikarp Logo</option>
-                            <option>Fisting baby</option>
-                            <option>Skeleton</option>
-                            <option>Scared cat</option>
-                            <option>Watching back</option>
-                        </select>
-            </div>
-            <div class = "form-group">
+
+            <div class="form-group">
                 <label>Image upload: </label>
-                <input type="file" id="img" name="img" accept="image/*" (change)="onFileChanged($event)">
+                <input class="input" type="file" id="img" name="img" accept="image/*" (change)="onFileChanged($event)">
             </div>
-            <div class = "form-group">
-                    <label>Background Color: </label>
-                    <input type="color" [(ngModel)] = "colorName">
+            <div class="form-group">
+                <label>Background Color: </label>
+                <input class="input" type="color" [(ngModel)]="colorName">
             </div>
-            <div class = "form-group">
+            <div class="form-group">
                 <label>Title: </label>
-                <input class = "form-control" [(ngModel)] = "title">
+                <input class="form-control input" [(ngModel)]="title">
             </div>
-            <div class = "form-group">
+            <div class="form-group">
                 <label>Description: </label>
-                <input class = "form-control" [(ngModel)] = "description">
+                <input class="form-control input" [(ngModel)]="description">
             </div>
-            <div class="button" (click)="downloadImage()">Save image</div>
+            <div class="form-group">
+                <label for="">Tags</label>
+                <select [(ngModel)]="tag" class="dropdown">
+                    <option *ngFor="let tag of tags" [value]="tag.id">
+                        {{tag.title}}
+                    </option>
+                </select>
+                <button class="button is-success" (click)="addTag(tag)">
+                    Add tag
+                </button>
+            </div> <br />
+            <div class="added-tag has-text-centered" *ngFor="let chosenTag of chosenTags">
+                {{ chosenTag.title }}
+            </div>
+            <div class="button is-success" (click)="downloadImage()">Save image</div>
         </div>
-        <div class = "two" #screen>
-            <div style = "background-color: {{colorName}}">
-                <h2 style = "text-align: center; color: white; padding-top: 1em;">{{ topText }}</h2>
-                <img [src]="changeImage()" class = ".img-responsive" style = "display: block;
+        <div class="two" #screen>
+            <div style="background-color: {{colorName}}">
+                <h2 style="text-align: center; color: white; padding-top: 1em;">{{ topText }}</h2>
+                <img [src]="changeImage()" class=".img-responsive" style="display: block;
                 margin-left: auto;
                 margin-right: auto;" #image>
-                <h2 style = "text-align: center; color: white; padding-bottom: 1em;">{{ bottomText }}</h2>
+                <h2 style="text-align: center; color: white; padding-bottom: 1em;">{{ bottomText }}</h2>
             </div>
         </div>
 
         <div id="download">
             <img #canvas>
             <a #downloadLink></a>
-          </div>
+        </div>
     </div>
 </div>
