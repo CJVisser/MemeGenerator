@@ -46,8 +46,17 @@
                         </div>
                     </div>
                     <div class="column is-2 center-text">
-                        <button class="button is-success" (click)="addTag(tag)">
+                        <button class="button" (click)="addTag(tag)">
                             Add tag
+                        </button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="title">Custom tag</label>
+                    <div class="control">
+                        <input id="title" [(ngModel)]="customTag" class="input" type="text" placeholder="Custom tag">
+                        <button class="button" (click)="addCustomTag()">
+                            Add custom tag
                         </button>
                     </div>
                 </div>
@@ -56,7 +65,7 @@
                 </div>
             </div>
             <div class="field">
-                <button class="button is-success" (click)="createMeme()">
+                <button class="button is-success" (click)="createMeme()" [disabled]="chosenImage.url === ''">
                     Create
                 </button>
             </div>
@@ -69,8 +78,8 @@
                     <option *ngFor="let image of images" [value]="image.url">{{ image.name }}</option>
                 </select>
             </div>
-            <h3 class="subtitle">... or select your own</h3>
             <div class="field" *ngIf="user.points >= 100">
+                <h3 class="subtitle">... or select your own</h3>
                 <label for="image" class="label">Image</label>
                 <div class="control">
                     <input type="file" class="input" id="img" name="img" accept="image/*"

@@ -68,7 +68,7 @@ public class MemeServiceImpl implements MemeService {
 
         if(!userAllowedToCreate(userId)){
             response.Errors.add("User is not allowed to create the meme.");
-            response.Message = "You are not allowed to create the meme.";
+            response.Message = "You are not allowed to create more memes today.";
             return response;
         }
 
