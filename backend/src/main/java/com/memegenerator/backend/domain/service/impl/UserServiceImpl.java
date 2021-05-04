@@ -8,10 +8,12 @@ import java.util.stream.Collectors;
 
 import javax.ejb.DuplicateKeyException;
 
+import com.memegenerator.backend.data.entity.Achievement;
 import com.memegenerator.backend.data.entity.User;
 import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.security.Role;
 import com.memegenerator.backend.security.UserDetailsAdapter;
+import com.memegenerator.backend.data.repository.AchievementRepository;
 import com.memegenerator.backend.data.repository.UserRepository;
 
 import org.modelmapper.ModelMapper;
@@ -30,6 +32,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private static final String USER_NOT_FOUND = "User not found";
 
     private final UserRepository userRepository;
+    private final AchievementServiceImpl achievementService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ModelMapper modelMapper;
 

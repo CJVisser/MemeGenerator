@@ -4,11 +4,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.memegenerator.backend.data.entity.Achievement;
 import com.memegenerator.backend.data.entity.Meme;
+import com.memegenerator.backend.data.entity.User;
+import com.memegenerator.backend.data.repository.AchievementRepository;
 import com.memegenerator.backend.data.repository.MemeRepository;
 import com.memegenerator.backend.data.repository.UserRepository;
 import com.memegenerator.backend.domain.service.MemeService;
 
+import org.hibernate.mapping.Set;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +23,7 @@ public class MemeServiceImpl implements MemeService {
 
     private final MemeRepository memeRepository;
     private final UserRepository userRepository;
+    private final AchievementRepository achievementRepository;
 
     /**
      * @param meme
@@ -28,7 +33,14 @@ public class MemeServiceImpl implements MemeService {
      */
     public Meme createMeme(Meme meme, Long userId) throws NoSuchElementException {
 
-        meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        //meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        Achievement achievement = determineAchievement(user);
+
+        // If achievement is not empty, add it to the user
+        if(!achievement.title.equals("")){
+            achievement.users.add(user);
+        }
 
         return memeRepository.save(meme);
     }
@@ -67,5 +79,22 @@ public class MemeServiceImpl implements MemeService {
         allMemes.sort(Comparator.comparing(Meme::getCreatedat).reversed());
 
         return allMemes;
+    }
+
+    private Achievement determineAchievement(User user){
+
+        int amountOfMemes = user.getMemes().size();
+        Achievement achievement = new Achievement();
+
+        switch(amountOfMemes){
+            case 0:
+                achievement = achievementRepository.findByTitle("first meme");
+                break;
+            
+            case 4:
+                achievement = achievementRepository.findByTitle("fifth meme");
+        }
+
+        return achievement;
     }
 }
