@@ -79,9 +79,8 @@ public class MemeController {
 
         for (int i = 0; i < tags.length; i++) {
 
-            Tag newTag = new Tag();
+            Tag newTag = new Tag(tags[i].title);
             newTag.id = tags[i].id;
-            newTag.title = tags[i].title;
             memeDto.tags[i] = newTag;
         }
 
