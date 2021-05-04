@@ -19,7 +19,7 @@ public class User extends BaseEntity {
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "user_achievements", joinColumns = { @JoinColumn(name = "userid") }, inverseJoinColumns = {
             @JoinColumn(name = "achievementid") })
-    private Set<Achievement> achievements = new HashSet<>();
+    public Set<Achievement> achievements = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private Set<Meme> memes = new HashSet<>();

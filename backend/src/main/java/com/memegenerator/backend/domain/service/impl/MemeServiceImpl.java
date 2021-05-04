@@ -58,8 +58,9 @@ public class MemeServiceImpl implements MemeService {
         Achievement achievement = determineAchievement(user);
 
         // If achievement is not empty, add it to the user
-        if(!achievement.title.equals("")){
-            achievement.users.add(user);
+        if(achievement.title != null){
+            user.achievements.add(achievement);
+            userRepository.save(user);
         }
 
         RequestResponse response = new RequestResponse();
@@ -169,11 +170,16 @@ public class MemeServiceImpl implements MemeService {
 
         switch(amountOfMemes){
             case 0:
-                achievement = achievementRepository.findByTitle("first meme");
+                achievement = achievementRepository.findByTitle("First Meme");
                 break;
             
-            case 4:
-                achievement = achievementRepository.findByTitle("fifth meme");
+            case 9:
+                achievement = achievementRepository.findByTitle("10 Memes");
+                break;
+            
+            case 24:
+                achievement = achievementRepository.findByTitle("25 Memes");
+                break;
         }
 
         return achievement;

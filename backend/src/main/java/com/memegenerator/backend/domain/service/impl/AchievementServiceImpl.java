@@ -5,7 +5,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import com.memegenerator.backend.data.entity.Achievement;
-import com.memegenerator.backend.data.entity.Category;
 import com.memegenerator.backend.data.entity.User;
 import com.memegenerator.backend.data.repository.AchievementRepository;
 import com.memegenerator.backend.data.repository.UserRepository;
