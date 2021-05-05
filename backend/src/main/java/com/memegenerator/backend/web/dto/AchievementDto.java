@@ -13,5 +13,8 @@ public class AchievementDto {
     public String title;
 
     @NotNull
+    public String Description;
+
+    @NotNull
     public Long id;
 }

@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 public class User extends BaseEntity {
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     @JoinTable(name = "user_achievements", joinColumns = { @JoinColumn(name = "userid") }, inverseJoinColumns = {
             @JoinColumn(name = "achievementid") })
     public Set<Achievement> achievements = new HashSet<>();
