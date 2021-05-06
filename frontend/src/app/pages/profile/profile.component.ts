@@ -1,13 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
 import { User } from "../../models/User";
 import { ProfileService } from "../../services/profile/profile.service";
 import { LoginService } from 'src/app/services/login/loginService';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-
-let self: any;
 
 @Component({
   selector: "ngx-profile",
@@ -16,14 +11,13 @@ let self: any;
 })
 export class ProfileComponent implements OnInit {
 
-  updatedProfile: Boolean = false
+  updatedProfile: boolean = false
   password: string = ""
   user: User;
   id: any;
 
   constructor(private profileService: ProfileService,
     private route: ActivatedRoute,
-    private router: Router,
     private loginService: LoginService
   ) {
     loginService.getLoggedInUser.subscribe(user => this.getUser(user))

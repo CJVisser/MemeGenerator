@@ -10,8 +10,8 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { PasswordResetComponent } from './pages/password-reset/password-reset.component';
-import { CreateComponent } from './pages/create/create.component'
-import { LoginService } from './services/login/loginService'
+import { CreateComponent } from './pages/create/create.component';
+import { LoginService } from './services/login/loginService';
 
 const routes: Routes = [
   {
