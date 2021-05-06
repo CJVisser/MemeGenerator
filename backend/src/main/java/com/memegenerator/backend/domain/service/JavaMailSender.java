@@ -20,8 +20,8 @@ public class JavaMailSender {
         mailSender.setHost("mail.cornevisser.nl");
         mailSender.setPort(587);
 
-        mailSender.setUsername(env.getProperty("MAIL_USER"));
-        mailSender.setPassword(env.getProperty("MAIL_PASS"));
+        mailSender.setUsername(env.getProperty("mail.username"));
+        mailSender.setPassword(env.getProperty("mail.password"));
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

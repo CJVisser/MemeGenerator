@@ -20,6 +20,10 @@
                 <input id="password" type="password" [(ngModel)]="password" class="input" />
             </div>
         </div>
+
+        <div *ngIf="updatedProfile" class="block notification is-success is-light margin">
+            Your profile has been updated.
+        </div>
         <button class="button is-success" (click)="updateUser()">Update</button>
         <h1 class="title">Achievements</h1>
         <div *ngFor="let achievement of user.achievements">
@@ -32,10 +36,6 @@
                     </div>
                 </div>
             </div> <br />
-        </div>
-
-        <div *ngIf="updatedProfile" class="block notification is-success is-light margin">
-            Your profile has been updated.
         </div>
     </div>
 </section>
