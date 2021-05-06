@@ -1,18 +1,13 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, Injector, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Observable, Observer } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { MemeService } from "../../services/meme/memeService";
 import { Meme } from "../../models/Meme"
 import { Category } from 'src/app/models/Category';
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { LoginService } from 'src/app/services/login/loginService';
-import { User } from 'src/app/models/User';
 import { Tag } from 'src/app/models/Tag';
-import { ProfileService } from 'src/app/services/profile/profile.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { tap } from "rxjs/operators";
-import { pipe } from 'rxjs';
+import { Router } from '@angular/router';
 import { MemeImage } from 'src/app/models/MemeImage';
 
 @Component({

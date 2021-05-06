@@ -3,6 +3,9 @@ import { NgModule,ModuleWithProviders } from '@angular/core';
 //components
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from "@angular/common";
 
 
 @NgModule({
@@ -11,7 +14,9 @@ import { FooterComponent } from './components/footer/footer.component';
         FooterComponent
     ],
     imports: [
-
+        FormsModule,
+        BrowserModule,
+        CommonModule
     ],
     exports: [
         HeaderComponent,
