@@ -21,7 +21,6 @@ export class AdminComponent implements OnInit {
     {text: "Creation Date", value: "createdat"},
     {text: "Banned", value: "banned"},
     {text: "Points", value: "points"},
-    {text: "# of Memes", value: "numOfMemes"},
   ];
   headersMemes: any[] = [
     {text: "Meme Title", value: "title"},
@@ -56,22 +55,24 @@ export class AdminComponent implements OnInit {
     this.adminService.getUsers()
     .subscribe( data => {
       this.users = data;
-      console.log(data);
     });
     this.memeService.GetAllMemes()
     .subscribe( data => {
-      console.log(data);
       this.memes = data;
       this.getWantedProps();
     })
     this.userButtonText = 'Ban';
+    this.memeButtonText = 'Cancel';
   }
 
   public banUser(userId: number): void {
     this.adminService.banUser(userId)
-    .subscribe( data => {
-      console.log(data);
-    })
+    .subscribe( () => {})
+  }
+
+  public cancelMeme(memeId: number): void {
+    this.adminService.cancelMeme(memeId)
+    .subscribe( () => {})
   }
 
   getWantedProps() {

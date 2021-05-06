@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.ejb.DuplicateKeyException;
 import javax.validation.Valid;
 
 import com.google.gson.Gson;
@@ -140,6 +141,20 @@ public class MemeController {
 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PutMapping(path = "/cancel")
+    public ResponseEntity<String> cancelMeme(@Valid @RequestBody Long memeId) {
+
+        try {
+            
+            memeService.cancelMeme(memeId);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException | DuplicateKeyException e) {
+
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
     }
 
     @PostMapping(path = "/flag")
