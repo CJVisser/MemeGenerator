@@ -216,6 +216,8 @@ public class MemeServiceImpl implements MemeService {
         }
         
         memeRepository.save(meme);
+    }
+    
     /**
      * @param imageData
      * @return BufferedImage
