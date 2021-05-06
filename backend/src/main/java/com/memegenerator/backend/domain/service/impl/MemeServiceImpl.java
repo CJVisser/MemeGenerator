@@ -91,8 +91,26 @@ public class MemeServiceImpl implements MemeService {
 
         meme.flag_points += 1;
 
+        meme.memestatus = "reported";
+
         memeRepository.save(meme);
 
         return meme;
+    }
+
+    public void cancelMeme(Long memeId) {
+        Meme meme = memeRepository.findById(memeId).orElseThrow(() -> new NoSuchElementException("Meme not found"));
+        
+        if (meme.memestatus == "" || meme.memestatus == null || meme.memestatus == "reported") {
+            meme.memestatus = "cancelled";
+        }
+        else if (meme.memestatus == "cancelled") {
+            meme.memestatus = "";
+        }
+        else {
+            meme.memestatus = null;
+        }
+        
+        memeRepository.save(meme);
     }
 }

@@ -27,7 +27,8 @@
         <tr *ngFor="let meme of memes">
             <td *ngFor="let header of headersMemes">{{ meme[header.value] }}</td>
             <td *ngIf="memeButtonText">
-                <button onclick="actionButton(meme.id)">{{ memeButtonText }}</button>
+                <button *ngIf="!meme.memestatus" (click)="cancelMeme(meme.id)">{{ memeButtonText }}</button>
+                <button *ngIf="meme.memestatus" (click)="cancelMeme(meme.id)">Uncancel</button>
             </td>
         </tr>
     </tbody>
