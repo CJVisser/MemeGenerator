@@ -15,4 +15,5 @@ export interface Meme {
   customTags?: string[],
   createdat?: Date;
   memestatus?: string;
+  user?: any
 };

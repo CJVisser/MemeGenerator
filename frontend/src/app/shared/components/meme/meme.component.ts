@@ -19,6 +19,7 @@ export class MemeComponent implements OnInit {
   @Input() memeImageUrl;
   @Input() memeUpvotes;
   @Input() memeDownvotes;
+  @Input() memeUser;
   @Input() tags;
   @Input() category;
   @Input() description;
