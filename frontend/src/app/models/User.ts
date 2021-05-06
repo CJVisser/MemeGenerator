@@ -17,4 +17,5 @@ export interface User {
   activated?: boolean;
   createdat?: Date;
   achievements?: Achievement[]
+  banned?: boolean; 
 };

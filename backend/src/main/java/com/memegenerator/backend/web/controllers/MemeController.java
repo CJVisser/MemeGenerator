@@ -3,7 +3,6 @@ package com.memegenerator.backend.web.controllers;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
