@@ -20,7 +20,6 @@ export class MenuComponent implements OnInit {
 
   private updateUser(user: any) : void {
     this.user = user;
-    console.log(this.user);
   }
 
   private logout(){
