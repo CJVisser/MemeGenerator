@@ -65,6 +65,12 @@ public class MemeServiceImpl implements MemeService {
         RequestResponse response = new RequestResponse();
         response.Success = false;
 
+        if(user.banned){
+            response.Errors.add("The user is banned and not allowed to create memes.");
+            response.Message = "You are banned and not allowed to create memes.";
+            return response;
+        }
+
         if (!userAllowedToCreate(userId)) {
             response.Errors.add("User is not allowed to create the meme.");
             response.Message = "You are not allowed to create more memes today.";
@@ -86,7 +92,7 @@ public class MemeServiceImpl implements MemeService {
         if (meme.user.points >= 1000) {
 
             BufferedImage bufferedImage = createImageFromBytes(meme.imageblob);
-            BufferedImage bufferedImageWithWatermark = addTextWatermark("CREATED BY A MEMEKING", bufferedImage);
+            BufferedImage bufferedImageWithWatermark = addTextWatermark("PREMIUM", bufferedImage);
             byte[] watermarkedMeme = createBytesFromImage(bufferedImageWithWatermark);
             meme.imageblob = watermarkedMeme;
         }

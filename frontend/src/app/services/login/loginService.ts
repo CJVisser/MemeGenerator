@@ -57,8 +57,8 @@ export class LoginService {
           this.profileService
             .getUserInfo(response.userId)
             .subscribe((user: User) => {
-              this._currentUser.next(user)
 
+              this._currentUser.next(user)
               this.getLoggedInUser.emit(user)
             });
         } else {
