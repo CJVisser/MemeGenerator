@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private static final String USER_NOT_FOUND = "User not found";
 
     private final UserRepository userRepository;
-    private final AchievementServiceImpl achievementService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JavaMailSender javaMailSender;
 
@@ -110,10 +109,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new DuplicateKeyException("Wrong user");
         }
 
+
         user.activated = true;
         user.createdat = foundUser.createdat;
         user.role = foundUser.role;
-        user.password = bCryptPasswordEncoder.encode(user.password);
+
+        if(user.password != ""){
+            user.password = bCryptPasswordEncoder.encode(user.password);
+        }else{
+            user.password = foundUser.password;
+        }
+
         user.confirmationToken = this.randomInt();
         user.banned = false;
         user.achievements = foundUser.achievements;
