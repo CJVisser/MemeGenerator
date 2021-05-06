@@ -1,9 +1,6 @@
 package com.memegenerator.backend.web.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -13,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.memegenerator.backend.domain.service.impl.MemeServiceImpl;
 import com.memegenerator.backend.domain.service.impl.UserServiceImpl;
-import com.memegenerator.backend.web.controllers.LikeDislikeController;
 import com.memegenerator.backend.web.dto.SocketResponseDto;
 
 import org.junit.jupiter.api.BeforeEach;

@@ -118,7 +118,7 @@ public class MemeController {
     }
 
     @PutMapping(path = "/{memeId}")
-    public ResponseEntity<MemeDto> updateMeme(@Valid @RequestBody MemeDto memeDto) {
+    public ResponseEntity<MemeDto> updateMeme(@PathVariable long memeId, @Valid @RequestBody MemeDto memeDto) {
 
         try {
 
@@ -131,8 +131,8 @@ public class MemeController {
         }
     }
 
-    @PostMapping(path = "/flag")
-    public ResponseEntity<MemeDto> flagMeme(@Valid @RequestBody SmallMemeDto memeDto) {
+    @PostMapping(path = "/flag/{memeId}")
+    public ResponseEntity<MemeDto> flagMeme(@PathVariable long memeId, @Valid @RequestBody SmallMemeDto memeDto) {
         Meme meme = memeService.flagMeme(memeDto.Id);
 
         return new ResponseEntity<MemeDto>(modelMapper.map(meme, MemeDto.class), HttpStatus.OK);
