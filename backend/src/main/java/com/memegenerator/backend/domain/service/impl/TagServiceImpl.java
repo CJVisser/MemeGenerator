@@ -42,6 +42,6 @@ public class TagServiceImpl implements TagService {
 
         Meme meme = memeRepository.findById(memeId).orElseThrow(() -> new NoSuchElementException("Meme not found"));
 
-        return meme.tags;
+        return meme.getTags();
     }
 }

@@ -3,7 +3,6 @@ package com.memegenerator.backend.web.controllers;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -80,7 +79,7 @@ public class MemeController {
         for (int i = 0; i < tags.length; i++) {
 
             Tag newTag = new Tag(tags[i].title);
-            newTag.id = tags[i].id;
+            newTag.setId(tags[i].id);
             memeDto.tags[i] = newTag;
         }
 
@@ -118,7 +117,7 @@ public class MemeController {
         }
     }
 
-    @PutMapping(path = "/update")
+    @PutMapping(path = "/{memeId}")
     public ResponseEntity<MemeDto> updateMeme(@Valid @RequestBody MemeDto memeDto) {
 
         try {

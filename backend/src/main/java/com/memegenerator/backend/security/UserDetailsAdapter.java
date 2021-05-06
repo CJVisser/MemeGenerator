@@ -92,6 +92,6 @@ public class UserDetailsAdapter implements UserDetails {
      * @return Long
      */
     public Long getUserId(){
-        return user.id;
+        return user.getId();
     }
 }

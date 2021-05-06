@@ -18,5 +18,5 @@ public class Tag extends BaseEntity {
     
     @Column(name = "title", nullable = false)
     @NotNull
-    public String title;
+    private String title;
 }

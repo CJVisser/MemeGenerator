@@ -25,43 +25,43 @@ public class Meme extends BaseEntity {
 
     @Column(name = "title", nullable = false)
     @NotNull
-    public String title;
+    private String title;
 
     @Column(name = "description")
-    public String description;
+    private String description;
 
     @Column(name = "image", nullable = false)
-    public byte[] imageblob;
+    private byte[] imageblob;
 
     @Column(name = "likes")
-    public int likes;
+    private int likes;
 
     @Column(name = "dislikes")
-    public int dislikes;
+    private int dislikes;
 
     @Column(name = "flag_points")
-    public int flag_points;
+    private int flag_points;
 
     @Column(name = "memestatus")
-    public String memestatus;
+    private String memestatus;
 
     @Column(name = "disabled", nullable = false)
-    public boolean activated;
+    private boolean activated;
 
     @ManyToOne
     @JoinColumn(name = "imageid")
-    public Image image;
+    private Image image;
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
-    public User user;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "categoryid", nullable = false)
-    public Category category;
+    private Category category;
 
     @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     @JoinTable(name = "meme_tags", joinColumns = { @JoinColumn(name = "memeid") }, inverseJoinColumns = {
             @JoinColumn(name = "tagid") })
-    public Set<Tag> tags = new HashSet<>();
+            private Set<Tag> tags = new HashSet<>();
 }

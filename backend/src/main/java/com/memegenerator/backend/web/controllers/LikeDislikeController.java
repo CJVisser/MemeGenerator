@@ -36,18 +36,18 @@ public class LikeDislikeController {
 
             Meme meme = memeService.getMemeById(response.memeId);
             
-            if(response.userId == meme.user.id){
+            if(response.userId.equals(meme.getUser().getId())){
                 return new ResponseEntity<SocketResponseDto>(response, HttpStatus.OK);
             }
 
             if (response.isUpvote) {
 
-                meme.likes = meme.likes + 1;
+                meme.setLikes(meme.getLikes() + 1);
                 userService.updateUserPoints(response.userId, 1);
-                userService.updateUserPoints(meme.user.id, 1);
+                userService.updateUserPoints(meme.getUser().getId(), 1);
             } else {
 
-                meme.dislikes = meme.dislikes + 1;
+                meme.setDislikes(meme.getDislikes() + 1);
                 userService.updateUserPoints(response.userId, 1);
             }
 

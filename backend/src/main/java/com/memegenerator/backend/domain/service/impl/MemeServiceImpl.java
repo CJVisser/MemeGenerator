@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 import com.memegenerator.backend.data.entity.Meme;
 import com.memegenerator.backend.data.entity.Tag;
 import com.memegenerator.backend.data.entity.User;
-import com.memegenerator.backend.data.repository.CategoryRepository;
 import com.memegenerator.backend.data.repository.MemeRepository;
 import com.memegenerator.backend.data.repository.UserRepository;
 import com.memegenerator.backend.data.repository.TagRepository;
@@ -51,7 +50,7 @@ public class MemeServiceImpl implements MemeService {
      */
     public RequestResponse createMeme(MemeDto memeDto, Long userId) throws NoSuchElementException {
 
-        RequestResponse response = new RequestResponse();
+        RequestResponse response = new RequestResponse("");
         response.Success = false;
 
         if(!userAllowedToCreate(userId)){
@@ -61,22 +60,22 @@ public class MemeServiceImpl implements MemeService {
         }
 
         Meme meme = modelMapper.map(memeDto, Meme.class);
-        meme.category = memeDto.category;
+        meme.setCategory(memeDto.category);
 
-        meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(MEME_NOT_FOUND));
+        meme.setUser(userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(MEME_NOT_FOUND)));
 
         for (Tag elementTag : memeDto.tags) {
             // Check if tag exists in the database 
-            Tag tag = tagRepository.findById(elementTag.id).orElseThrow(() -> new NoSuchElementException("Tag not found"));
-            meme.tags.add(tag);
+            Tag tag = tagRepository.findById(elementTag.getId()).orElseThrow(() -> new NoSuchElementException("Tag not found"));
+            meme.getTags().add(tag);
         }
 
-        if (meme.user.points >= 1000) {
+        if (meme.getUser().getPoints() >= 1000) {
 
-            BufferedImage bufferedImage = createImageFromBytes(meme.imageblob);
+            BufferedImage bufferedImage = createImageFromBytes(meme.getImageblob());
             BufferedImage bufferedImageWithWatermark = addTextWatermark("CREATED BY A MEMEKING", bufferedImage);
             byte[] watermarkedMeme = createBytesFromImage(bufferedImageWithWatermark);
-            meme.imageblob = watermarkedMeme;
+            meme.setImageblob(watermarkedMeme);
         }
 
         memeRepository.save(meme);
@@ -97,11 +96,11 @@ public class MemeServiceImpl implements MemeService {
         Integer memesAddedCount = memeRepository.countAddedRecordsTodayByUser(currentDate.toString(), userId);
 
         Integer userAmountToPost = 0;
-        if (user.points < 100) {
+        if (user.getPoints() < 100) {
             userAmountToPost = 1;
-        } else if (user.points < 500) {
+        } else if (user.getPoints() < 500) {
             userAmountToPost = 5;
-        } else if (user.points < 1000) {
+        } else if (user.getPoints() < 1000) {
             userAmountToPost = 10;
         } else {
             userAmountToPost = -1;
@@ -122,7 +121,7 @@ public class MemeServiceImpl implements MemeService {
      */
     public Meme getMemeById(long memeId) throws NoSuchElementException {
 
-        return memeRepository.findById(memeId).orElseThrow(() -> new NoSuchElementException("Meme not found"));
+        return memeRepository.findById(memeId).orElseThrow(() -> new NoSuchElementException(MEME_NOT_FOUND));
     }
 
     /**
@@ -132,8 +131,8 @@ public class MemeServiceImpl implements MemeService {
      */
     public Meme updateMeme(Meme meme) throws NoSuchElementException {
 
-        if (!memeRepository.findById(meme.id).isPresent()) {
-            throw new NoSuchElementException("Meme not found");
+        if (!memeRepository.findById(meme.getId()).isPresent()) {
+            throw new NoSuchElementException(MEME_NOT_FOUND);
         }
 
         return memeRepository.save(meme);
@@ -155,7 +154,7 @@ public class MemeServiceImpl implements MemeService {
 
         Meme meme = getMemeById(id);
 
-        meme.flag_points += 1;
+        meme.setFlag_points(meme.getFlag_points() + 1);
 
         memeRepository.save(meme);
 

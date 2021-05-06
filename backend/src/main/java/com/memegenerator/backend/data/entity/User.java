@@ -27,35 +27,35 @@ public class User extends BaseEntity {
 
     @Column(name = "username", nullable = false)
     @NotNull(message = "No username given")
-    public String username;
+    private String username;
 
     @Column(name = "password", nullable = false)
     @NotNull(message = "No password given")
-    public String password;
+    private String password;
 
     @Column(name = "points")
-    public int points;
+    private int points;
 
     @Column(name = "email", nullable = false)
     @NotNull(message = "No email given")
-    public String email;
+    private String email;
 
     @Column(name = "token")
-    public String token;
+    private String token;
 
     @Column(name = "confirmation_token")
-    public int confirmationToken;
+    private int confirmationToken;
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    public Role role;
+    private Role role;
 
     @Column(name = "activated", nullable = false)
     @NotNull(message = "No activated give")
-    public boolean activated;
+    private boolean activated;
 
     @Column(name = "banned")
-    public boolean banned;
+    private boolean banned;
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "user_achievements", joinColumns = { @JoinColumn(name = "userid") }, inverseJoinColumns = {

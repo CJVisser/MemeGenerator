@@ -41,28 +41,32 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      */
     public RequestResponse createUser(User user) {
 
-        RequestResponse response = new RequestResponse();
+        RequestResponse response = new RequestResponse("");
 
         // Check if email is already in use
-        if (userRepository.findByEmail(user.email).isPresent()) response.Errors.add("This email is already in use.");
+        if (userRepository.findByEmail(user.getEmail()).isPresent())
+            response.Errors.add("This email is already in use.");
 
         // Check if username is already in use
-        if (userRepository.findUserByUsername(user.username).isPresent()) response.Errors.add("This username is already in use.");
+        if (userRepository.findUserByUsername(user.getUsername()).isPresent())
+            response.Errors.add("This username is already in use.");
 
-        if(response.Errors.size() > 0) return response;
+        if (!response.Errors.isEmpty())
+            return response;
 
-        user.role = Role.USER;
-        user.password = bCryptPasswordEncoder.encode(user.password);
-        user.confirmationToken = this.randomInt();
+        user.setRole(Role.USER);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setConfirmationToken(this.randomInt());
 
         User savedUser = userRepository.save(user);
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("javaminor@cornevisser.nl");
-        message.setTo(savedUser.email);
+        message.setTo(savedUser.getEmail());
         message.setSubject("Bedankt voor het registreren");
 
-        String url = "http://localhost:8080/user/activate/" + savedUser.id + "/" + savedUser.confirmationToken;
+        String url = "http://localhost:8080/user/activate/" + savedUser.getId() + "/"
+                + savedUser.getConfirmationToken();
 
         message.setText("Klik hier om uw account te activeren: " + url);
 
@@ -101,19 +105,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      */
     public User updateUser(User user) throws NoSuchElementException, DuplicateKeyException {
 
-        User foundUser = userRepository.findUserByUsername(user.username)
+        User foundUser = userRepository.findUserByUsername(user.getUsername())
                 .orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
 
-        if (!user.id.equals(foundUser.id)) {
+        if (!user.getId().equals(foundUser.getId())) {
 
             throw new DuplicateKeyException("Wrong user");
         }
 
-        user.activated = true;
-        user.role = Role.USER;
-        user.password = bCryptPasswordEncoder.encode(user.password);
-        user.confirmationToken = this.randomInt();
-        user.banned = false;
+        user.setActivated(true);
+        user.setRole(Role.USER);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setConfirmationToken(this.randomInt());
+        user.setBanned(false);
 
         return userRepository.save(user);
     }
@@ -129,14 +133,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         new Random().nextBytes(array);
         String token = new String(array, StandardCharsets.UTF_8);
 
-        user.token = token;
+        user.setToken(token);
+        ;
         userRepository.save(user);
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("javaminor@cornevisser.nl");
-        message.setTo(user.email);
+        message.setTo(user.getEmail());
         message.setSubject("Password reset token");
-        message.setText("Your password reset token: " + user.token);
+        message.setText("Your password reset token: " + user.getToken());
         javaMailSender.getJavaMailSender().send(message);
     }
 
@@ -149,8 +154,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         User user = userRepository.findByToken(confirmationToken)
                 .orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
 
-        user.password = bCryptPasswordEncoder.encode(password);
-        user.token = null;
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        user.setToken(null);
 
         userRepository.save(user);
     }
@@ -163,13 +168,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public RequestResponse activateUser(Long userId, String confirmationToken) throws NoSuchElementException {
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
 
-        RequestResponse response = new RequestResponse();
+        RequestResponse response = new RequestResponse("");
 
-        if (!user.id.equals(userId)) {
+        if (!user.getId().equals(userId)) {
             throw new NoSuchElementException(USER_NOT_FOUND);
         }
 
-        user.activated = true;
+        user.setActivated(true);
 
         userRepository.save(user);
 
@@ -187,7 +192,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public void updateUserPoints(Long userId, int pointsToAdd) throws NoSuchElementException {
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
 
-        user.points = user.points + pointsToAdd;
+        user.setPoints(user.getPoints() + pointsToAdd);
 
         userRepository.save(user);
     }
@@ -212,7 +217,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     public void banUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
-        user.banned = !user.banned;
+        
+        user.setBanned(!user.isBanned());
 
         userRepository.save(user);
     }

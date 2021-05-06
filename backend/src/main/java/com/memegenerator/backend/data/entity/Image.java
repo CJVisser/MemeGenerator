@@ -23,16 +23,16 @@ public class Image extends BaseEntity {
 
     @Column(name = "title", nullable = false)
     @NotNull
-    public String title;
+    private String title;
 
     @Column(name = "image", nullable = false)
     @NotNull
-    public byte[] imageblob;
+    private byte[] imageblob;
 
     @OneToMany(mappedBy = "image")
     private Set<Meme> memes = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
-    public User user;
+    private User user;
 }

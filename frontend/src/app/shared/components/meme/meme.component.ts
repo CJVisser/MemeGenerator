@@ -25,9 +25,9 @@ export class MemeComponent implements OnInit {
   user: any = null
   showButtons: boolean = false
   appComponent: MemelistComponent;
-  
+
   constructor(
-    private loginService: LoginService, 
+    private loginService: LoginService,
     protected httpClient: HttpClient,
     private router: Router,
     protected memeService: MemeService,
@@ -45,7 +45,7 @@ export class MemeComponent implements OnInit {
   sendMessage(voteType){
     this.appComponent.sendMessage(voteType, this.memeId)
   }
-  
+
   flagMeme(id): void {
     this.memeService.FlagMeme(id);
 
