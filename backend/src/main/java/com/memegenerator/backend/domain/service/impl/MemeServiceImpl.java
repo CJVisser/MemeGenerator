@@ -203,12 +203,12 @@ public class MemeServiceImpl implements MemeService {
     }
 
     public void cancelMeme(Long memeId) {
-        Meme meme = memeRepository.findById(memeId).orElseThrow(() -> new NoSuchElementException("Meme not found"));
+        var meme = memeRepository.findById(memeId).orElseThrow(() -> new NoSuchElementException("Meme not found"));
         
-        if (meme.memestatus == "" || meme.memestatus == null || meme.memestatus == "reported") {
+        if (meme.memestatus.equals("") || meme.memestatus == null || meme.memestatus.equals("reported")) {
             meme.memestatus = "cancelled";
         }
-        else if (meme.memestatus == "cancelled") {
+        else if (meme.memestatus.equals("cancelled")) {
             meme.memestatus = "";
         }
         else {
@@ -217,7 +217,7 @@ public class MemeServiceImpl implements MemeService {
         
         memeRepository.save(meme);
     }
-    
+
     /**
      * @param imageData
      * @return BufferedImage
