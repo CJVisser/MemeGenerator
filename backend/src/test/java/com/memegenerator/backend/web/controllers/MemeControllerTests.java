@@ -167,7 +167,7 @@ public class MemeControllerTests {
         when(memeService.updateMeme(any())).thenReturn(mockMeme);
 
         var mvcResult = this.mockMvc
-            .perform(get("/meme/5").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+            .perform(put("/meme/5").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andReturn();
 

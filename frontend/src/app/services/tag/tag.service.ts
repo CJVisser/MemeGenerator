@@ -20,7 +20,7 @@ export class TagService {
     };
 
     createTag(tag: Tag): Observable<any>{
-        return this.http.post<Tag>(`http://localhost:8080/tag/create`, tag, this.httpOptions).pipe(retry(1));
+        return this.http.post<Tag>(`http://localhost:8080/tag/`, tag, this.httpOptions).pipe(retry(1));
     }
 
     getTags():Observable<any>{
