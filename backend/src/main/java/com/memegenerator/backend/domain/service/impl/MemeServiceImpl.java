@@ -92,7 +92,7 @@ public class MemeServiceImpl implements MemeService {
         if (meme.user.points >= 1000) {
 
             BufferedImage bufferedImage = createImageFromBytes(meme.imageblob);
-            BufferedImage bufferedImageWithWatermark = addTextWatermark("CREATED BY A MEMEKING", bufferedImage);
+            BufferedImage bufferedImageWithWatermark = addTextWatermark("PREMIUM", bufferedImage);
             byte[] watermarkedMeme = createBytesFromImage(bufferedImageWithWatermark);
             meme.imageblob = watermarkedMeme;
         }
