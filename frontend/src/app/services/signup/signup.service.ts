@@ -16,7 +16,7 @@ export class SignupService {
   constructor(
     private httpClient: HttpClient,
   ) {
-    
+
    }
 
   httpOptions = {
@@ -34,13 +34,6 @@ export class SignupService {
       production: false,
       apiUrl: "http://localhost:8080",
     };
-
-    // return this.httpClient
-    //   .post<User>(`${environment.apiUrl}/user`, user, this.httpOptions)
-    //   .subscribe((res) => {
-
-    //     this.showLoginForm = true
-    //   });
 
     return this.httpClient
       .post<User>(`${environment.apiUrl}/user`, user, this.httpOptions)

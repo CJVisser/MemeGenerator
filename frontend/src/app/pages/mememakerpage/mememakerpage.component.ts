@@ -200,7 +200,6 @@ export class MememakerpageComponent implements OnInit {
 
     const mimeType = files[0].type;
     if (mimeType.match(/image\/*/) == null) {
-      //this.message = "Only images are supported."; possible error message
       return;
     }
 

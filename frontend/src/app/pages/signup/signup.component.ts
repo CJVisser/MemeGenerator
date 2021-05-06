@@ -67,10 +67,6 @@ export class SignupComponent implements OnInit {
           this.errors = response.errors
         }
     });
-
-    // if(response.success) this.createdAccount = true
-
-    // this.errors = response.errors
   }
 }
 
