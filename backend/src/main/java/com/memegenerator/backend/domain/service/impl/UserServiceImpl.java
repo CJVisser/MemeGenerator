@@ -15,7 +15,6 @@ import com.memegenerator.backend.web.dto.RequestResponse;
 import com.memegenerator.backend.data.repository.UserRepository;
 
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserDetailsService, UserService {
+public class UserServiceImpl implements UserService {
 
     private static final String USER_NOT_FOUND = "User not found";
 
@@ -45,13 +44,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         // Check if email is already in use
         if (userRepository.findByEmail(user.getEmail()).isPresent())
-            response.Errors.add("This email is already in use.");
+            response.errors.add("This email is already in use.");
 
         // Check if username is already in use
         if (userRepository.findUserByUsername(user.getUsername()).isPresent())
-            response.Errors.add("This username is already in use.");
+            response.errors.add("This username is already in use.");
 
-        if (!response.Errors.isEmpty())
+        if (!response.errors.isEmpty())
             return response;
 
         user.setRole(Role.USER);
@@ -72,9 +71,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         javaMailSender.getJavaMailSender().send(message);
 
-        response.Message = "You successfully signed up!";
+        response.message = "You successfully signed up!";
 
-        response.Success = true;
+        response.success = true;
 
         return response;
     }
@@ -178,8 +177,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         userRepository.save(user);
 
-        response.Message = "Your account is activated!";
-        response.Success = true;
+        response.message = "Your account is activated!";
+        response.success = true;
 
         return response;
     }

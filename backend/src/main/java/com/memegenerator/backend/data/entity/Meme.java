@@ -14,6 +14,12 @@ import java.util.Set;
 @Setter
 public class Meme extends BaseEntity {
 
+    public Meme(String title, byte[] imageblob)
+    {
+        this.title = title;
+        this.imageblob = imageblob;
+    }
+
     public Meme(String title, byte[] imageblob, boolean activated, User user, Category category)
     {
         this.title = title;

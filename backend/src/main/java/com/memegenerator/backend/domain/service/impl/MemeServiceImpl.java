@@ -51,11 +51,11 @@ public class MemeServiceImpl implements MemeService {
     public RequestResponse createMeme(MemeDto memeDto, Long userId) throws NoSuchElementException {
 
         RequestResponse response = new RequestResponse("");
-        response.Success = false;
+        response.success = false;
 
         if(!userAllowedToCreate(userId)){
-            response.Errors.add("User is not allowed to create the meme.");
-            response.Message = "You are not allowed to create the meme.";
+            response.errors.add("User is not allowed to create the meme.");
+            response.message = "You are not allowed to create the meme.";
             return response;
         }
 
@@ -80,8 +80,8 @@ public class MemeServiceImpl implements MemeService {
 
         memeRepository.save(meme);
 
-        response.Message = "Successfully created the meme!";
-        response.Success = true;
+        response.message = "Successfully created the meme!";
+        response.success = true;
 
         return response;
     }

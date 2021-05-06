@@ -96,7 +96,7 @@ public class MemeController {
 
             userService.updateUserPoints(userIdLong, 1);
         
-			return new ResponseEntity<RequestResponse>(response, HttpStatus.OK);
+			return new ResponseEntity<RequestResponse>(response, HttpStatus.CREATED);
         } catch (NoSuchElementException e) {
 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -133,7 +133,7 @@ public class MemeController {
 
     @PostMapping(path = "/flag/{memeId}")
     public ResponseEntity<MemeDto> flagMeme(@PathVariable long memeId, @Valid @RequestBody SmallMemeDto memeDto) {
-        Meme meme = memeService.flagMeme(memeDto.Id);
+        Meme meme = memeService.flagMeme(memeId);
 
         return new ResponseEntity<MemeDto>(modelMapper.map(meme, MemeDto.class), HttpStatus.OK);
     }

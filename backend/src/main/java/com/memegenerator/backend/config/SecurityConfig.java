@@ -7,11 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.HttpMethod;
 
-import com.memegenerator.backend.domain.service.impl.*;
+import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.security.UserDetailsAdapter;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -30,11 +29,14 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
     
     private static final String USER_PATH = "/user";
@@ -43,10 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     private static final String LOGOUT_PATH = "/logout";
     private static final String HOME_PATH = "/";
     private static final String LIKEDISLIKE_PATH = "/likedislike";
-    private ModelMapper modelmapper = new ModelMapper();
 
-    @Autowired
-    UserServiceImpl userService;
+    private final ModelMapper modelmapper;
+    private final UserService userService;
 
     /** 
      * @param passwordEncoder
