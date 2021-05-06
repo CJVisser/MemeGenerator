@@ -17,6 +17,7 @@ let self: any;
 export class ProfileComponent implements OnInit {
 
   updatedProfile: Boolean = false
+  password: string = ""
   user: User;
   id: any;
 
@@ -29,14 +30,12 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    self = this;
     this.id = this.route.snapshot.paramMap.get('id');
     this.profileService.getUserInfo(
       <Number>this.id
-    ).subscribe(user => { this.user = user });
-
-
+    ).subscribe(user => {  
+      this.user = user 
+    });
   }
 
   private getUser(user: any) : void {
@@ -47,12 +46,7 @@ export class ProfileComponent implements OnInit {
     const e: Event = window.event;
     e.preventDefault();
 
-    self.user.email = (<HTMLInputElement>(
-      document.getElementById("email")
-    )).value;
-    self.user.password = (<HTMLInputElement>(
-      document.getElementById("password")
-    )).value;
+    this.user.password = this.password;
 
     this.profileService.updateUserInfo(this.user).subscribe()
 

@@ -4,19 +4,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.imageio.ImageIO;
-
+import com.memegenerator.backend.data.entity.Achievement;
 import com.memegenerator.backend.data.entity.Meme;
-import com.memegenerator.backend.data.entity.Tag;
 import com.memegenerator.backend.data.entity.User;
-import com.memegenerator.backend.data.repository.CategoryRepository;
+import com.memegenerator.backend.data.repository.AchievementRepository;
+import javax.imageio.ImageIO;
+import com.memegenerator.backend.data.entity.Tag;
 import com.memegenerator.backend.data.repository.MemeRepository;
 import com.memegenerator.backend.data.repository.UserRepository;
 import com.memegenerator.backend.data.repository.TagRepository;
 import com.memegenerator.backend.domain.service.MemeService;
 import com.memegenerator.backend.web.dto.MemeDto;
 import com.memegenerator.backend.web.dto.RequestResponse;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.awt.image.BufferedImage;
@@ -40,6 +39,7 @@ public class MemeServiceImpl implements MemeService {
 
     private final MemeRepository memeRepository;
     private final UserRepository userRepository;
+    private final AchievementRepository achievementRepository;
     private final TagRepository tagRepository;
     private final ModelMapper modelMapper;
 
@@ -51,12 +51,23 @@ public class MemeServiceImpl implements MemeService {
      */
     public RequestResponse createMeme(MemeDto memeDto, Long userId) throws NoSuchElementException {
 
+        // meme.user = userRepository.findById(userId).orElseThrow(() -> new
+        // NoSuchElementException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        Achievement achievement = determineAchievement(user);
+
+        // If achievement is not empty, add it to the user
+        if (achievement.title != null) {
+            user.achievements.add(achievement);
+            userRepository.save(user);
+        }
+
         RequestResponse response = new RequestResponse();
         response.Success = false;
 
-        if(!userAllowedToCreate(userId)){
+        if (!userAllowedToCreate(userId)) {
             response.Errors.add("User is not allowed to create the meme.");
-            response.Message = "You are not allowed to create the meme.";
+            response.Message = "You are not allowed to create more memes today.";
             return response;
         }
 
@@ -66,8 +77,9 @@ public class MemeServiceImpl implements MemeService {
         meme.user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(MEME_NOT_FOUND));
 
         for (Tag elementTag : memeDto.tags) {
-            // Check if tag exists in the database 
-            Tag tag = tagRepository.findById(elementTag.id).orElseThrow(() -> new NoSuchElementException("Tag not found"));
+            // Check if tag exists in the database
+            Tag tag = tagRepository.findById(elementTag.id)
+                    .orElseThrow(() -> new NoSuchElementException("Tag not found"));
             meme.tags.add(tag);
         }
 
@@ -151,6 +163,32 @@ public class MemeServiceImpl implements MemeService {
         return allMemes;
     }
 
+    private Achievement determineAchievement(User user) {
+
+        int amountOfMemes = user.getMemes().size();
+        Achievement achievement = new Achievement();
+
+        switch (amountOfMemes) {
+            case 0:
+                achievement = achievementRepository.findByTitle("First Meme");
+                break;
+
+            case 4:
+                achievement = achievementRepository.findByTitle("5 Memes");
+                break;
+
+            case 9:
+                achievement = achievementRepository.findByTitle("10 Memes");
+                break;
+
+            case 24:
+                achievement = achievementRepository.findByTitle("25 Memes");
+                break;
+        }
+
+        return achievement;
+    }
+
     public Meme flagMeme(long id) throws NoSuchElementException {
 
         Meme meme = getMemeById(id);
@@ -162,7 +200,7 @@ public class MemeServiceImpl implements MemeService {
         return meme;
     }
 
-        /** 
+    /**
      * @param imageData
      * @return BufferedImage
      */
@@ -179,7 +217,7 @@ public class MemeServiceImpl implements MemeService {
         }
     }
 
-    /** 
+    /**
      * @param text
      * @param sourceImage
      * @return BufferedImage
@@ -202,8 +240,8 @@ public class MemeServiceImpl implements MemeService {
 
         return sourceImage;
     }
-    
-    /** 
+
+    /**
      * @param image
      * @return byte[]
      */

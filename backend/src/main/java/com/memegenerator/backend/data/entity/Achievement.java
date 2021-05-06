@@ -6,9 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Getter
 @Setter
@@ -17,7 +14,7 @@ public class Achievement extends BaseEntity {
     @Column(name = "title", nullable = false)
     @NotNull
     public String title;
-
-    @ManyToMany(mappedBy = "achievements")
-    private Set<User> users = new HashSet<>();
+    @Column(name = "description", nullable = false)
+    @NotNull
+    public String description;
 }

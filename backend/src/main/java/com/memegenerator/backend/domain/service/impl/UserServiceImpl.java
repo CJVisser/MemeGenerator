@@ -7,10 +7,12 @@ import java.util.Random;
 
 import javax.ejb.DuplicateKeyException;
 
+import com.memegenerator.backend.data.entity.Achievement;
 import com.memegenerator.backend.data.entity.User;
 import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.security.Role;
 import com.memegenerator.backend.security.UserDetailsAdapter;
+import com.memegenerator.backend.data.repository.AchievementRepository;
 import com.memegenerator.backend.web.dto.RequestResponse;
 import com.memegenerator.backend.data.repository.UserRepository;
 
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private static final String USER_NOT_FOUND = "User not found";
 
     private final UserRepository userRepository;
+    private final AchievementServiceImpl achievementService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JavaMailSender javaMailSender;
 
@@ -57,16 +60,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         User savedUser = userRepository.save(user);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("javaminor@cornevisser.nl");
-        message.setTo(savedUser.email);
-        message.setSubject("Bedankt voor het registreren");
+        // SimpleMailMessage message = new SimpleMailMessage();
+        // message.setFrom("javaminor@cornevisser.nl");
+        // message.setTo(savedUser.email);
+        // message.setSubject("Bedankt voor het registreren");
 
-        String url = "http://localhost:8080/user/activate/" + savedUser.id + "/" + savedUser.confirmationToken;
+        // String url = "http://localhost:8080/user/activate/" + savedUser.id + "/" + savedUser.confirmationToken;
 
-        message.setText("Klik hier om uw account te activeren: " + url);
+        // message.setText("Klik hier om uw account te activeren: " + url);
 
-        javaMailSender.getJavaMailSender().send(message);
+        // javaMailSender.getJavaMailSender().send(message);
 
         response.Message = "You successfully signed up!";
 
@@ -110,10 +113,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
 
         user.activated = true;
-        user.role = Role.User;
+        user.createdat = foundUser.createdat;
+        user.role = foundUser.role;
         user.password = bCryptPasswordEncoder.encode(user.password);
         user.confirmationToken = this.randomInt();
         user.banned = false;
+        user.achievements = foundUser.achievements;
 
         return userRepository.save(user);
     }
