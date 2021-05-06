@@ -1,18 +1,13 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, Injector, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Observable, Observer } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { MemeService } from "../../services/meme/memeService";
 import { Meme } from "../../models/Meme"
 import { Category } from 'src/app/models/Category';
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { LoginService } from 'src/app/services/login/loginService';
-import { User } from 'src/app/models/User';
 import { Tag } from 'src/app/models/Tag';
-import { ProfileService } from 'src/app/services/profile/profile.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { tap } from "rxjs/operators";
-import { pipe } from 'rxjs';
+import { Router } from '@angular/router';
 import { MemeImage } from 'src/app/models/MemeImage';
 
 @Component({
@@ -39,6 +34,7 @@ export class CreateComponent implements OnInit {
   categories: any
   chosenCategoryId: number
   user: any = null
+  customTag: string = ""
 
   constructor(private loginService: LoginService,
     private memeService: MemeService, private httpClient: HttpClient,
@@ -129,6 +125,12 @@ export class CreateComponent implements OnInit {
 
   createMeme() {
 
+    if (this.title == "" || !this.chosenCategoryId) {
+      alert("The title or category is empty")
+
+      return
+    }
+
     this.canvas.toBlob((blob) => {
       const meme: Meme = {
         title: this.title,
@@ -141,8 +143,12 @@ export class CreateComponent implements OnInit {
 
       this.memeService.CreateMeme(meme).subscribe((res: HttpResponse<any>) => {
 
-        alert('Je meme is aangemaakt!')
-      });
+        if (res.body.Success) {
+          alert("Your meme has been created!")
+        } else {
+          alert(res.body.Message)
+        }
+      })
     })
   }
 
@@ -157,5 +163,16 @@ export class CreateComponent implements OnInit {
         this.setChosenImage(url)
       }
     }
+  }
+
+  addCustomTag() {
+    const tag : Tag = {
+      id: 0,
+      title: this.customTag
+    }
+
+    this.chosenTags.push(tag)
+
+    this.customTag = ""
   }
 }

@@ -55,10 +55,6 @@ public class Meme extends BaseEntity {
     private boolean activated;
 
     @ManyToOne
-    @JoinColumn(name = "imageid")
-    private Image image;
-
-    @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
     private User user;
 

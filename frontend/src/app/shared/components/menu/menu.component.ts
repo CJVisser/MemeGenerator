@@ -1,5 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
-import { User } from '../../../models/User';
+import { Component, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/services/login/loginService';
 
 @Component({
@@ -20,7 +19,6 @@ export class MenuComponent implements OnInit {
 
   private updateUser(user: any) : void {
     this.user = user;
-    console.log(this.user);
   }
 
   private logout(){

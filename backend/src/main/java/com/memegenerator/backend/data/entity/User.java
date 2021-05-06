@@ -32,7 +32,7 @@ public class User extends BaseEntity {
         this.role = role;
         this.activated = activated;
     }
-
+    
     @Column(name = "username", nullable = false)
     @NotNull(message = "No username given")
     private String username;
@@ -65,10 +65,10 @@ public class User extends BaseEntity {
     @Column(name = "banned")
     private boolean banned;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     @JoinTable(name = "user_achievements", joinColumns = { @JoinColumn(name = "userid") }, inverseJoinColumns = {
             @JoinColumn(name = "achievementid") })
-    private Set<Achievement> achievements = new HashSet<>();
+    public Set<Achievement> achievements = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private Set<Meme> memes = new HashSet<>();

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import javax.ejb.DuplicateKeyException;
 import javax.validation.Valid;
 
 import com.google.gson.Gson;
@@ -13,6 +14,7 @@ import com.memegenerator.backend.data.entity.Meme;
 import com.memegenerator.backend.data.entity.Tag;
 import com.memegenerator.backend.domain.service.CategoryService;
 import com.memegenerator.backend.domain.service.MemeService;
+import com.memegenerator.backend.domain.service.TagService;
 import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.web.dto.MemeDto;
 import com.memegenerator.backend.web.dto.RequestResponse;
@@ -40,6 +42,7 @@ import lombok.RequiredArgsConstructor;
 public class MemeController {
 
     private final CategoryService categoryService;
+    private final TagService tagService;
     private final MemeService memeService;
     private final UserService userService;
     private final ModelMapper modelMapper;
@@ -72,6 +75,7 @@ public class MemeController {
 
         Gson gson = new Gson();
         TagDto[] tags = gson.fromJson(tagsString, TagDto[].class);
+
         long userIdLong = Long.parseLong(userId);
 
         memeDto.tags = new Tag[tags.length];
@@ -80,6 +84,11 @@ public class MemeController {
 
             Tag newTag = new Tag(tags[i].title);
             newTag.setId(tags[i].id);
+
+            if(tags[i].id == 0){
+                newTag = tagService.createTag(newTag);
+            }
+
             memeDto.tags[i] = newTag;
         }
 
@@ -94,7 +103,7 @@ public class MemeController {
         try {
             RequestResponse response = memeService.createMeme(memeDto, userIdLong);
 
-            userService.updateUserPoints(userIdLong, 1);
+            if(response.success) userService.updateUserPoints(userIdLong, 1);
         
 			return new ResponseEntity<RequestResponse>(response, HttpStatus.CREATED);
         } catch (NoSuchElementException e) {
@@ -129,6 +138,20 @@ public class MemeController {
 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PutMapping(path = "/cancel")
+    public ResponseEntity<String> cancelMeme(@Valid @RequestBody Long memeId) {
+
+        try {
+            
+            memeService.cancelMeme(memeId);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException | DuplicateKeyException e) {
+
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
     }
 
     @PostMapping(path = "/flag/{memeId}")

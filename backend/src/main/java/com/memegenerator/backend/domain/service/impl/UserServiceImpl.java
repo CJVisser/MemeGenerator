@@ -117,6 +117,13 @@ public class UserServiceImpl implements UserService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setConfirmationToken(this.randomInt());
         user.setBanned(false);
+        if(!user.getPassword().equals("")){
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        }else{
+            user.setPassword(foundUser.getPassword());
+        }
+
+        user.achievements = foundUser.achievements;
 
         return userRepository.save(user);
     }

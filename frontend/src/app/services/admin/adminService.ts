@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { User } from "../../models/User";
 import { environment } from "../../../environments/environment";
 import { Observable } from "rxjs";
+import { Meme } from "src/app/models/Meme";
 
 @Injectable({
   providedIn: "root",
@@ -20,5 +21,9 @@ export class AdminService {
 
   banUser(userId: number): Observable<User> {
     return this.httpClient.put<User>(`${environment.apiUrl}/user/ban`, userId);
+  }
+
+  cancelMeme(memeId: number): Observable<Meme> {
+    return this.httpClient.put<Meme>(`${environment.apiUrl}/meme/cancel`, memeId);
   }
 }

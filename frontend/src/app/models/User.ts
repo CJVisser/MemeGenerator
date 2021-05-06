@@ -1,3 +1,5 @@
+import { Achievement } from "./Achievement";
+
 export enum Role {
   User = "User",
   Admin = "Admin",
@@ -14,4 +16,6 @@ export interface User {
   role?: Role;
   activated?: boolean;
   createdat?: Date;
+  achievements?: Achievement[]
+  banned?: boolean; 
 };

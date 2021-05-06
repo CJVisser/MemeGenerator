@@ -4,18 +4,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.imageio.ImageIO;
-
+import com.memegenerator.backend.data.entity.Achievement;
 import com.memegenerator.backend.data.entity.Meme;
-import com.memegenerator.backend.data.entity.Tag;
 import com.memegenerator.backend.data.entity.User;
+import com.memegenerator.backend.data.repository.CategoryRepository;
+import com.memegenerator.backend.data.repository.AchievementRepository;
+import javax.imageio.ImageIO;
+import com.memegenerator.backend.data.entity.Tag;
 import com.memegenerator.backend.data.repository.MemeRepository;
 import com.memegenerator.backend.data.repository.UserRepository;
 import com.memegenerator.backend.data.repository.TagRepository;
 import com.memegenerator.backend.domain.service.MemeService;
 import com.memegenerator.backend.web.dto.MemeDto;
 import com.memegenerator.backend.web.dto.RequestResponse;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.awt.image.BufferedImage;
@@ -39,6 +40,7 @@ public class MemeServiceImpl implements MemeService {
 
     private final MemeRepository memeRepository;
     private final UserRepository userRepository;
+    private final AchievementRepository achievementRepository;
     private final TagRepository tagRepository;
     private final ModelMapper modelMapper;
 
@@ -49,11 +51,26 @@ public class MemeServiceImpl implements MemeService {
      * @throws NoSuchElementException
      */
     public RequestResponse createMeme(MemeDto memeDto, Long userId) throws NoSuchElementException {
+    
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        Achievement achievement = determineAchievement(user);
+
+        // If achievement is not empty, add it to the user
+        if (achievement.getTitle() != null) {
+            user.achievements.add(achievement);
+            userRepository.save(user);
+        }
 
         RequestResponse response = new RequestResponse("");
         response.success = false;
 
-        if(!userAllowedToCreate(userId)){
+        if(user.isBanned()){
+            response.errors.add("The user is banned and not allowed to create memes.");
+            response.message = "You are banned and not allowed to create memes.";
+            return response;
+        }
+
+        if (!userAllowedToCreate(userId)) {
             response.errors.add("User is not allowed to create the meme.");
             response.message = "You are not allowed to create the meme.";
             return response;
@@ -65,7 +82,7 @@ public class MemeServiceImpl implements MemeService {
         meme.setUser(userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(MEME_NOT_FOUND)));
 
         for (Tag elementTag : memeDto.tags) {
-            // Check if tag exists in the database 
+            // Check if tag exists in the database
             Tag tag = tagRepository.findById(elementTag.getId()).orElseThrow(() -> new NoSuchElementException("Tag not found"));
             meme.getTags().add(tag);
         }
@@ -73,7 +90,7 @@ public class MemeServiceImpl implements MemeService {
         if (meme.getUser().getPoints() >= 1000) {
 
             BufferedImage bufferedImage = createImageFromBytes(meme.getImageblob());
-            BufferedImage bufferedImageWithWatermark = addTextWatermark("CREATED BY A MEMEKING", bufferedImage);
+            BufferedImage bufferedImageWithWatermark = addTextWatermark("PREMIUM", bufferedImage);
             byte[] watermarkedMeme = createBytesFromImage(bufferedImageWithWatermark);
             meme.setImageblob(watermarkedMeme);
         }
@@ -150,18 +167,65 @@ public class MemeServiceImpl implements MemeService {
         return allMemes;
     }
 
+    private Achievement determineAchievement(User user) {
+
+        int amountOfMemes = user.getMemes().size();
+        Achievement achievement = new Achievement(null);
+
+        switch (amountOfMemes) {
+            case 0:
+                achievement = achievementRepository.findByTitle("First Meme");
+                break;
+
+            case 4:
+                achievement = achievementRepository.findByTitle("5 Memes");
+                break;
+
+            case 9:
+                achievement = achievementRepository.findByTitle("10 Memes");
+                break;
+
+            case 24:
+                achievement = achievementRepository.findByTitle("25 Memes");
+                break;
+
+            default:
+                break;
+        }
+
+        return achievement;
+    }
+
     public Meme flagMeme(long id) throws NoSuchElementException {
 
         Meme meme = getMemeById(id);
 
         meme.setFlag_points(meme.getFlag_points() + 1);
 
+        meme.setMemestatus("reported");
+
         memeRepository.save(meme);
 
         return meme;
     }
 
-        /** 
+    public void cancelMeme(Long memeId) {
+        var meme = memeRepository.findById(memeId).orElseThrow(() -> new NoSuchElementException(MEME_NOT_FOUND));
+        
+        if (meme.getMemestatus().equals("") || meme.getMemestatus() == null || meme.getMemestatus().equals("reported")) {
+            meme.setMemestatus("cancelled");
+        }
+        else if (meme.getMemestatus().equals("cancelled")) {
+            meme.setMemestatus("");
+        }
+        else {
+            meme.setMemestatus(null);
+        }
+        
+        memeRepository.save(meme);
+    }
+
+    /**
      * @param imageData
      * @return BufferedImage
      */
@@ -178,7 +242,7 @@ public class MemeServiceImpl implements MemeService {
         }
     }
 
-    /** 
+    /**
      * @param text
      * @param sourceImage
      * @return BufferedImage
@@ -201,8 +265,8 @@ public class MemeServiceImpl implements MemeService {
 
         return sourceImage;
     }
-    
-    /** 
+
+    /**
      * @param image
      * @return byte[]
      */

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MemeService } from 'src/app/services/meme/memeService';
+import { SearchService } from 'src/app/services/search/search.service';
 import { Meme } from "../../../../app/models/Meme";
 import { WebSocketAPI } from './WebSocketAPI';
 
@@ -20,62 +21,36 @@ class ResponseClass {
   templateUrl: './memelist.component.html',
   styleUrls: ['./memelist.component.scss']
 })
-
 export class MemelistComponent implements OnInit {
-
   memes: Meme[];
-  webSocketAPI: WebSocketAPI;
+  allMemes: Meme[];
+  searchValue: string = '';
+  categoryId: number = 0;
 
-  constructor(private memeService: MemeService) { }
+  constructor(private memeService: MemeService, private searchService: SearchService
+  ) {
+    searchService.updatetSearch.subscribe(x => this.filterMemes(x));
+    searchService.updatetCategory.subscribe(x => this.filterMemesCategory(x));
+  }
 
   ngOnInit(): void {
     this.memeService.GetAllMemes().subscribe(memes => {
       this.memes = memes;
+      this.allMemes = memes;
 
       this.memes.forEach(function(element){
         element.imageSrc = 'data:image/png;base64,' + element.imageblob;
       });
     });
-
-    this.webSocketAPI = new WebSocketAPI(this);
-    this.connect();
   }
 
-  ngOnDestroy(){
-    this.disconnect();
+  private filterMemes(value: any) : void {
+    this.searchService = value;
+    this.memes = this.allMemes.filter(x => x.title.toLowerCase().indexOf(value.toLowerCase()) !== -1 && (this.categoryId === 0 || x.categoryId === this.categoryId));
   }
 
-  sendMessage(voteType, memeId){
-    if(true){ // check if user logged in
-      let response;
-      if(voteType === "u"){
-        response = {memeId: memeId, isUpvote: true, userId: 10} // Use correct userId
-      }else{
-        response = {memeId: memeId, isUpvote: false, userId: 10}
-      }
-
-      this.webSocketAPI._send(response);
-    }
-  }
-
-  handleMessage(message){
-    let fObj: ResponseClass = new ResponseClass(message);
-    var item2 = this.memes.filter(function(item) {
-      return item.id === fObj.memeId;
-    })[0];
-
-    if(fObj.isUpvote){
-      item2.likes++;
-    }else{
-      item2.dislikes++;
-    }
-  }
-
-  connect(){
-    this.webSocketAPI._connect();
-  }
-
-  disconnect(){
-    this.webSocketAPI._disconnect();
+  private filterMemesCategory(value: any) : void {
+    this.categoryId = Number(value);
+    this.memes = this.allMemes.filter(x => x.title.toLowerCase().indexOf(this.searchValue.toLowerCase()) !== -1 && x.categoryId === Number(value));
   }
 }

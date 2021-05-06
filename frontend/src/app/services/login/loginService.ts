@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { User } from "../../models/User"
 import { environment } from "../../../environments/environment";
@@ -48,7 +48,6 @@ export class LoginService {
     const formData = new FormData();
     formData.append("username", username);
     formData.append("password", password);
-    console.log(username, password);
     return this.httpClient.post(`${environment.apiUrl}/login`, formData).pipe(
       tap((response: LoginResponse) => {
         this._loggedIn.next(response.status);
@@ -58,8 +57,8 @@ export class LoginService {
           this.profileService
             .getUserInfo(response.userId)
             .subscribe((user: User) => {
-              this._currentUser.next(user)
 
+              this._currentUser.next(user)
               this.getLoggedInUser.emit(user)
             });
         } else {

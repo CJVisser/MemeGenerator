@@ -6,6 +6,8 @@ import { LoginService } from 'src/app/services/login/loginService';
 import { User } from 'src/app/models/User';
 import { ProfileService } from 'src/app/services/profile/profile.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { environment } from "../../../../../src/environments/environment"
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: 'meme',
@@ -20,11 +22,17 @@ export class MemeComponent implements OnInit {
   @Input() memeDownvotes;
   @Input() tags;
   @Input() category;
+  @Input() description;
 
   status: boolean = false
   user: any = null
   showButtons: boolean = false
-  appComponent: MemelistComponent;
+  httpOptions = {
+    headers: new HttpHeaders({
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }),
+  };
 
   constructor(
     private loginService: LoginService,
@@ -32,26 +40,41 @@ export class MemeComponent implements OnInit {
     private router: Router,
     protected memeService: MemeService,
   ) {
-    this.appComponent = appComponent;
   }
 
   ngOnInit(): void {
 
     this.user = this.loginService.getCurrentUser()
 
-    if(this.user) this.showButtons = true
-  }
-
-  sendMessage(voteType){
-    this.appComponent.sendMessage(voteType, this.memeId)
+    if (this.user) this.showButtons = true
   }
 
   flagMeme(id): void {
     this.memeService.FlagMeme(id);
-
     this.status = true
 
     alert("You flagged this meme!")
   }
 
+  like() {
+    const likeDislike = {
+      memeId: this.memeId,
+      userId: this.user.id
+    }
+
+    this.httpClient.post(`${environment.apiUrl}/like`, likeDislike, this.httpOptions).subscribe()
+
+    alert("You upvoted this meme!")
+  }
+
+  dislike() {
+    const likeDislike = {
+      memeId: this.memeId,
+      userId: this.user.id
+    }
+
+    this.httpClient.post(`${environment.apiUrl}/dislike`, likeDislike, this.httpOptions).subscribe()
+
+    alert("You downvoted this meme!")
+  }
 }

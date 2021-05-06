@@ -2,6 +2,7 @@ package com.memegenerator.backend.web.dto;
 
 import javax.validation.constraints.NotNull;
 
+import com.memegenerator.backend.data.entity.Achievement;
 import com.memegenerator.backend.security.Role;
 
 import lombok.Getter;
@@ -24,4 +25,5 @@ public class SmallUserDto {
 	public Role role;
 	
 	public int points;
+	public Achievement[] achievements;
 }

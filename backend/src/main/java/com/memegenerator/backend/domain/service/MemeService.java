@@ -3,6 +3,8 @@ package com.memegenerator.backend.domain.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.ejb.DuplicateKeyException;
+
 import com.memegenerator.backend.data.entity.Meme;
 import com.memegenerator.backend.web.dto.MemeDto;
 import com.memegenerator.backend.web.dto.RequestResponse;
@@ -21,4 +23,6 @@ public interface MemeService {
     Meme flagMeme(long id) throws NoSuchElementException;
 
     List<Meme> getMemes();
+
+    void cancelMeme(Long memeId) throws NoSuchElementException, DuplicateKeyException;
 }
