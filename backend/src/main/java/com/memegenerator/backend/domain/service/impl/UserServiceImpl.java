@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         user.createdat = foundUser.createdat;
         user.role = foundUser.role;
 
-        if(user.password != ""){
+        if(!user.password.equals("")){
             user.password = bCryptPasswordEncoder.encode(user.password);
         }else{
             user.password = foundUser.password;
