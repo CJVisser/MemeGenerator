@@ -109,11 +109,20 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new DuplicateKeyException("Wrong user");
         }
 
+
         user.activated = true;
-        user.role = Role.User;
-        user.password = bCryptPasswordEncoder.encode(user.password);
+        user.createdat = foundUser.createdat;
+        user.role = foundUser.role;
+
+        if(!user.password.equals("")){
+            user.password = bCryptPasswordEncoder.encode(user.password);
+        }else{
+            user.password = foundUser.password;
+        }
+
         user.confirmationToken = this.randomInt();
         user.banned = false;
+        user.achievements = foundUser.achievements;
 
         return userRepository.save(user);
     }

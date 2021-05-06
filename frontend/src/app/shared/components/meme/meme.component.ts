@@ -18,6 +18,8 @@ export class MemeComponent implements OnInit {
   @Input() memeUpvotes;
   @Input() memeDownvotes;
   @Input() tags;
+  @Input() category;
+  @Input() description;
 
   status: boolean = false
   user: any = null
@@ -43,7 +45,7 @@ export class MemeComponent implements OnInit {
 
     this.status = true
 
-    alert("De meme is gerapporteerd!")
+    alert("You flagged this meme!")
   }
 
 }

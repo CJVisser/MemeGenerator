@@ -31,9 +31,8 @@ public class MemeDto {
 
     public UserDto user;
 
-    public long categoryId;
-
     public Timestamp createdat;
+    public long categoryId;
 
     public String memestatus;
 

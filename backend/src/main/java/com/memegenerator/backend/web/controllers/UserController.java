@@ -46,6 +46,8 @@ public class UserController {
 		try {
 
 			User user = modelMapper.map(userDto, User.class);
+			user.password = userDto.password;
+
 			RequestResponse response = userService.createUser(user);
 
 			return new ResponseEntity<RequestResponse>(response, HttpStatus.OK);
@@ -63,10 +65,8 @@ public class UserController {
 	public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto userDto) {
 
 		try {
-
-			// if(authenticatedUser == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-
 			User user = modelMapper.map(userDto, User.class);
+			user.password = userDto.password;
 			userService.updateUser(user);
 
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -120,6 +120,7 @@ public class UserController {
 			User user = userService.getUserById(userId);
 
 			return new ResponseEntity<SmallUserDto>(modelMapper.map(user, SmallUserDto.class), HttpStatus.OK);
+	
 		} catch (NoSuchElementException e) {
 
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

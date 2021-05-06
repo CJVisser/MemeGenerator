@@ -147,7 +147,7 @@ export class MememakerpageComponent implements OnInit {
   createBlobImageFileAndShow(): void {
     this.dataURItoBlob(this.base64TrimmedURL).subscribe((blob: Blob) => {
 
-      var meme: Meme = {
+      const meme: Meme = {
         title: this.title,
         description: this.description,
         imageblob: blob,

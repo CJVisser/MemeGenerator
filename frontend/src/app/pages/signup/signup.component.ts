@@ -50,7 +50,7 @@ export class SignupComponent implements OnInit {
     };
 
     if(this.user.username == "" || this.user.password == "" || this.user.email == ""){
-      alert("U moet een gebruikersnaam, wachtwoord en email invullen.")
+      alert("You must prove a username, password and email.")
 
       return;
     }
@@ -67,10 +67,6 @@ export class SignupComponent implements OnInit {
           this.errors = response.errors
         }
     });
-
-    // if(response.success) this.createdAccount = true
-
-    // this.errors = response.errors
   }
 }
 
