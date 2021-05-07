@@ -13,7 +13,7 @@ export class ProfileComponent implements OnInit {
 
   updatedProfile: boolean = false
   password: string = ""
-  user: User;
+  user: User = {username: '', email: '', password: ''};
   id: any;
 
   constructor(private profileService: ProfileService,
