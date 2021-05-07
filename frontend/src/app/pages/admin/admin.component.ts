@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Meme } from 'src/app/models/Meme';
 import { User } from 'src/app/models/User';
-import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { AdminService } from 'src/app/services/admin/adminService';
 import { MemeService } from 'src/app/services/meme/memeService';
 import { LoginService } from 'src/app/services/login/loginService';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin',

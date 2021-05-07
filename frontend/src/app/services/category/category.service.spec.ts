@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { CategoryService } from './category.service';
-import { HttpClient } from '@angular/common/http';
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
-import { environment } from "environments/environment";
-import { Category } from 'src/app/models/category';
+import { Category } from '../../../app/models/category';
+import { environment } from '../../../environments/environment';
 
 describe('CategoryService', () => {
   let service: CategoryService;
