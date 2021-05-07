@@ -1,0 +1,27 @@
+.meme-container{
+    position: relative;
+    padding: 2rem 2rem;
+    background: gray;
+    margin: 2rem 2rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}   
+
+
+.meme{
+    
+    position: relative;
+    width: 100%;
+    &-name{
+        font-weight: bold;
+    }
+
+    &-image{
+        display: inline-flex;
+        & img{
+            // justify-self: center;
+        }
+  
+    }
+}

@@ -1,0 +1,41 @@
+<section id="profile">
+    <div class="container">
+        <h1 class="title">Profile</h1>
+        <div class="field">
+            <label for="username" class="label">Username</label>
+            <div class="control">
+                <input id="username" class="input" type="text" [(ngModel)]="user.username" disabled
+                    value="{{user.username}}" />
+            </div>
+        </div>
+        <div class="field">
+            <label for="email" class="label">Email</label>
+            <div class="control">
+                <input id="email" type="email" [(ngModel)]="user.email" class="input" />
+            </div>
+        </div>
+        <div class="field">
+            <label for="password" class="label">New password</label>
+            <div class="control">
+                <input id="password" type="password" [(ngModel)]="password" class="input" />
+            </div>
+        </div>
+
+        <div *ngIf="updatedProfile" class="block notification is-success is-light margin">
+            Your profile has been updated.
+        </div>
+        <button class="button is-success" (click)="updateUser()">Update</button>
+        <h1 class="title">Achievements</h1>
+        <div *ngFor="let achievement of user.achievements">
+            <div class="card">
+                <div class="card-content">
+                    <div class="content">
+                        <b>{{ achievement.title }}<i class="fas fa-crown"></i></b>
+                        <br>
+                        {{ achievement.description }}
+                    </div>
+                </div>
+            </div> <br />
+        </div>
+    </div>
+</section>

@@ -1,1 +1,22 @@
-<p>header works!</p>
+<div class="columns has-text-centered padding" id="header">
+    <div class="column is-1 border has-text-centered">
+        <figure class="image is-48x48 is-centered">
+            <img class="is-rounded" src="../../assets/magikarp_logo.png">
+        </figure>
+    </div>
+    <div class="column is-7 border">
+        <input class="input" type="text" placeholder="search" id="search" name="search" (keyup)="seachText($event.target.value)"> 
+    </div>
+    <div class="column is-4 border max-width">
+
+        <div class="control is-expanded">
+            <div class="select is-fullwidth">
+                <select id="category" (change)="onCategoryChange($event.target.value)" class="dropdown">
+                    <option *ngFor="let category of categories" [value]="category.id">
+                        {{category.title}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

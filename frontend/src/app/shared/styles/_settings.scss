@@ -1,0 +1,39 @@
+/**
+ * Typography
+ */
+ @import url('https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap');
+ $font-heading: "PT Sans";
+ $font-regular: "PT Sans";
+ $font-subs: "Reenie Beanie";
+
+ //Dave's baseline
+//  $color-1-normal: #181C24;
+//  $color-2-normal: #E45849;
+//  $color-3-normal: #A14238;
+//  $color-4-normal: #CBE9EE;
+//  $color-5-normal: #FBF2E4;
+//  $color-6-normal: #FFFFFF;
+
+//Memegenerator?
+$color-1-normal: #181C24;
+$color-2-normal: #EC8845;
+$color-3-normal: #D35635;
+$color-4-normal: #E7EE1A;
+
+ // Box colors
+ $color-box-beige: #FFECD5;
+ $color-box-white: #FFFFFF;
+
+ // Line colors
+ $line-color-gray: #E2E2E2;
+
+// Text colors
+ $color-font-dark: #000000;
+ $color-font-white: #ffffff;
+ $color-font-gray: #727272;
+ $color-font-dark-gray: #414141;
+ $color-font-red: #E61616;
+
+ // Extra Padding
+ $desktop-padding: 96px;
+ $mobile-padding: 80px;
