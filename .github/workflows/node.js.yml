@@ -38,3 +38,4 @@ jobs:
         DB_URL: ${{ secrets.DB_URL }}
         DB_USER: ${{ secrets.DB_USER }}
         DB_PASS: ${{ secrets.DB_PASS }}
+      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
