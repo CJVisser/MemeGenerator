@@ -11,6 +11,7 @@ import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.security.UserDetailsAdapter;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -47,7 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     private static final String LIKEDISLIKE_PATH = "/likedislike";
 
     private final ModelMapper modelmapper;
-    private final UserService userService;
+
+    @Autowired
+    private UserService userService;
 
     /** 
      * @param passwordEncoder

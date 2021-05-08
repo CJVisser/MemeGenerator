@@ -7,7 +7,6 @@ import java.util.NoSuchElementException;
 import com.memegenerator.backend.data.entity.Achievement;
 import com.memegenerator.backend.data.entity.Meme;
 import com.memegenerator.backend.data.entity.User;
-import com.memegenerator.backend.data.repository.CategoryRepository;
 import com.memegenerator.backend.data.repository.AchievementRepository;
 import javax.imageio.ImageIO;
 import com.memegenerator.backend.data.entity.Tag;

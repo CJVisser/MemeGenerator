@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
         String token = new String(array, StandardCharsets.UTF_8);
 
         user.setToken(token);
-        ;
+        
         userRepository.save(user);
 
         SimpleMailMessage message = new SimpleMailMessage();
