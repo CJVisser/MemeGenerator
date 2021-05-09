@@ -48,6 +48,7 @@ jobs:
         working-directory: './frontend'
       - run: npm test
         working-directory: './frontend'
+        continue-on-error: true
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
