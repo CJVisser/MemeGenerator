@@ -122,7 +122,8 @@ public class TagControllerTests {
         when(tagService.createTag(any())).thenReturn(tagMock);
 
         var mvcResult = this.mockMvc
-            .perform(post("/tag/").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+            .perform(post("/tag/").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+            .content(content))
             .andExpect(status().isOk())
             .andReturn();
 
@@ -133,5 +134,15 @@ public class TagControllerTests {
 
         assertThat(title).isEqualTo(mockTitle);
         verify(tagService, times(1)).createTag(any());
+    }
+
+    private String asJsonString(final Object obj) {
+        try {
+            final ObjectMapper mapper = new ObjectMapper();
+            final String jsonContent = mapper.writeValueAsString(obj);
+            return jsonContent;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

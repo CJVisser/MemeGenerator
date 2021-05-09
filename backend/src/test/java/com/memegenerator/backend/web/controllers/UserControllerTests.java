@@ -6,10 +6,12 @@ import static org.mockito.Mockito.when;
 import com.memegenerator.backend.data.entity.User;
 import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.web.dto.RequestResponse;
+import com.memegenerator.backend.web.dto.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,6 +44,9 @@ public class UserControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private ModelMapper mockModelMapper;
+
     @Test
     public void contextLoads() throws Exception {
 
@@ -54,9 +59,17 @@ public class UserControllerTests {
 
         RequestResponse mockResponse = new RequestResponse("");
 
-        when(userService.createUser(any())).thenReturn(mockResponse);
+        UserDto mockUserDto = new UserDto();
+        mockUserDto.setUsername("testUser");
+        mockUserDto.setPassword("testPassword");
+        mockUserDto.setEmail("test@test.test");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/user").content(asJsonString(mockResponse))
+        User mockUser = new User("testUser", "testPassword", "test@test.test", false);
+
+        when(userService.createUser(any())).thenReturn(mockResponse);
+        when(mockModelMapper.map(any(), any())).thenReturn(mockUser);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/user").content(asJsonString(mockUserDto))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
@@ -67,7 +80,10 @@ public class UserControllerTests {
         String mockValue = "acbdef";
         User userMock = new User(mockValue, mockValue, mockValue, true);
 
+        User mockUser = new User("testUser", "testPassword", "test@test.test", false);
+
         when(userService.updateUser(any())).thenReturn(userMock);
+        when(mockModelMapper.map(any(), any())).thenReturn(mockUser);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/user").content(asJsonString(userMock))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());

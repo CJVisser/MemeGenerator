@@ -9,11 +9,12 @@ import static org.mockito.Mockito.*;
 
 import java.util.*;
 
-
+import com.memegenerator.backend.data.entity.Achievement;
 import com.memegenerator.backend.data.entity.Category;
 import com.memegenerator.backend.data.entity.Meme;
 import com.memegenerator.backend.data.entity.Tag;
 import com.memegenerator.backend.data.entity.User;
+import com.memegenerator.backend.data.repository.AchievementRepository;
 import com.memegenerator.backend.data.repository.CategoryRepository;
 import com.memegenerator.backend.data.repository.MemeRepository;
 import com.memegenerator.backend.data.repository.TagRepository;
@@ -46,6 +47,9 @@ public class MemeServiceTests {
     private CategoryRepository categoryRepository;
 
     @MockBean
+    private AchievementRepository achievementRepository;
+
+    @MockBean
     private UserRepository userRepository;
 
     @MockBean
@@ -72,6 +76,7 @@ public class MemeServiceTests {
         when(memeRepository.save(any())).thenReturn(meme);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+        when(achievementRepository.findByTitle(any())).thenReturn(new Achievement(null));
 
         RequestResponse result = memeService.createMeme(memeDto, (long) 2);
 

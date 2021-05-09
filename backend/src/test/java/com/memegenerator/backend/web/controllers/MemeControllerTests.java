@@ -15,7 +15,9 @@ import java.util.Map;
 import java.util.Random;
 
 import com.memegenerator.backend.security.Role;
+import com.memegenerator.backend.web.dto.MemeDto;
 import com.memegenerator.backend.web.dto.RequestResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import com.memegenerator.backend.data.entity.Category;
 import com.memegenerator.backend.data.entity.Meme;
@@ -26,6 +28,8 @@ import com.memegenerator.backend.domain.service.UserService;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Spy;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -63,6 +67,9 @@ public class MemeControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Spy
+    private ModelMapper modelMapper;
 
     @Test
     public void contextLoads() throws Exception {
@@ -158,16 +165,18 @@ public class MemeControllerTests {
     @Test
     @WithMockUser(username = "test", roles = { "User" })
     public void updates_meme() throws Exception {
-
         String mockTitle = "acbdef";
         Category mockCategory = new Category("test");
         User mockUser = new User("test", "test", "test", Role.USER, true);
         Meme mockMeme = new Meme(mockTitle, new byte[8], true, mockUser, mockCategory);
+        MemeDto mockMemeDto = new MemeDto();
+        mockMemeDto.setTitle("test");
 
         when(memeService.updateMeme(any())).thenReturn(mockMeme);
 
         var mvcResult = this.mockMvc
-            .perform(put("/meme/5").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+            .perform(put("/meme/5").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+            .content(asJsonString(mockMemeDto)))
             .andExpect(status().isOk())
             .andReturn();
 
@@ -194,5 +203,15 @@ public class MemeControllerTests {
             .perform(get("/meme/flag/5").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andReturn();
+    }
+
+    private String asJsonString(final Object obj) {
+        try {
+            final ObjectMapper mapper = new ObjectMapper();
+            final String jsonContent = mapper.writeValueAsString(obj);
+            return jsonContent;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
