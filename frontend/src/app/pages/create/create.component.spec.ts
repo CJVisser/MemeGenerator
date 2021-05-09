@@ -17,7 +17,7 @@ describe('CreateComponent', () => {
 
   beforeEach(async () => {
     mockLoginService = jasmine.createSpyObj(['getCurrentUser']);
-    mockLoginService.getCurrentUser.and.returnValue({points: 0});
+    mockLoginService.getCurrentUser.and.returnValue({points: 0, username: 'test'});
 
     mockMemeService = jasmine.createSpyObj(['CreateMeme']);
     mockMemeService.CreateMeme.and.returnValue({subscribe: () => {}});

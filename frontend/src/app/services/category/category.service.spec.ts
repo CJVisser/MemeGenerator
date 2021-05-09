@@ -14,7 +14,7 @@ describe('CategoryService', () => {
       imports: [HttpClientTestingModule]
     });
     service = TestBed.inject(CategoryService);
-    httpMock = TestBed.get(HttpTestingController);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   // Test fetching all

@@ -42,7 +42,6 @@ export class CreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.user = this.loginService.getCurrentUser()
 
     if (!this.user) this.router.navigate(["/login"]);

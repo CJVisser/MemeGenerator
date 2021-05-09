@@ -1,6 +1,5 @@
 
 import { TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs';
 import { TagService } from './tag.service';
 import { HttpClient } from '@angular/common/http';
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
