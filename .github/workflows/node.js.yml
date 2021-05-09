@@ -34,10 +34,9 @@ jobs:
     name: SonarCloud
     runs-on: ubuntu-latest
 
-    - run: ng test
-      working-directory: './frontend'
-
     steps:
+      - run: ng test
+        working-directory: './frontend'
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
