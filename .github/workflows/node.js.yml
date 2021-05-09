@@ -35,14 +35,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Use Node.js 12.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-      - run: npm ci
-        working-directory: './frontend'
-      - run: ng test
-        working-directory: './frontend'
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
