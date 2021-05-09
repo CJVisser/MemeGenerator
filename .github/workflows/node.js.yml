@@ -33,6 +33,10 @@ jobs:
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
+
+    - run: ng test
+      working-directory: './frontend'
+
     steps:
       - uses: actions/checkout@v2
         with:
