@@ -12,9 +12,6 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "es2020",
-    "extends": "./tsconfig.base.json",
-    "files": ["src/main.ts", "src/polyfills.ts"],
-    "include": ["src/type-definitions/*.d.ts"],
     "lib": [
       "es2018",
       "dom"
