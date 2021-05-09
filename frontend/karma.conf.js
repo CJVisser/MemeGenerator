@@ -15,12 +15,12 @@ module.exports = function (config) {
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
+    reporters: ['progress', 'kjhtml', 'coverage-istanbul'],
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage/frontend'),
       reports: ['html', 'lcovonly', 'text-summary'],
       fixWebpackSourcePaths: true
     },
-    reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
