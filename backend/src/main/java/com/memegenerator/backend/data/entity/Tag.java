@@ -11,6 +11,10 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class Tag extends BaseEntity {
 
+    public Tag()
+    {
+    }
+
     public Tag(String title)
     {
         this.title = title;
