@@ -102,7 +102,7 @@ public class TagControllerTests {
         when(tagService.getTagsForMeme(anyLong())).thenReturn(new HashSet<>(tagList));
 
         var mvcResult = this.mockMvc
-                .perform(get("/tag/").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .perform(get("/tag/5").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 

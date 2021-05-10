@@ -74,21 +74,18 @@ public class TagServiceTests {
     public void gets_tags_for_meme() {
 
         int generations = new Random().nextInt(9) + 1;
-        Set<Tag> tagList = new HashSet<Tag>();
         String mockTitle = "testtitle";
+        Meme mockMeme = new Meme();
 
         for (int i = 0; i < generations; i++) {
-            tagList.add(new Tag(mockTitle));
+            mockMeme.getTags().add(new Tag(mockTitle));
         }
-
-        Meme mockMeme = new Meme();
-        mockMeme.setTags(tagList);
 
         when(memeRepository.findById(anyLong())).thenReturn(Optional.of(mockMeme));
         
-        List<Tag> result = tagService.getTags();
+        Set<Tag> result = tagService.getTagsForMeme(anyLong());
 
-        assertThat(result.get(0).getTitle()).isEqualTo(mockTitle);
+        assertThat(((Tag)result.toArray()[0]).getTitle()).isEqualTo(mockTitle);
         verify(memeRepository, times(1)).findById(anyLong());
     }
 }
