@@ -1,36 +1,35 @@
 package com.memegenerator.backend.web.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.memegenerator.backend.data.entity.Category;
+import com.memegenerator.backend.data.entity.Meme;
+import com.memegenerator.backend.data.entity.User;
 import com.memegenerator.backend.domain.service.impl.MemeServiceImpl;
 import com.memegenerator.backend.domain.service.impl.UserServiceImpl;
-import com.memegenerator.backend.web.dto.SocketResponseDto;
+import com.memegenerator.backend.security.Role;
+import com.memegenerator.backend.web.dto.LikeDislikeDto;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.simp.stomp.StompFrameHandler;
-import org.springframework.messaging.simp.stomp.StompHeaders;
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
-import org.springframework.web.socket.sockjs.client.SockJsClient;
-import org.springframework.web.socket.sockjs.client.WebSocketTransport;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.http.MediaType;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -41,21 +40,14 @@ public class LikeDislikeControllerTests {
     @Autowired
     private LikeDislikeController controller;
 
+    @Autowired
+	private MockMvc mockMvc;
+
     @MockBean
     private MemeServiceImpl memeService;
 
     @MockBean
     private UserServiceImpl userService;
-
-    private WebSocketStompClient webSocketStompClient;
-
-    @BeforeEach
-    public void setup() {
-        this.webSocketStompClient = new WebSocketStompClient(
-                new SockJsClient(List.of(new WebSocketTransport(new StandardWebSocketClient()))));
-
-        this.webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
-    }
 
     @Test
     public void contextLoads() throws Exception {
@@ -64,36 +56,53 @@ public class LikeDislikeControllerTests {
 
     @Test
     @WithMockUser(username = "test", roles = { "User" })
-    public void like_dislike() throws Exception {
-        BlockingQueue<SocketResponseDto> blockingQueue = new ArrayBlockingQueue(1);
+    public void like() throws Exception {
+        LikeDislikeDto mockLikeDislike = new LikeDislikeDto();
+        mockLikeDislike.memeId = 1l;
+        mockLikeDislike.userId = 1l;
 
-        SocketResponseDto response = new SocketResponseDto();
-        response.isUpvote = true;
-        response.memeId = 1l;
-        response.userId = 1l;
+        Category mockCategory = new Category("test");
 
-        StompSession session = webSocketStompClient
-        .connect("ws://localhost:8080/ws", new StompSessionHandlerAdapter() {})
-        .get(1, TimeUnit.SECONDS);
+        User mockUser = new User("test", "test", "test", Role.USER, true);
+        Meme mockMeme = new Meme("title", null, true, mockUser, mockCategory);
 
-        session.subscribe("/likedislike/", new StompFrameHandler(){
-        
-            @Override
-            public void handleFrame(StompHeaders headers, Object payload) {
-            System.out.println("Received message: " + payload);
-                blockingQueue.add((SocketResponseDto) payload);
-            }
+        when(memeService.getMemeById(anyLong())).thenReturn(mockMeme);
+        when(memeService.updateMeme(any())).thenReturn(mockMeme);
 
-            @Override
-            public Type getPayloadType(StompHeaders headers) {
-                return SocketResponseDto.class;
-            }
-        });
+        mockMvc.perform(MockMvcRequestBuilders.post("/like").content(asJsonString(mockLikeDislike))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
-        session.send("/likedislike/", response);
+        verify(memeService, times(1)).updateMeme(any());
+    }
 
-        assertThat(response)
-            .usingRecursiveComparison()
-            .isEqualTo(blockingQueue.poll(1, TimeUnit.SECONDS));
+    @Test
+    @WithMockUser(username = "test", roles = { "User" })
+    public void dislike() throws Exception {
+        LikeDislikeDto mockLikeDislike = new LikeDislikeDto();
+        mockLikeDislike.memeId = 1l;
+        mockLikeDislike.userId = 1l;
+
+        Category mockCategory = new Category("test");
+
+        User mockUser = new User("test", "test", "test", Role.USER, true);
+        Meme mockMeme = new Meme("title", null, true, mockUser, mockCategory);
+
+        when(memeService.getMemeById(anyLong())).thenReturn(mockMeme);
+        when(memeService.updateMeme(any())).thenReturn(mockMeme);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/dislike").content(asJsonString(mockLikeDislike))
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+
+        verify(memeService, times(1)).updateMeme(any());
+    }
+
+    private String asJsonString(final Object obj) {
+        try {
+            final ObjectMapper mapper = new ObjectMapper();
+            final String jsonContent = mapper.writeValueAsString(obj);
+            return jsonContent;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
