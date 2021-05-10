@@ -1,10 +1,10 @@
 package com.memegenerator.backend.web.services;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -20,7 +20,6 @@ import com.memegenerator.backend.data.repository.MemeRepository;
 import com.memegenerator.backend.data.repository.TagRepository;
 import com.memegenerator.backend.data.repository.UserRepository;
 import com.memegenerator.backend.domain.service.MemeService;
-import com.memegenerator.backend.domain.service.TagService;
 import com.memegenerator.backend.web.dto.MemeDto;
 import com.memegenerator.backend.web.dto.RequestResponse;
 import org.junit.Test;
@@ -84,35 +83,40 @@ public class MemeServiceTests {
 
         RequestResponse result = memeService.createMeme(memeDto, (long) 2);
 
-        assertTrue(result.success);
+        assertThat(result.success).isTrue();
 
         verify(memeRepository, times(1)).save(any());
         verify(userRepository, times(2)).findById(anyLong());
     }
 
-//    @Test
-//    public void gets_memes() {
-//
-//        int generations = new Random().nextInt(9) + 1;
-//        List<Meme> memeList = new ArrayList<Meme>();
-//        String mockTitle = "testtitle";
-//        String testValue = "abc";
-//        byte[] testByte = new byte[1];
-//
-//        User user = new User(testValue, testValue, testValue, true);
-//        Category category = new Category(testValue);
-//        for (int i = 0; i < generations; i++) {
-//            memeList.add(
-//                    new Meme(mockTitle, testByte, true, user, category));
-//        }
-//
-//        when(memeRepository.findAll()).thenReturn(memeList);
-//
-//        List<Meme> result = memeService.getMemes();
-//
-//        assertEquals(result.size(), generations);
-//        verify(memeService, times(1)).getMemes();
-//    }
+   @Test
+   public void gets_memes() {
+
+       int generations = new Random().nextInt(9) + 1;
+       List<Meme> memeList = new ArrayList<Meme>();
+       String mockTitle = "testtitle";
+       String testValue = "abc";
+       byte[] testByte = new byte[1];
+
+       User user = new User(testValue, testValue, testValue, true);
+       Category category = new Category(testValue);
+       for (int i = 0; i < generations; i++) {
+            Meme tempMeme = new Meme(mockTitle, testByte, true, user, category);
+            
+            Date tempDate = new java.util.Date();
+            Timestamp ts = new Timestamp(tempDate.getTime());  
+
+            tempMeme.setCreatedat(ts);
+
+           memeList.add(tempMeme);
+       }
+
+       when(memeRepository.findAll()).thenReturn(memeList);
+
+       List<Meme> result = memeService.getMemes();
+
+       assertThat(result.size()).isEqualTo(generations);
+   }
 
     @Test
     public void gets_meme() {
@@ -129,7 +133,7 @@ public class MemeServiceTests {
 
         Meme result = memeService.getMemeById(anyLong());
 
-        assertEquals(result.getTitle(), meme.getTitle());
+        assertThat(result.getTitle()).isEqualTo(meme.getTitle());
 
         verify(memeRepository, times(1)).findById(anyLong());
 
@@ -158,7 +162,7 @@ public class MemeServiceTests {
 
         Meme result = memeService.updateMeme(meme);
 
-        assertEquals(result.getTitle(), memeDto.getTitle());
+        assertThat(result.getTitle()).isEqualTo(memeDto.getTitle());
         verify(memeRepository, times(1)).findById(any());
         verify(memeRepository, times(1)).save(any());
     }
@@ -192,6 +196,6 @@ public class MemeServiceTests {
 
         List<Meme> result = memeService.getMemes();
 
-        assertEquals(result.size(), generations);
+        assertThat(result.size()).isEqualTo(generations);
     }
 }
