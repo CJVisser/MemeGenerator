@@ -19,10 +19,10 @@ public abstract class BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false, updatable = false)
-    public Long id;
+    private Long id;
 
     @Column(name = "createdat", unique = false, nullable = true)
     @CreatedDate
     @CreationTimestamp
-    public Timestamp createdat;
+    private Timestamp createdat;
 }

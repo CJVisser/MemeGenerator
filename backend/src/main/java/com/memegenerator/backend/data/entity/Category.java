@@ -11,7 +11,12 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class Category extends BaseEntity {
 
+    public Category(String title)
+    {
+        this.title = title;
+    }
+
     @Column(name = "title", nullable = false)
     @NotNull
-    public String title;
+    private String title;
 }

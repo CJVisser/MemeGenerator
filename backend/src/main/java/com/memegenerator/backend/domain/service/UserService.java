@@ -1,6 +1,7 @@
 package com.memegenerator.backend.domain.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import com.memegenerator.backend.data.entity.User;
 import com.memegenerator.backend.web.dto.RequestResponse;
 
 @Service
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     RequestResponse createUser(User user);
 

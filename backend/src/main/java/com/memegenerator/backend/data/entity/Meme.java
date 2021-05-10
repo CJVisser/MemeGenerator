@@ -14,41 +14,60 @@ import java.util.Set;
 @Setter
 public class Meme extends BaseEntity {
 
+    public Meme()
+    {
+    }
+
+    public Meme(String title, byte[] imageblob)
+    {
+        this.title = title;
+        this.imageblob = imageblob;
+    }
+
+    public Meme(String title, byte[] imageblob, boolean activated, User user, Category category)
+    {
+        this.title = title;
+        this.imageblob = imageblob;
+        this.activated = activated;
+        this.user = user;
+        this.category = category;
+    }
+
     @Column(name = "title", nullable = false)
     @NotNull
-    public String title;
+    private String title;
 
     @Column(name = "description")
-    public String description;
+    private String description;
 
     @Column(name = "image", nullable = false)
-    public byte[] imageblob;
+    private byte[] imageblob;
 
     @Column(name = "likes")
-    public int likes;
+    private int likes;
 
     @Column(name = "dislikes")
-    public int dislikes;
+    private int dislikes;
 
     @Column(name = "flag_points")
-    public int flag_points;
+    private int flag_points;
 
     @Column(name = "memestatus")
-    public String memestatus;
+    private String memestatus;
 
     @Column(name = "disabled", nullable = false)
-    public boolean activated;
+    private boolean activated;
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
-    public User user;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "categoryid", nullable = false)
-    public Category category;
+    private Category category;
 
     @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     @JoinTable(name = "meme_tags", joinColumns = { @JoinColumn(name = "memeid") }, inverseJoinColumns = {
             @JoinColumn(name = "tagid") })
-    public Set<Tag> tags = new HashSet<>();
+            private Set<Tag> tags = new HashSet<>();
 }

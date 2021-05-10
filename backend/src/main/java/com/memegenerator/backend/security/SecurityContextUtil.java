@@ -6,7 +6,6 @@ public class SecurityContextUtil {
 
     private SecurityContextUtil() {
     }
-
     
     /** 
      * @return UserDetailsAdapter

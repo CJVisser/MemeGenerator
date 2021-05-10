@@ -46,7 +46,7 @@ public class UserController {
 		try {
 
 			User user = modelMapper.map(userDto, User.class);
-			user.password = userDto.password;
+			user.setPassword(userDto.password);
 
 			RequestResponse response = userService.createUser(user);
 
@@ -66,7 +66,7 @@ public class UserController {
 
 		try {
 			User user = modelMapper.map(userDto, User.class);
-			user.password = userDto.password;
+			user.setPassword(userDto.password);
 			userService.updateUser(user);
 
 			return new ResponseEntity<>(HttpStatus.OK);
