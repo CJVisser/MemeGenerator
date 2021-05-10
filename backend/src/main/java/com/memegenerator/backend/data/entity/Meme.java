@@ -66,8 +66,8 @@ public class Meme extends BaseEntity {
     @JoinColumn(name = "categoryid", nullable = false)
     private Category category;
 
-    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
     @JoinTable(name = "meme_tags", joinColumns = { @JoinColumn(name = "memeid") }, inverseJoinColumns = {
             @JoinColumn(name = "tagid") })
-            private Set<Tag> tags = new HashSet<>();
+            public Set<Tag> tags = new HashSet<>();
 }

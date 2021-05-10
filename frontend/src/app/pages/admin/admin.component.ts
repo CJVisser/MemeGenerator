@@ -46,7 +46,7 @@ export class AdminComponent implements OnInit {
 
     if (!this.user) this.router.navigate(["/login"]);
 
-    if(this.user.role !== "Admin"){
+    if(this.user.role !== "ADMIN"){
       alert("You are not allowed to see this page.")
     }
 
