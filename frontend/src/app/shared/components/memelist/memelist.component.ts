@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MemeService } from 'src/app/services/meme/memeService';
 import { SearchService } from 'src/app/services/search/search.service';
 import { Meme } from "../../../../app/models/Meme";
-import { WebSocketAPI } from './WebSocketAPI';
-
 class ResponseClass {
   memeId: number;
   isUpvote: boolean;
