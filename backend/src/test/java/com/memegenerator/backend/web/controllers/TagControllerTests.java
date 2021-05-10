@@ -8,10 +8,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -99,10 +99,10 @@ public class TagControllerTests {
             tagList.add(new Tag(mockTitle));
         }
 
-        when(tagService.getTagsForMeme(anyLong())).thenReturn(new HashSet<>(tagList));
+        when(tagService.getTagsForMeme(anyLong())).thenReturn(Set.copyOf(tagList));
 
         var mvcResult = this.mockMvc
-                .perform(get("/tag/5").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .perform(get("/tag/tag/5").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -137,8 +137,8 @@ public class TagControllerTests {
 
         var json = mvcResult.getResponse().getContentAsString();
 
-        List<Map<String, Object>> dataList = JsonPath.parse(json).read("$");
-        String title = (String) dataList.get(0).get("title");
+        Map<String, Object> data = JsonPath.parse(json).read("$");
+        String title = (String) data.get("title");
 
         assertThat(title).isEqualTo(mockTitle);
         verify(tagService, times(1)).createTag(any());
