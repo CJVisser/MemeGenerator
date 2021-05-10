@@ -214,7 +214,7 @@ public class MemeServiceImpl implements MemeService {
     public void cancelMeme(Long memeId) {
         var meme = memeRepository.findById(memeId).orElseThrow(() -> new NoSuchElementException(MEME_NOT_FOUND));
         
-        if (meme.getMemestatus().equals("") || meme.getMemestatus() == null || meme.getMemestatus().equals("reported")) {
+        if (meme.getMemestatus() == null || meme.getMemestatus().equals("") || meme.getMemestatus().equals("reported")) {
             meme.setMemestatus("cancelled");
         }
         else if (meme.getMemestatus().equals("cancelled")) {

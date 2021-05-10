@@ -31,6 +31,7 @@ public class LikeDislikeController {
         Meme meme = memeService.getMemeById(likeDislikeDto.memeId);
         meme.setLikes(meme.getLikes() + 1);
         userService.updateUserPoints(likeDislikeDto.userId, 1);
+        userService.updateUserPoints(meme.getUser().getId(), 1);
 
         memeService.updateMeme(meme);
 
