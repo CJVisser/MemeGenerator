@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CategoryService } from './category.service';
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
-import { Category } from '../../../app/models/category';
+import { Category } from '../../models/Category';
 import { environment } from '../../../environments/environment';
 
 describe('CategoryService', () => {
@@ -14,7 +14,7 @@ describe('CategoryService', () => {
       imports: [HttpClientTestingModule]
     });
     service = TestBed.inject(CategoryService);
-    httpMock = TestBed.get(HttpTestingController);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   // Test fetching all

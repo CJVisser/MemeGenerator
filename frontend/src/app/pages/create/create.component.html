@@ -87,7 +87,7 @@
                 </div>
             </div>
             <div *ngIf="text.length >= 1" ngDraggable (endOffset)="onMoveEnd($event)" id="textPosition">
-                {{ text }}
+               <div class="memeText">{{ text }}</div>
             </div>
             <img [src]="chosenImage.url" alt="" id="meme-image">
             <canvas id="canvas"></canvas>

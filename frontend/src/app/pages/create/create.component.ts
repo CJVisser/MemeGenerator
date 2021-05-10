@@ -42,7 +42,6 @@ export class CreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.user = this.loginService.getCurrentUser()
 
     if (!this.user) this.router.navigate(["/login"]);
@@ -81,8 +80,12 @@ export class CreateComponent implements OnInit {
 
     const textRectangle = document.getElementById("textPosition").getBoundingClientRect();
 
-    this.context.font = "12px Arial";
+    this.context.font = "24px Comic Sans MS";
+    this.context.fillStyle = "white";
+    this.context.strokeStyle = "black";
     this.context.fillText(this.text, x, y);
+    this.context.strokeText(this.text, x, y);
+
     this.text = "";
   }
 

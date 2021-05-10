@@ -72,3 +72,9 @@ li a:hover {
 #meme-image{
     display:none;
 }
+
+.memeText{
+    font-size:24px;
+    font-family: "Comic Sans MS";
+    cursor:move;
+}
