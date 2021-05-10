@@ -1,14 +1,10 @@
 
 import { TestBed } from '@angular/core/testing';
-import { Tag } from 'app/models/Tag';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/throw';
 import { TagService } from './tag.service';
-import { ExpandOperator } from 'rxjs/internal/operators/expand';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
-import { environment } from "environments/environment";
+import { environment } from "../../../environments/environment";
+import { Tag } from '../../../app/models/Tag';
 
 describe('TagService', () => {
   let service: TagService;
@@ -39,7 +35,7 @@ describe('TagService', () => {
       expect(t.body).toEqual(tag);
     });
 
-    const request = httpMock.expectOne(`${environment.apiUrl}/tag/create/${tag.id}`);
+    const request = httpMock.expectOne(`${environment.apiUrl}/tag/create`);
 
     expect(request.request.method).toEqual('POST');
 

@@ -16,6 +16,7 @@ import com.memegenerator.backend.data.repository.TagRepository;
 import com.memegenerator.backend.domain.service.MemeService;
 import com.memegenerator.backend.web.dto.MemeDto;
 import com.memegenerator.backend.web.dto.RequestResponse;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.awt.image.BufferedImage;
@@ -160,6 +161,8 @@ public class MemeServiceImpl implements MemeService {
     public List<Meme> getMemes() {
 
         List<Meme> allMemes = memeRepository.findAll();
+        
+        allMemes.forEach(meme -> meme.getUser().setPassword(""));
 
         allMemes.sort(Comparator.comparing(Meme::getCreatedat).reversed());
 

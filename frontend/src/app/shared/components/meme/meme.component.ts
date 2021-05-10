@@ -20,6 +20,7 @@ export class MemeComponent implements OnInit {
   @Input() memeImageUrl;
   @Input() memeUpvotes;
   @Input() memeDownvotes;
+  @Input() memeUser;
   @Input() tags;
   @Input() category;
   @Input() description;
@@ -44,7 +45,7 @@ export class MemeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.user = this.loginService.getCurrentUser()
+    this.user = this.loginService.getCurrentUser();
 
     if (this.user) this.showButtons = true
   }
