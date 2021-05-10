@@ -16,6 +16,10 @@ import java.util.Set;
 @Setter
 public class User extends BaseEntity {
 
+    public User(){
+        
+    }
+
     public User(String username, String password, String email, boolean activated)
     {
         this.username = username;

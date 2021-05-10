@@ -10,8 +10,8 @@ import java.util.Arrays;
 
 public enum Role {
 
-    USER(Collections.singletonList(new SimpleGrantedAuthority("User"))), 
-    ADMIN(new ArrayList<GrantedAuthority>(Arrays.asList(new SimpleGrantedAuthority("Admin"), new SimpleGrantedAuthority("User"))));
+    USER(Collections.singletonList(new SimpleGrantedAuthority("USER"))), 
+    ADMIN(new ArrayList<GrantedAuthority>(Arrays.asList(new SimpleGrantedAuthority("ADMIN"), new SimpleGrantedAuthority("USER"))));
 
     private final Collection<GrantedAuthority> authorities;
 

@@ -11,6 +11,10 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class Achievement extends BaseEntity {
 
+    public Achievement(){
+        
+    }
+
     public Achievement(String title)
     {
         this.title = title;
