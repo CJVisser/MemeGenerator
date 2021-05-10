@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 import com.memegenerator.backend.data.entity.Achievement;
@@ -19,6 +20,7 @@ import com.memegenerator.backend.data.repository.MemeRepository;
 import com.memegenerator.backend.data.repository.TagRepository;
 import com.memegenerator.backend.data.repository.UserRepository;
 import com.memegenerator.backend.domain.service.MemeService;
+import com.memegenerator.backend.domain.service.TagService;
 import com.memegenerator.backend.web.dto.MemeDto;
 import com.memegenerator.backend.web.dto.RequestResponse;
 import org.junit.Test;
@@ -88,28 +90,29 @@ public class MemeServiceTests {
         verify(userRepository, times(2)).findById(anyLong());
     }
 
-    @Test
-    public void gets_memes() {
-
-        int generations = new Random().nextInt(9) + 1;
-        List<Meme> memeList = new ArrayList<Meme>();
-        String mockTitle = "testtitle";
-        String testValue = "abc";
-        byte[] testByte = new byte[1];
-
-        User user = new User(testValue, testValue, testValue, true);
-        Category category = new Category(testValue);
-        for (int i = 0; i < generations; i++) {
-            memeList.add(
-                    new Meme(mockTitle, testByte, true, user, category));
-        }
-
-        when(memeRepository.findAll()).thenReturn(memeList);
-
-        List<Meme> result = memeService.getMemes();
-
-        assertEquals(result.size(), generations);
-    }
+//    @Test
+//    public void gets_memes() {
+//
+//        int generations = new Random().nextInt(9) + 1;
+//        List<Meme> memeList = new ArrayList<Meme>();
+//        String mockTitle = "testtitle";
+//        String testValue = "abc";
+//        byte[] testByte = new byte[1];
+//
+//        User user = new User(testValue, testValue, testValue, true);
+//        Category category = new Category(testValue);
+//        for (int i = 0; i < generations; i++) {
+//            memeList.add(
+//                    new Meme(mockTitle, testByte, true, user, category));
+//        }
+//
+//        when(memeRepository.findAll()).thenReturn(memeList);
+//
+//        List<Meme> result = memeService.getMemes();
+//
+//        assertEquals(result.size(), generations);
+//        verify(memeService, times(1)).getMemes();
+//    }
 
     @Test
     public void gets_meme() {
@@ -127,6 +130,9 @@ public class MemeServiceTests {
         Meme result = memeService.getMemeById(anyLong());
 
         assertEquals(result.getTitle(), meme.getTitle());
+
+        verify(memeRepository, times(1)).findById(anyLong());
+
     }
 
     @Test
@@ -153,108 +159,39 @@ public class MemeServiceTests {
         Meme result = memeService.updateMeme(meme);
 
         assertEquals(result.getTitle(), memeDto.getTitle());
+        verify(memeRepository, times(1)).findById(any());
+        verify(memeRepository, times(1)).save(any());
     }
 
-//    @Test
-//    public void gets_filtered_memes() {
-//
-//        int generations = new Random().nextInt(9) + 1;
-//        List<Meme> memeList = new ArrayList<Meme>();
-//        String mockTitle = "testtitle";
-//
-//        Date date = new Date();
-//        Timestamp ts = new Timestamp(date.getTime());
-//
-//        for (int i = 0; i < generations; i++) {
-//            memeList.add(new Meme() {
-//                {
-//                    setTitle(mockTitle);
-//                    setCreatedat(ts);
-//                }
-//            });
-//        }
-//
-//        Category category = new Category() {
-//            {
-//                setTitle(mockTitle);
-//            }
-//        };
-//
-//        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
-//
-//        when(memeRepository.findAll()).thenReturn(memeList);
-//
-//        List<MemeDto> result = memeService.getMemes();
-//
-//        assertEquals(result.size(), generations);
-//    }
-//
-//    @Test
-//    public void gets_filtered_memes_tags() {
-//
-//        int generations = new Random().nextInt(9) + 1;
-//        List<Meme> memeList = new ArrayList<Meme>();
-//        String mockTitle = "testtitle";
-//
-//        Date date = new Date();
-//        Timestamp ts = new Timestamp(date.getTime());
-//
-//        for (int i = 0; i < generations; i++) {
-//            memeList.add(new Meme() {
-//                {
-//                    setTitle(mockTitle);
-//                    setCreatedat(ts);
-//                }
-//            });
-//        }
-//
-//        Category category = new Category() {
-//            {
-//                setTitle(mockTitle);
-//            }
-//        };
-//
-//        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
-//
-//        when(memeRepository.findAll()).thenReturn(memeList);
-//
-//        List<MemeDto> result = memeService.getFilteredMemesTag(any());
-//
-//        assertEquals(result.size(), generations);
-//    }
-//
-//    @Test
-//    public void user_allowed_to_create() {
-//
-//        Date date = new Date();
-//        Timestamp ts = new Timestamp(date.getTime());
-//
-//        String testValue = "testtitle";
-//
-//        Meme meme = new Meme() {
-//            {
-//                setTitle(testValue);
-//                setTags(new HashSet<Tag>());
-//            }
-//        };
-//
-//        Category category = new Category() {
-//            {
-//                setTitle(testValue);
-//            }
-//        };
-//
-//        User user = new User() {
-//            {
-//                setUsername(testValue);
-//                setPassword(testValue);
-//                setEmail(testValue);
-//            }
-//        };
-//
-//        when(memeRepository.countAddedRecordsTodayByUser(any(), anyLong())).thenReturn(anyInt());
-//        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-//
-//        boolean result = memeService.userAllowedToCreate(anyLong());
-//    }
+    @Test
+    public void gets_filtered_memes() {
+
+        int generations = new Random().nextInt(9) + 1;
+        List<Meme> memeList = new ArrayList<Meme>();
+        String testValue = "abc";
+        String mockTitle = "testtitle";
+        byte[] testByte = new byte[1];
+
+        User user = new User(testValue, testValue, testValue, true);
+        Category category = new Category(testValue);
+        Date date = new Date();
+        Timestamp ts = new Timestamp(date.getTime());
+
+        for (int i = 0; i < generations; i++) {
+            memeList.add(new Meme(mockTitle, testByte, true, user, category) {
+                {
+                    setTitle(mockTitle);
+                    setCreatedat(ts);
+                }
+            });
+        }
+
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+
+        when(memeRepository.findAll()).thenReturn(memeList);
+
+        List<Meme> result = memeService.getMemes();
+
+        assertEquals(result.size(), generations);
+    }
 }
