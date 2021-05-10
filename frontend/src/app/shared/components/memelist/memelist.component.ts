@@ -25,6 +25,8 @@ export class MemelistComponent implements OnInit {
       this.memes = memes;
       this.allMemes = memes;
 
+      this.memes = this.memes.filter(a => a.memestatus !== "cancelled")
+
       this.memes.forEach(function(element){
         element.imageSrc = 'data:image/png;base64,' + element.imageblob;
       });

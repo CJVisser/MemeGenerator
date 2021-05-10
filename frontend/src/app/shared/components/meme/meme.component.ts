@@ -65,6 +65,9 @@ export class MemeComponent implements OnInit {
     this.httpClient.post(`${environment.apiUrl}/like`, likeDislike, this.httpOptions).subscribe()
 
     alert("You upvoted this meme!")
+
+    this.status = true
+    this.memeUpvotes += 1
   }
 
   dislike() {
@@ -76,5 +79,10 @@ export class MemeComponent implements OnInit {
     this.httpClient.post(`${environment.apiUrl}/dislike`, likeDislike, this.httpOptions).subscribe()
 
     alert("You downvoted this meme!")
+
+    this.status = true
+
+    this.memeDownvotes += 1
+
   }
 }
