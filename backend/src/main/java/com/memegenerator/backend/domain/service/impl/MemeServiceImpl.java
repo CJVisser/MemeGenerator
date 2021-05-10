@@ -78,7 +78,7 @@ public class MemeServiceImpl implements MemeService {
         Meme meme = modelMapper.map(memeDto, Meme.class);
         meme.setCategory(memeDto.category);
 
-        meme.setUser(userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(MEME_NOT_FOUND)));
+        meme.setUser(user);
 
         for (Tag elementTag : memeDto.tags) {
             // Check if tag exists in the database

@@ -3,7 +3,6 @@ package com.memegenerator.backend.web.services;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -24,13 +23,12 @@ import com.memegenerator.backend.web.dto.MemeDto;
 import com.memegenerator.backend.web.dto.RequestResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.sql.Timestamp;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -55,6 +53,9 @@ public class MemeServiceTests {
     @MockBean
     private TagRepository tagRepository;
 
+    @MockBean
+    private ModelMapper modelMapper;
+
     @Test
     public void creates_meme() {
 
@@ -77,14 +78,14 @@ public class MemeServiceTests {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
         when(achievementRepository.findByTitle(any())).thenReturn(new Achievement(null));
+        when(modelMapper.map(any(), eq(Meme.class))).thenReturn(meme);
 
         RequestResponse result = memeService.createMeme(memeDto, (long) 2);
 
         assertTrue(result.success);
 
         verify(memeRepository, times(1)).save(any());
-        verify(userRepository, times(1)).findById(anyLong());
-        verify(categoryRepository, times(1)).findById(anyLong());
+        verify(userRepository, times(2)).findById(anyLong());
     }
 
     @Test
@@ -95,9 +96,6 @@ public class MemeServiceTests {
         String mockTitle = "testtitle";
         String testValue = "abc";
         byte[] testByte = new byte[1];
-
-        Date date = new Date();
-        Timestamp ts = new Timestamp(date.getTime());
 
         User user = new User(testValue, testValue, testValue, true);
         Category category = new Category(testValue);
@@ -115,9 +113,6 @@ public class MemeServiceTests {
 
     @Test
     public void gets_meme() {
-
-        Date date = new Date();
-        Timestamp ts = new Timestamp(date.getTime());
         String testValue = "abc";
         byte[] testByte = new byte[1];
 
@@ -147,7 +142,7 @@ public class MemeServiceTests {
 
         MemeDto memeDto = new MemeDto() {
             {
-                setTitle(testValue);
+                setTitle(mockTitle);
                 setTags(new Tag[0]);
             }
         };
