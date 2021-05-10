@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { MemelistComponent } from '../memelist/memelist.component'
 import { MemeService } from 'src/app/services/meme/memeService';
 import { LoginService } from 'src/app/services/login/loginService';
 import { User } from 'src/app/models/User';

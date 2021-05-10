@@ -23,6 +23,7 @@ public class SmallUserDto {
 	public int activated;
 
 	public Role role;
+	
 	public int points;
 	public Achievement[] achievements;
 }

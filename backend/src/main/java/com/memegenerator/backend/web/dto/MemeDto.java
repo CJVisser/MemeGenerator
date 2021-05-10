@@ -32,10 +32,12 @@ public class MemeDto {
     public UserDto user;
 
     public Timestamp createdat;
+
     public long categoryId;
 
     public String memestatus;
 
     public Category category;
+    
     public Integer flag_points;
 }

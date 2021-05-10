@@ -75,6 +75,6 @@ li a:hover {
 
 .memeText{
     font-size:24px;
-    font-family: "Comic Sans MS";
+    font-family: "Comic Sans MS", "fantasy";
     cursor:move;
 }

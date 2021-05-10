@@ -146,10 +146,10 @@ export class CreateComponent implements OnInit {
 
       this.memeService.CreateMeme(meme).subscribe((res: HttpResponse<any>) => {
 
-        if (res.body.Success) {
+        if (res.body.success) {
           alert("Your meme has been created!")
         } else {
-          alert(res.body.Message)
+          alert(res.body.message)
         }
       })
     })

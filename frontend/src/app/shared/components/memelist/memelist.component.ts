@@ -2,6 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { MemeService } from 'src/app/services/meme/memeService';
 import { SearchService } from 'src/app/services/search/search.service';
 import { Meme } from "../../../../app/models/Meme";
+class ResponseClass {
+  memeId: number;
+  isUpvote: boolean;
+
+  constructor(jsonStr: string) {
+    let jsonObj: any = JSON.parse(jsonStr);
+    for (let prop in jsonObj) {
+        this[prop] = jsonObj[prop];
+    }
+  }
+}
 
 @Component({
   selector: 'memelist',

@@ -82,10 +82,8 @@ public class MemeController {
 
         for (int i = 0; i < tags.length; i++) {
 
-            Tag newTag = new Tag();
-
-            newTag.id = tags[i].id;
-            newTag.title = tags[i].title;
+            Tag newTag = new Tag(tags[i].title);
+            newTag.setId(tags[i].id);
 
             if(tags[i].id == 0){
                 newTag = tagService.createTag(newTag);
@@ -105,9 +103,9 @@ public class MemeController {
         try {
             RequestResponse response = memeService.createMeme(memeDto, userIdLong);
 
-            if(response.Success) userService.updateUserPoints(userIdLong, 1);
+            if(response.success) userService.updateUserPoints(userIdLong, 1);
         
-			return new ResponseEntity<RequestResponse>(response, HttpStatus.OK);
+			return new ResponseEntity<RequestResponse>(response, HttpStatus.CREATED);
         } catch (NoSuchElementException e) {
 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -128,8 +126,8 @@ public class MemeController {
         }
     }
 
-    @PutMapping(path = "/update")
-    public ResponseEntity<MemeDto> updateMeme(@Valid @RequestBody MemeDto memeDto) {
+    @PutMapping(path = "/{memeId}")
+    public ResponseEntity<MemeDto> updateMeme(@PathVariable long memeId, @Valid @RequestBody MemeDto memeDto) {
 
         try {
 
@@ -156,9 +154,9 @@ public class MemeController {
 		}
     }
 
-    @PostMapping(path = "/flag")
-    public ResponseEntity<MemeDto> flagMeme(@Valid @RequestBody SmallMemeDto memeDto) {
-        Meme meme = memeService.flagMeme(memeDto.Id);
+    @PostMapping(path = "/flag/{memeId}")
+    public ResponseEntity<MemeDto> flagMeme(@PathVariable long memeId, @Valid @RequestBody SmallMemeDto memeDto) {
+        Meme meme = memeService.flagMeme(memeId);
 
         return new ResponseEntity<MemeDto>(modelMapper.map(meme, MemeDto.class), HttpStatus.OK);
     }

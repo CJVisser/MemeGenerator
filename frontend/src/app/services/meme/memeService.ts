@@ -30,7 +30,7 @@ export class MemeService {
     result.append("title", data.title);
     result.append("userId", data.userId.toString());
     result.append("tags", JSON.stringify(data.tags));
-    
+
     if(data.description){
       result.append("description", data.description);
     }else{
@@ -57,12 +57,12 @@ export class MemeService {
       Id: id
     }
 
-    this.http.post(`${environment.apiUrl}/meme/flag`, JSON.stringify(data), this.httpOptions).subscribe(
+    this.http.post(`${environment.apiUrl}/meme/flag/${id}`, JSON.stringify(data), this.httpOptions).subscribe(
       tap((response: any) => {
 
         if (response.status) {
           alert("You have flagged this meme!")
-        } 
+        }
       })
     );
   }
@@ -89,8 +89,8 @@ export class MemeService {
     return this.http
     .get<Meme[]>(`${environment.apiUrl}/meme/tags/` + tag)
     .pipe(retry(1), catchError(this.handleError));
-}
-  
+  }
+
   updateMeme(meme: Meme) {
     this.http.put<Meme>(`${environment.apiUrl}/meme/${meme.id}`, meme);
   }

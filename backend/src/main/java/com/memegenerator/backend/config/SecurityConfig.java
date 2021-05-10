@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.HttpMethod;
 
-import com.memegenerator.backend.domain.service.impl.*;
+import com.memegenerator.backend.domain.service.UserService;
 import com.memegenerator.backend.security.UserDetailsAdapter;
 
 import org.modelmapper.ModelMapper;
@@ -26,10 +26,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.resource.PathResourceResolver;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
     
     private static final String USER_PATH = "/user";
@@ -37,10 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     private static final String LOGIN_PATH = "/login";
     private static final String LOGOUT_PATH = "/logout";
     private static final String HOME_PATH = "/";
-    private ModelMapper modelmapper = new ModelMapper();
+    private static final String LIKEDISLIKE_PATH = "/likedislike";
+
+    private final ModelMapper modelmapper;
 
     @Autowired
-    UserServiceImpl userService;
+    private UserService userService;
 
     /** 
      * @param passwordEncoder
@@ -93,7 +103,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .antMatchers(HttpMethod.PUT, MEME_PATH).permitAll()
                 .antMatchers(HttpMethod.PUT, USER_PATH).permitAll()
                 .antMatchers(HttpMethod.GET, MEME_PATH).permitAll()
-                .antMatchers(HttpMethod.POST, MEME_PATH + "/flag").permitAll()
+                .antMatchers(LIKEDISLIKE_PATH).permitAll()
                 .anyRequest().permitAll()
                 .and().httpBasic().and().formLogin().successHandler(new AuthenticationSuccessHandler() {
 
@@ -119,5 +129,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedMethods("*");
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/")
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver() {
+                    @Override
+                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+                        Resource requestedResource = location.createRelative(resourcePath);
+ 
+                        return requestedResource.exists() && requestedResource.isReadable() ? requestedResource
+                                : new ClassPathResource("/static/index.html");
+                    }
+                });
     }
 }

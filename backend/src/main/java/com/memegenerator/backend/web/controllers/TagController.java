@@ -29,7 +29,7 @@ public class TagController {
      * @param tagDto
      * @return ResponseEntity<TagDto>
      */
-    @PostMapping(path = "/create")
+    @PostMapping(path = "/")
     public ResponseEntity<TagDto> createTag(@Valid @RequestBody TagDto tagDto) {
 
         Tag tag = tagService.createTag(modelMapper.map(tagDto, Tag.class));

@@ -7,9 +7,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-
 public class RequestResponse {
-    public String Message;
-    public List<String> Errors = new ArrayList<String>();
-    public Boolean Success = false;
+    
+    public RequestResponse(String message) {
+        this.message = message;
+    }
+
+    public String message;
+
+    public List<String> errors = new ArrayList<String>();
+
+    public Boolean success = false;
 }

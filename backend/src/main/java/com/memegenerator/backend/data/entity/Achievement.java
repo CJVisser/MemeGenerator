@@ -11,9 +11,18 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class Achievement extends BaseEntity {
 
+    public Achievement(){
+        
+    }
+
+    public Achievement(String title)
+    {
+        this.title = title;
+    }
+
     @Column(name = "title", nullable = false)
     @NotNull
-    public String title;
+    private String title;
     @Column(name = "description", nullable = false)
     @NotNull
     public String description;

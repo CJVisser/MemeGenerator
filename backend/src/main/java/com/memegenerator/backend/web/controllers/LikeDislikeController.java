@@ -29,8 +29,9 @@ public class LikeDislikeController {
     public ResponseEntity<String> like(@RequestBody LikeDislikeDto likeDislikeDto) {
 
         Meme meme = memeService.getMemeById(likeDislikeDto.memeId);
-        meme.likes = meme.likes + 1;
+        meme.setLikes(meme.getLikes() + 1);
         userService.updateUserPoints(likeDislikeDto.userId, 1);
+        userService.updateUserPoints(meme.getUser().getId(), 1);
 
         memeService.updateMeme(meme);
 
@@ -45,7 +46,7 @@ public class LikeDislikeController {
     public ResponseEntity<String> dislike(@RequestBody LikeDislikeDto likeDislikeDto) {
 
         Meme meme = memeService.getMemeById(likeDislikeDto.memeId);
-        meme.dislikes = meme.dislikes + 1;
+        meme.setDislikes(meme.getDislikes() + 1);
 
         memeService.updateMeme(meme);
 
